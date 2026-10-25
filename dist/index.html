@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#000e54" />
+    <meta name="description" content="Find your people and your next step. A community and career resource hub for Newhouse international students and alumni." />
+    <title>NHISA | A new place. A shared future.</title>
+    <link rel="icon" type="image/png" href="assets/block-s-orange.png" />
+    <link rel="preload" href="assets/fonts/ShermanSans-Book.ttf" as="font" type="font/ttf" crossorigin />
+    <link rel="preload" href="assets/fonts/ShermanSans-Bold.ttf" as="font" type="font/ttf" crossorigin />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="data.js" defer></script>
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
+    <div class="utility"><div class="container utility-inner"><span>A world of perspectives. One Newhouse community.</span><a href="#/about">Get to know NHISA <span aria-hidden="true">↗</span></a></div></div>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="#/" aria-label="NHISA home"><span class="brand-name">NH<span>I</span>SA<span class="brand-period">.</span></span><span class="brand-description">Newhouse International<br />Student Association</span></a>
+        <button class="menu-toggle" aria-label="Open navigation" aria-controls="primary-nav" aria-expanded="false"><span></span><span></span></button>
+        <nav id="primary-nav" class="primary-nav" aria-label="Main navigation">
+          <a href="#/" data-nav="home">Home</a>
+          <a href="#/support" data-nav="support">Student support</a>
+          <a href="#/alumni" data-nav="alumni">Alumni connections</a>
+          <a href="#/careers" data-nav="careers">Career access</a>
+          <a href="#/join" class="button button-small">Join the community <span aria-hidden="true">↗</span></a>
+        </nav>
+      </div>
+    </header>
+    <main id="main" tabindex="-1"></main>
+    <footer class="site-footer">
+      <div class="container footer-top">
+        <div class="footer-intro"><a href="#/" class="footer-wordmark" aria-label="NHISA home">NHISA<span>.</span></a><p>Different journeys.<br />A shared place to begin.</p><div class="footer-icons" aria-hidden="true"><img src="assets/icons/globe.svg" alt="" /><span class="connector-line"></span><img src="assets/icons/coffee.svg" alt="" /><span class="connector-line"></span><img src="assets/icons/graduate-cap.svg" alt="" /></div></div>
+        <div><h2>Find your next step</h2><a href="#/support">International student support</a><a href="#/alumni">Alumni connections</a><a href="#/careers">Career access</a><a href="#/careers?filter=saved">Saved resources</a></div>
+        <div><h2>Our community</h2><a href="#/about">About NHISA</a><a href="#/join">Get involved</a><a href="#/join?role=alumni">Share your experience</a><a href="https://newhouse.syracuse.edu/students/career-development-center/" target="_blank" rel="noopener noreferrer">Newhouse Career Development Center ↗</a></div>
+      </div>
+      <div class="container footer-bottom"><span>© 2026 NHISA. Built around community.</span><span>A student community for Newhouse international students.</span><a href="#/privacy">Privacy and accessibility</a></div>
+    </footer>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>
