@@ -11,6 +11,13 @@ new vm.Script(app);new vm.Script(data);
 const context={window:{}};vm.runInNewContext(data,context);
 assert.equal(context.window.NHISA.steps.length,5);
 assert.equal(context.window.NHISA.resources.length,8);
+assert.equal(context.window.NHISA.alumni.length,6);
+for(const person of context.window.NHISA.alumni){
+  assert(person.test || person.published,'Interview must be labeled test or approved for publication');
+  assert(person.questions.length>=4,'Interview should have a complete question-and-answer structure');
+  assert(person.photoAlt,'Profile imagery must have contextual alternative text');
+  await fs.access(path.join(root,person.photo));
+}
 const ids=context.window.NHISA.resources.map(resource=>resource.id);
 assert.equal(new Set(ids).size,ids.length);
 for(const step of context.window.NHISA.steps)for(const id of step.resources)assert(ids.includes(id),`Missing resource ${id}`);
@@ -20,4 +27,4 @@ references.push(...[...css.matchAll(/url\('([^']+)'\)/g)].map(match=>match[1]));
 for(const ref of references)await fs.access(path.join(root,ref));
 assert(css.includes('prefers-reduced-motion'));
 assert(html.includes('Skip to main content'));
-console.log(`Validated scripts, 5 roadmap steps, 8 unique resources, ${references.length} static references, and accessibility foundations.`);
+console.log(`Validated scripts, 5 roadmap steps, 8 unique resources, 6 complete test interviews, ${references.length} static references, and accessibility foundations.`);
