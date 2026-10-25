@@ -115,3 +115,20 @@ window.NHISA = {
     { id: 'interview', name: 'Walk into interviews prepared', short: 'Practice and preparation', icon: 'target-arrow', intro: 'Give yourself room to practice. Learn about the organization, choose concrete examples from your experience, and rehearse your answers out loud.', tasks: ['Prepare examples of teamwork, initiative, and problem-solving.', 'Practice introducing yourself and explaining your work.', 'Write down questions you want to ask the interviewer.'], resources: ['interview', 'career-services'] }
   ]
 };
+
+/* Site settings.
+   Before announcing the site, fill in at least `email` or `formUrl`.
+   The Get involved page uses them to send introductions to the NHISA team,
+   and the footer lists every contact channel that has a value. */
+window.NHISA.site = {
+  contact: {
+    email: '',       // The organization's shared inbox, e.g. a syr.edu address
+    formUrl: '',     // Optional sign-up form (https), e.g. a Google Form
+    instagram: '',   // Full https URL
+    linkedin: '',    // Full https URL
+    wechat: ''       // WeChat ID or official account name, shown as text
+  },
+  // Fictional TEST interviews stay hidden on the public site.
+  // Set to true only for local previews of the interview layout.
+  showTestInterviews: false
+};

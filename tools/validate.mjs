@@ -42,6 +42,18 @@ for(const resource of context.window.NHISA.resources){
 const references=[...html.matchAll(/(?:src|href)="([^"#]+)"/g)].map(match=>match[1]).filter(ref=>!ref.startsWith('http'));
 references.push(...[...css.matchAll(/url\('([^']+)'\)/g)].map(match=>match[1]));
 for(const ref of references)await fs.access(path.join(root,ref));
+for(const ref of [...html.matchAll(/--icon:url\('([^']+)'\)/g)].map(match=>match[1]))await fs.access(path.join(root,ref));
+const icons=[...new Set([...app.matchAll(/icon\('([a-z0-9-]+)'/g)].map(match=>match[1]))];
+icons.push(...new Set([...context.window.NHISA.resources,...context.window.NHISA.steps].map(item=>item.icon).filter(name=>name&&!icons.includes(name))));
+for(const name of icons)await fs.access(path.join(root,'assets/icons',`${name}.svg`));
+const appAssets=[...new Set([...app.matchAll(/assets\/[a-z0-9-]+\.(?:webp|png|svg)/g)].map(match=>match[0]))];
+for(const ref of appAssets)await fs.access(path.join(root,ref));
+const site=context.window.NHISA.site||{};
+assert(typeof site==='object','Site settings must be an object');
+for(const key of ['formUrl','instagram','linkedin']){const value=site.contact?.[key];if(value)assert.equal(new URL(value).protocol,'https:',`contact.${key} must be an https URL`);}
+if(site.contact?.email)assert(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(site.contact.email),'contact.email must be an email address');
+if(!site.contact?.email&&!site.contact?.formUrl)console.warn('Warning: add contact.email or contact.formUrl in dist/data.js so visitors can send their introduction to NHISA.');
+if(site.showTestInterviews)console.warn('Warning: fictional TEST interviews are visible. Set showTestInterviews to false before publishing.');
 assert(css.includes('prefers-reduced-motion'));
 assert(html.includes('Skip to main content'));
-console.log(`Validated scripts, ${context.window.NHISA.steps.length} roadmap steps, ${ids.length} unique resources, ${context.window.NHISA.alumni.length} complete interviews, ${immigration.topics.length} sourced immigration guides, ${references.length} static references, and accessibility foundations.`);
+console.log(`Validated scripts, ${context.window.NHISA.steps.length} roadmap steps, ${ids.length} unique resources, ${context.window.NHISA.alumni.length} complete interviews, ${immigration.topics.length} sourced immigration guides, ${references.length} static references, ${icons.length} icons, and accessibility foundations.`);
