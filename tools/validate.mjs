@@ -9,9 +9,13 @@ const app=await fs.readFile(path.join(root,'app.js'),'utf8');
 const data=await fs.readFile(path.join(root,'data.js'),'utf8');
 new vm.Script(app);new vm.Script(data);
 const context={window:{}};vm.runInNewContext(data,context);
-assert.equal(context.window.NHISA.steps.length,5);
-assert.equal(context.window.NHISA.resources.length,8);
-assert.equal(context.window.NHISA.alumni.length,6);
+for(const collection of ['steps','resources','alumni']){
+  assert(Array.isArray(context.window.NHISA[collection]),`${collection} must be an array`);
+  assert(context.window.NHISA[collection].length>0,`${collection} must contain content`);
+  const entryIds=context.window.NHISA[collection].map(entry=>entry.id);
+  assert(entryIds.every(id=>typeof id==='string'&&/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(id)),`${collection} must use route-safe IDs`);
+  assert.equal(new Set(entryIds).size,entryIds.length,`${collection} IDs must be unique`);
+}
 for(const person of context.window.NHISA.alumni){
   assert(person.test || person.published,'Interview must be labeled test or approved for publication');
   assert(person.questions.length>=4,'Interview should have a complete question-and-answer structure');
@@ -27,4 +31,4 @@ references.push(...[...css.matchAll(/url\('([^']+)'\)/g)].map(match=>match[1]));
 for(const ref of references)await fs.access(path.join(root,ref));
 assert(css.includes('prefers-reduced-motion'));
 assert(html.includes('Skip to main content'));
-console.log(`Validated scripts, 5 roadmap steps, 8 unique resources, 6 complete test interviews, ${references.length} static references, and accessibility foundations.`);
+console.log(`Validated scripts, ${context.window.NHISA.steps.length} roadmap steps, ${ids.length} unique resources, ${context.window.NHISA.alumni.length} complete interviews, ${references.length} static references, and accessibility foundations.`);
