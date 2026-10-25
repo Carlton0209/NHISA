@@ -57,6 +57,8 @@ The interface includes responsive layouts, mobile navigation, keyboard focus sta
 
 Provided university brand assets retain their original ownership. This repository does not assign an open-source license to those assets.
 
+The browser tab icon, `dist/assets/newhouse-favicon.png`, is the unmodified 192×192 PNG used by the [official Newhouse website](https://newhouse.syracuse.edu/), downloaded from its [original icon URL](https://newhouse.syracuse.edu/wp-content/themes/newhouse5/img/android-icon-192x192.png).
+
 ## Validate
 
 ```sh
