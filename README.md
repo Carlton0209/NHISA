@@ -21,9 +21,10 @@ Open http://localhost:5173. The complete static website is in `dist/`.
 | Page | Features |
 | --- | --- |
 | Home | Editorial hero, campus photography, three core pathways, community introduction, featured resources |
-| Student support | Five career preparation stages, external resources, persistent checklist |
+| Student support | Five career preparation stages, external resources, persistent checklist, visa and work authorization guide entry |
 | Alumni connections | Six TEST profiles, field filters, full interview pages, quotes, profile facts, related conversations |
-| Career access | Eight resources, live search, category filters, bookmarks, saved-resource view, empty states |
+| Career access | Thirteen resources, live search, category filters, bookmarks, saved-resource view, empty states |
+| Visa and work authorization | F-1, CPT, OPT, STEM OPT, and H-1B explainers, three-stage application overviews, comparison table, official sources, common questions |
 | About | Community purpose and priorities |
 | Get involved | Validated introduction form, local draft, clipboard copy, text-file download |
 | Privacy and accessibility | Storage information and an action to clear local data |
@@ -35,6 +36,8 @@ The introduction form operates on the visitor's device. It does not send email, 
 ## Edit content
 
 Edit `dist/data.js` to update resources, roadmap steps, and interviews. Edit `dist/app.js` for page structure and behavior, and `dist/styles.css` for visual styling.
+
+The visa and work authorization guide is at `#/immigration`. It can be reached from Student support, the footer, and Career access's International students category. Individual topics have links such as `#/immigration?topic=cpt`. Content and references are stored in `window.NHISA.immigration` in `dist/data.js`. Keep the review date accurate and check university and government guidance whenever updating immigration content. This is general education, not a determination of an individual's eligibility or legal advice; filing fees and deadlines are deferred to current official instructions.
 
 The six existing alumni interviews are fictional **TEST** entries for demonstrating the complete website framework. They are explicitly labeled in the collection and detail pages. Campus photos are illustrative and do not identify the fictional interviewees.
 
