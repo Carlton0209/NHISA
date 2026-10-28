@@ -40,7 +40,7 @@ body { margin: 0; background: #03060b; color: #fff; }
   isolation: isolate;
 }
 
-.hero-scene, .hero-scene .flow-lines, .scenery, .hero-scrim {
+.hero-scene, .scenery, .hero-scrim {
   position: absolute;
   inset: 0;
   width: 100%;

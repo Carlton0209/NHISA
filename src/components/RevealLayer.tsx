@@ -12,15 +12,14 @@ const SPOTLIGHT_STOPS: [number, number][] = [
   [0, 1], [0.4, 1], [0.6, 0.75], [0.75, 0.4], [0.88, 0.12], [1, 0],
 ];
 
-/** The photographs ship pre-matted (transparent sky), so they only need decoding. */
-async function loadCutout(src: string) {
+async function loadPhoto(src: string) {
   const image = new Image();
   image.src = src;
   await image.decode();
   return image;
 }
 
-/** Mix the two foregrounds in one canvas, above a single independent sky. */
+/** Show the autumn photo, with the winter one revealed in a soft circle under the cursor. */
 export default function RevealLayer({ autumnImage, winterImage, radius = 260 }: RevealLayerProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -67,8 +66,7 @@ export default function RevealLayer({ autumnImage, winterImage, radius = 260 }: 
         mask.addColorStop(offset, `rgba(0, 0, 0, ${alpha})`);
       });
 
-      // Both operations finish in this frame; no CSS mask or second animated
-      // sky is involved. Sky pixels remain transparent through the whole mix.
+      // Both operations finish in this frame; no CSS mask is involved.
       context.globalCompositeOperation = 'destination-out';
       context.fillStyle = mask;
       context.fillRect(left, top, w, h);
@@ -81,7 +79,7 @@ export default function RevealLayer({ autumnImage, winterImage, radius = 260 }: 
       bufferContext.fillRect(0, 0, width, height);
 
       // Add premultiplied contributions A*(1-mask) + W*mask. Source-over
-      // would apply the feather twice and leak the sky through opaque scenery.
+      // would apply the feather twice and leave a dark ring in the blend.
       context.globalCompositeOperation = 'lighter';
       context.drawImage(winterBuffer, 0, 0);
       context.globalCompositeOperation = 'source-over';
@@ -128,7 +126,7 @@ export default function RevealLayer({ autumnImage, winterImage, radius = 260 }: 
     });
     resizeObserver.observe(canvas);
 
-    void Promise.all([loadCutout(autumnImage), loadCutout(winterImage)]).then(([autumn, winter]) => {
+    void Promise.all([loadPhoto(autumnImage), loadPhoto(winterImage)]).then(([autumn, winter]) => {
       if (disposed) return;
       photos = [autumn, winter];
       canvas.width = winterBuffer.width = autumn.naturalWidth;

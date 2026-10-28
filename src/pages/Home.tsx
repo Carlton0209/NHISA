@@ -1,8 +1,7 @@
-import FlowLines from '../components/FlowLines';
 import RevealLayer from '../components/RevealLayer';
 import { href } from '../lib/router';
-import heroAutumn from '../assets/hero-autumn-cutout.webp';
-import heroWinter from '../assets/hero-winter-cutout.webp';
+import heroAutumn from '../assets/hero-autumn.jpg';
+import heroWinter from '../assets/hero-winter.jpg';
 
 export default function Home() {
   return (
@@ -11,7 +10,6 @@ export default function Home() {
         NHISA: community and career resources for Newhouse international students and alumni
       </h1>
       <div className="hero-scene" aria-hidden="true">
-        <FlowLines />
         <RevealLayer autumnImage={heroAutumn} winterImage={heroWinter} />
       </div>
 

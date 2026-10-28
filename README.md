@@ -21,7 +21,7 @@ Pushing to `main` builds the site and publishes `dist/` to GitHub Pages.
 
 | Route | Content |
 | --- | --- |
-| `#/` | Hero: the campus photo over an animated night sky; the cursor reveals the winter version |
+| `#/` | Hero: the autumn campus photo; the cursor reveals the winter version |
 | `#/school` | School Experience: Community, Experience, Academics, IT Support |
 | `#/job` | Job Knowledge: LinkedIn, Handshake, Email Signature, Job Search, Career Planning, and the NHISA toolkits |
 | `#/job/email-signature/laptop`, `/phone`, `/sample` | Step-by-step Outlook guides and a copyable sample signature |
@@ -39,19 +39,6 @@ All copy and links live in `src/content/`:
 
 The sample signature itself is in `src/pages/job/EmailSignature.tsx`. The Outlook screenshots in `src/assets/email/` have the original account name and address replaced with placeholders.
 
-## Hero cutouts
+## Hero photos
 
-`src/assets/hero-autumn-cutout.webp` and `hero-winter-cutout.webp` are the original photos (`hero-autumn.jpg`, `hero-winter.jpg`) with the sky removed, so the animated backdrop shows through. They are made offline with the scripts in `tools/matte/`:
-
-1. `segment.py` finds the sky with SegFormer-B5 (ADE20K), averaged over three scales and mirrored passes.
-2. `matte.py` refines it: the roof edge is detected column by column for a crisp line, tree edges are unmixed between the local sky and foliage colours (so holes between branches become transparent and thin twigs stay), and edge pixels are cleaned of the old sky colour.
-3. `preview.py` composites the result over a dark backdrop with close-up crops for checking.
-
-```sh
-pip install torch transformers opencv-python numpy pymatting
-python tools/matte/segment.py src/assets/hero-autumn.jpg sky-autumn.npy
-python tools/matte/matte.py src/assets/hero-autumn.jpg sky-autumn.npy autumn.png
-python -c "from PIL import Image; Image.open('autumn.png').save('src/assets/hero-autumn-cutout.webp', quality=90, method=6)"
-```
-
-Repeat with `winter` for the second photo. The file name selects the colour thresholds for each season.
+`src/assets/hero-autumn.jpg` is shown by default and `hero-winter.jpg` is revealed under the cursor. The two must keep the same size and framing so the reveal lines up. Inner pages sit on a dark backdrop of faint, static lines drawn by `src/components/FlowLines.tsx`.
