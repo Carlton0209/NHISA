@@ -38,7 +38,7 @@ export default function Navbar({ route }: { route: string }) {
         <span className="text-white text-2xl font-playfair italic">NHISA</span>
       </a>
 
-      <div className="hidden md:flex bg-white/[0.12] backdrop-blur-md border border-white/20 rounded-full px-2 py-2 items-center gap-1">
+      <div className="glass hidden md:flex rounded-full px-2 py-2 items-center gap-1">
         {NAV_ITEMS.map((item) => (
           <a
             key={item.path}
@@ -58,7 +58,7 @@ export default function Navbar({ route }: { route: string }) {
         onClick={() => setMenuOpen((open) => !open)}
         aria-label={menuOpen ? 'Close menu' : 'Open menu'}
         aria-expanded={menuOpen}
-        className="md:hidden flex items-center justify-center w-10 h-10 rounded-full bg-white/[0.14] backdrop-blur-md border border-white/25 text-white"
+        className="glass-button md:hidden w-10 h-10"
       >
         {menuOpen ? <X size={20} /> : <Menu size={20} />}
       </button>

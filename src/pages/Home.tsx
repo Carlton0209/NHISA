@@ -15,11 +15,8 @@ export default function Home() {
 
       <div className="hero-scrim" aria-hidden="true" />
 
-      <div className="absolute bottom-10 sm:bottom-24 right-5 sm:right-10 md:right-14 z-50 hero-anim">
-        <a
-          href={href('/school')}
-          className="inline-block bg-[#e8702a] hover:bg-[#d2611f] text-white text-sm font-medium px-7 py-3 rounded-full transition-all hover:scale-[1.03] active:scale-95 hover:shadow-lg hover:shadow-[#e8702a]/30"
-        >
+      <div className="absolute inset-x-0 bottom-[20%] z-50 flex justify-center px-5 hero-anim">
+        <a href={href('/school')} className="glass-button px-9 py-3.5 text-base">
           Start Exploring
         </a>
       </div>

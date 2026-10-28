@@ -34,7 +34,7 @@ export default function CopyButton({ text, html, label = 'Copy' }: CopyButtonPro
     <button
       type="button"
       onClick={() => copy(text, html).then(() => setState('copied'), () => setState('failed'))}
-      className="inline-flex items-center gap-2 rounded-full border border-white/20 px-4 py-2 text-sm font-medium text-white/85 transition-colors hover:border-ember hover:text-white"
+      className="glass-button px-4 py-2"
     >
       {state === 'copied' ? <Check size={16} aria-hidden="true" /> : <Copy size={16} aria-hidden="true" />}
       <span aria-live="polite">{state === 'copied' ? 'Copied' : state === 'failed' ? 'Couldn’t copy, select the text instead' : label}</span>

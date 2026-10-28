@@ -26,7 +26,7 @@ export function ResourceCard({ resource }: { resource: Resource }) {
               href={link.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 rounded-full border border-white/15 px-3 py-1.5 text-sm text-white/80 transition-colors hover:border-ember hover:text-white"
+              className="glass-button gap-1 px-3 py-1.5"
             >
               {link.label}
               <ArrowUpRight size={14} aria-hidden="true" />

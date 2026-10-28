@@ -49,11 +49,7 @@ export default function PageShell({ route, eyebrow, title, intro, subnav, back, 
                     <a
                       href={href(item.path)}
                       aria-current={active ? 'page' : undefined}
-                      className={`block rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
-                        active
-                          ? 'border-white bg-white text-night-900'
-                          : 'border-white/15 text-white/70 hover:border-white/35 hover:text-white'
-                      }`}
+                      className={`glass-button px-4 py-2 ${active ? '' : 'text-white/75 hover:text-white'}`}
                     >
                       {item.label}
                     </a>

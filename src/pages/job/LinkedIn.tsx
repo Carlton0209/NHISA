@@ -32,7 +32,7 @@ export default function LinkedIn() {
             href="https://www.linkedin.com/"
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-6 inline-flex items-center gap-2 rounded-full border border-white/20 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:border-ember"
+            className="glass-button mt-6 px-5 py-2.5"
           >
             Open LinkedIn
             <ArrowUpRight size={16} aria-hidden="true" />

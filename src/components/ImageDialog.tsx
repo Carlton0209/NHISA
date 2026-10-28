@@ -32,7 +32,7 @@ export default function ImageDialog({ label, src, alt, caption }: ImageDialogPro
             onClick={() => dialogRef.current?.close()}
             aria-label="Close"
             autoFocus
-            className="absolute -top-3 -right-3 flex h-9 w-9 items-center justify-center rounded-full bg-white text-night-900 shadow-lg"
+            className="glass-button absolute -top-3 -right-3 h-9 w-9"
           >
             <X size={18} aria-hidden="true" />
           </button>
