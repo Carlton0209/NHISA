@@ -1,9 +1,4 @@
-node_modules/
+node_modules
+dist
+*.local
 .DS_Store
-Thumbs.db
-*.log
-.env
-.env.*
-!.env.example
-.sites-local/
-artifacts/

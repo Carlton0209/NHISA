@@ -1,0 +1,125 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@1,400;1,500;1,600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* { font-family: 'Inter', sans-serif; }
+.font-playfair { font-family: 'Playfair Display', serif; }
+.font-mono { font-family: ui-monospace, 'SFMono-Regular', Consolas, monospace; }
+
+html { background: #03060b; color-scheme: dark; }
+body { margin: 0; background: #03060b; color: #fff; }
+
+:focus-visible { outline: 2px solid #e8702a; outline-offset: 3px; }
+/* Page headings receive focus on navigation for screen readers only. */
+[data-page-title]:focus { outline: none; }
+
+.skip-link {
+  position: fixed;
+  left: 1rem;
+  top: -4rem;
+  z-index: 200;
+  padding: 0.6rem 1rem;
+  border-radius: 999px;
+  background: #fff;
+  color: #070c15;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+.skip-link:focus { top: 1rem; }
+
+/* ---------- Hero ---------- */
+
+.hero {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.hero-scene, .hero-scene .flow-lines, .scenery, .hero-scrim {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.flow-lines { display: block; background: #03060b; }
+.flow-lines-fixed {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.scenery {
+  object-fit: cover;
+  object-position: center;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+.scenery.is-ready { opacity: 1; }
+
+.hero-scrim {
+  z-index: 40;
+  background: linear-gradient(180deg, rgb(2 4 8 / 50%), transparent 22%, transparent 80%, rgb(2 4 8 / 22%));
+}
+
+@keyframes heroFadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.hero-anim { animation: heroFadeUp 1s 0.4s cubic-bezier(0.16, 1, 0.3, 1) both; }
+
+/* ---------- Inner pages ---------- */
+
+@layer components {
+  .card {
+    @apply rounded-2xl border border-white/10 bg-white/[0.035] p-6 backdrop-blur-sm;
+  }
+  .card-link {
+    @apply transition-colors duration-200 hover:border-white/25 hover:bg-white/[0.06];
+  }
+}
+
+.subnav ul { scrollbar-width: none; }
+.subnav ul::-webkit-scrollbar { display: none; }
+
+/* Email signature tiles: a grid of pixels flickers across the artwork. */
+.pixel-card .pixel-art { transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1), filter 0.9s ease; }
+.pixel-card:hover .pixel-art,
+.pixel-card:focus-visible .pixel-art { transform: scale(1.045); filter: brightness(1.12); }
+.pixel-card .pixel { position: absolute; opacity: 0; }
+.pixel-card:hover .pixel,
+.pixel-card:focus-visible .pixel { animation: pixelFlash 0.46s linear both; }
+
+@keyframes pixelFlash {
+  0%, 18% { opacity: 0; }
+  19%, 68% { opacity: 0.92; }
+  69%, 100% { opacity: 0; }
+}
+
+.image-dialog {
+  width: min(92vw, 760px);
+  max-height: 90vh;
+  padding: 1.25rem;
+  overflow: visible;
+  border: 1px solid rgb(255 255 255 / 12%);
+  border-radius: 1.25rem;
+  background: #0d1522;
+  color: #fff;
+}
+.image-dialog::backdrop { background: rgb(2 4 8 / 72%); backdrop-filter: blur(4px); }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-anim, .pixel-card .pixel { animation: none !important; }
+  .pixel-card .pixel-art, .scenery { transition: none; }
+  .pixel-card:hover .pixel-art { transform: none; }
+}
