@@ -8,6 +8,7 @@ export default function LinkedIn() {
     <div className="space-y-28 sm:space-y-36">
       <Topic
         id="start"
+        photo="studios"
         title="Why is LinkedIn important?"
         intro={
           <>
@@ -20,10 +21,10 @@ export default function LinkedIn() {
           </>
         }
       >
-        <h3 className="mb-2 text-sm font-medium text-white/55">How to create a LinkedIn account</h3>
-        <ol className="border-t border-white/[0.08]">
+        <h3 className="mb-4 text-[var(--step-lead)] font-medium text-white">How to create a LinkedIn account</h3>
+        <ol className="space-y-2">
           {LINKEDIN.setup.map((step, index) => (
-            <li key={step} className="flex items-baseline gap-5 border-b border-white/[0.08] py-4">
+            <li key={step} className="flex items-baseline gap-5 rounded-2xl bg-[var(--surface)] px-6 py-4">
               <span className="tnum w-5 shrink-0 text-sm font-semibold text-accent">{index + 1}</span>
               <span className="text-white/80">{step}</span>
             </li>
@@ -31,11 +32,11 @@ export default function LinkedIn() {
         </ol>
       </Topic>
 
-      <Topic id="profile" title="Profile optimization" intro="Build a profile that clearly shows who you are, what you can do, and where you want to go.">
+      <Topic id="profile" photo="school" title="Profile optimization" intro="Build a profile that clearly shows who you are, what you can do, and where you want to go.">
         <PointList items={LINKEDIN.profile} />
       </Topic>
 
-      <Topic id="networking" title="Networking & outreach" intro="Build meaningful connections through thoughtful conversations and continued engagement.">
+      <Topic id="networking" photo="quad" title="Networking & outreach" intro="Build meaningful connections through thoughtful conversations and continued engagement.">
         <PointList items={LINKEDIN.networking} />
       </Topic>
 
@@ -63,7 +64,7 @@ export default function LinkedIn() {
                   <h3 className="text-[1.0625rem] font-semibold text-white">{prompt.title}</h3>
                   <CopyButton text={text} label="Copy prompt" />
                 </figcaption>
-                <blockquote className="mt-5 border-l border-white/15 pl-5 leading-relaxed text-white/80">
+                <blockquote className="mt-5 rounded-xl bg-white/[0.04] p-5 leading-relaxed text-white/80">
                   <p>{prompt.body}</p>
                   <p className="mt-4 text-sm text-white/55">
                     {prompt.fields.map((field) => (

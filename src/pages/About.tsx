@@ -34,7 +34,7 @@ const WAYS = [
   },
 ];
 
-const subheading = 'mb-2 text-sm font-medium text-white/55';
+const subheading = 'mb-5 text-[var(--step-lead)] font-medium text-white';
 
 export default function About({ path }: { path: string }) {
   const channels = [
@@ -44,15 +44,15 @@ export default function About({ path }: { path: string }) {
   ].filter(Boolean) as { label: string; url: string; Icon: typeof Mail }[];
 
   return (
-    <PageShell path={path} title="A home for Newhouse international students" intro={MISSION} jump={JUMP}>
+    <PageShell path={path} title="Built by students" intro={MISSION} jump={JUMP}>
       <div className="space-y-28 sm:space-y-36">
-        <Topic id="mission" title="Our mission" intro="Make useful resources easier to find, and valuable people and opportunities easier to reach.">
+        <Topic id="mission" photo="hall" title="Our mission" intro="Make useful resources easier to find, and valuable people and opportunities easier to reach.">
           <div className="space-y-14">
             <div>
               <h3 className={subheading}>Who we serve</h3>
-              <div className="grid gap-x-10 border-t border-white/[0.08] sm:grid-cols-2">
+              <div className="grid gap-x-10 gap-y-8 sm:grid-cols-2">
                 {AUDIENCES.map((audience) => (
-                  <div key={audience.title} className="border-b border-white/[0.08] py-6">
+                  <div key={audience.title}>
                     <h4 className="text-[1.0625rem] font-semibold text-white">{audience.title}</h4>
                     <p className="t-body mt-2">{audience.body}</p>
                   </div>
@@ -62,9 +62,9 @@ export default function About({ path }: { path: string }) {
 
             <div>
               <h3 className={subheading}>Why we exist</h3>
-              <ul className="border-t border-white/[0.08]">
+              <ul className="space-y-5">
                 {PROBLEMS.map((problem) => (
-                  <li key={problem} className="border-b border-white/[0.08] py-4 text-white/80">
+                  <li key={problem} className="t-lede">
                     {problem}
                   </li>
                 ))}
@@ -73,9 +73,9 @@ export default function About({ path }: { path: string }) {
 
             <div>
               <h3 className={subheading}>What we do</h3>
-              <ul className="border-t border-white/[0.08]">
+              <ul className="space-y-1">
                 {MODULES.filter((m) => m.id !== 'about').map((module) => (
-                  <li key={module.id} className="border-b border-white/[0.08]">
+                  <li key={module.id}>
                     <a href={href(module.path)} className="row -mx-4 grid grid-cols-[1fr_auto] items-start gap-x-6 rounded-2xl px-4 py-6">
                       <span>
                         <span data-vt-title className="row-title block text-[1.0625rem] font-semibold text-white">{module.title}</span>
@@ -90,14 +90,14 @@ export default function About({ path }: { path: string }) {
           </div>
         </Topic>
 
-        <Topic id="team" title="Our team" intro="NHISA is run by Newhouse international students.">
+        <Topic id="team" photo="quad" photoBelow title="Our team" intro="NHISA is run by Newhouse international students.">
           <div className="panel t-body">Team profiles are on the way.</div>
         </Topic>
 
-        <Topic id="get-involved" title="Get involved" intro="Three ways to help NHISA grow.">
-          <ul className="border-t border-white/[0.08]">
+        <Topic id="get-involved" photo="school" title="Get involved" intro="Three ways to help NHISA grow.">
+          <ul className="space-y-3">
             {WAYS.map((way) => (
-              <li key={way.title} className="grid gap-4 border-b border-white/[0.08] py-7 sm:grid-cols-[1fr_auto] sm:items-center sm:gap-8">
+              <li key={way.title} className="grid gap-4 rounded-2xl bg-[var(--surface)] p-6 sm:grid-cols-[1fr_auto] sm:items-center sm:gap-8">
                 <div>
                   <h3 className="text-[1.0625rem] font-semibold text-white">{way.title}</h3>
                   <p className="t-body mt-1.5">{way.body}</p>

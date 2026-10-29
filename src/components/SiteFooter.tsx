@@ -2,6 +2,11 @@ import { Instagram, Linkedin, Mail } from 'lucide-react';
 import { CONTACT, MODULES } from '../content/site';
 import { href, newTab } from '../lib/router';
 import { Logo } from './Brand';
+import CREDITS from '../assets/found/credits.json';
+
+const listed = (values: string[]) => [...new Set(values)].join(' and ');
+const CREATORS = listed(CREDITS.map((c) => c.creator));
+const LICENSES = listed(CREDITS.map((c) => c.license));
 
 const ABOUT_LINKS = [
   { label: 'Our mission', section: 'mission' },
@@ -35,7 +40,7 @@ function smoothThrough(points: [number, number][]) {
 function FooterArt() {
   const mullions = Array.from({ length: 13 }, (_, i) => 262 + i * 20);
   return (
-    <svg viewBox="0 0 540 140" className="h-[110px] w-auto sm:h-[140px]" fill="none" stroke="currentColor" strokeWidth="1.5"
+    <svg viewBox="0 0 540 140" className="h-[72px] w-auto sm:h-[88px]" fill="none" stroke="currentColor" strokeWidth="1.5"
       strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       {/* Student walking with a backpack and phone */}
       <circle cx="78" cy="52" r="9" />
@@ -57,6 +62,15 @@ function FooterArt() {
   );
 }
 
+// The wordmark built from five blocks, one per chapter, letters knocked out.
+const BLOCKS = [
+  { letter: 'N', field: 'var(--campus)', height: '100%' },
+  { letter: 'H', field: 'var(--careers)', height: '78%' },
+  { letter: 'I', field: 'var(--library)', height: '90%' },
+  { letter: 'S', field: 'var(--alumni)', height: '64%' },
+  { letter: 'A', field: 'var(--about)', height: '84%' },
+];
+
 export default function SiteFooter() {
   const socials = [
     CONTACT.instagram && { label: 'Instagram', url: CONTACT.instagram, Icon: Instagram },
@@ -65,59 +79,81 @@ export default function SiteFooter() {
   ].filter(Boolean) as { label: string; url: string; Icon: typeof Mail }[];
 
   return (
-    <footer className="relative z-10 mt-32 border-t border-white/[0.1] bg-[#0b0d17]">
-      <div className="mx-auto grid w-full max-w-6xl gap-10 px-5 pt-14 sm:px-8 md:grid-cols-[1.3fr_1fr_1fr_1fr]">
-        <div>
+    <footer className="relative z-10 pb-10 pt-24" style={{ paddingInline: 'var(--margin)' }} data-ink="dark">
+      <div className="flex h-[22svh] items-end gap-1 md:h-[34svh]" aria-hidden="true">
+        {BLOCKS.map((block) => (
+          <div key={block.letter} className="flex flex-1 items-end justify-center overflow-hidden rounded-[1.25rem]" style={{ background: block.field, height: block.height }}>
+            <span className="translate-y-[12%] select-none text-[18vw] font-bold leading-none text-[var(--bg)] md:text-[15vw]">{block.letter}</span>
+          </div>
+        ))}
+      </div>
+
+      <div className="mt-14 grid gap-10 text-[0.9375rem] md:grid-cols-12">
+        <div className="md:col-span-4">
           <Logo />
-          <p className="t-meta mt-5 max-w-xs leading-relaxed">
+          <p className="mt-4 max-w-xs text-white/75">
             A professional community and career resource hub for Newhouse international students and alumni.
           </p>
         </div>
-        <div>
-          <h2 className="t-mono">Explore</h2>
-          <ul className="mt-4 space-y-2.5 text-sm">
-            {MODULES.filter((m) => m.id !== 'about').map((m) => (
-              <li key={m.id}>
-                <a href={href(m.path)} className="text-white/60 transition-colors hover:text-white">{m.title}</a>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div>
-          <h2 className="t-mono">About</h2>
-          <ul className="mt-4 space-y-2.5 text-sm">
-            {ABOUT_LINKS.map((link) => (
-              <li key={link.section}>
-                <a href={href('/about', link.section)} className="text-white/60 transition-colors hover:text-white">{link.label}</a>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div>
-          <h2 className="t-mono">Connect with NHISA</h2>
+        <nav aria-label="Footer" className="grid grid-cols-2 gap-8 md:col-span-5">
+          <div>
+            <h2 className="font-medium">Explore</h2>
+            <ul className="mt-3 space-y-2">
+              {MODULES.filter((m) => m.id !== 'about').map((m) => (
+                <li key={m.id}><a href={href(m.path)} className="text-white/75 transition-colors hover:text-white">{m.title}</a></li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <h2 className="font-medium">About</h2>
+            <ul className="mt-3 space-y-2">
+              {ABOUT_LINKS.map((link) => (
+                <li key={link.section}><a href={href('/about', link.section)} className="text-white/75 transition-colors hover:text-white">{link.label}</a></li>
+              ))}
+            </ul>
+          </div>
+        </nav>
+        <div className="md:col-span-3">
+          <h2 className="font-medium">Connect with NHISA</h2>
           {socials.length ? (
-            <ul className="mt-4 flex gap-2">
+            <ul className="mt-3 flex gap-2">
               {socials.map(({ label, url, Icon }) => (
                 <li key={label}>
-                  <a href={url} {...newTab(url)} aria-label={label} className="glass-button h-10 w-10">
+                  <a href={url} {...newTab(url)} aria-label={label} className="glass-button h-11 w-11">
                     <Icon size={17} aria-hidden="true" />
                   </a>
                 </li>
               ))}
             </ul>
           ) : (
-            <p className="t-meta mt-4">Our social channels are coming soon.</p>
+            <p className="mt-3 text-white/75">Our social channels are coming soon.</p>
           )}
         </div>
       </div>
 
-      <div className="relative mx-auto mt-6 flex w-full max-w-6xl justify-end px-5 text-white/45 sm:px-8">
-        <FooterArt />
-      </div>
-      <div className="h-px bg-white/30" aria-hidden="true" />
-      <div className="t-mono mx-auto flex w-full max-w-6xl flex-col gap-2 px-5 pb-10 pt-5 sm:flex-row sm:justify-between sm:px-8">
-        <p>© {new Date().getFullYear()} NHISA · Newhouse international students and alumni</p>
-        <p>Links marked ↗ open official university and partner sites.</p>
+      <div className="mt-12 grid items-end gap-6 text-[var(--step-small)] text-white/70 md:grid-cols-12">
+        <div className="space-y-2 md:col-span-8">
+          <details className="group">
+            <summary className="cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+              Campus photographs by {CREATORS} on Wikimedia Commons, {LICENSES}.{' '}
+              <span className="font-medium text-white underline decoration-1 underline-offset-4 group-hover:decoration-2">
+                <span className="group-open:hidden">Show photo credits</span>
+                <span className="hidden group-open:inline">Hide photo credits</span>
+              </span>
+            </summary>
+            <ul className="mt-3 space-y-1.5">
+              {CREDITS.map((c) => (
+                <li key={c.file}>
+                  <a href={c.page} target="_blank" rel="noopener noreferrer" className="underline decoration-white/30 underline-offset-2 hover:text-white">{c.title}</a> by {c.creator}, {c.license}
+                </li>
+              ))}
+            </ul>
+          </details>
+          <p>© {new Date().getFullYear()} NHISA. Links marked ↗ open official university and partner sites.</p>
+        </div>
+        <div className="flex justify-end text-white/45 md:col-span-4">
+          <FooterArt />
+        </div>
       </div>
     </footer>
   );

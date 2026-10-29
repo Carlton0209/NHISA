@@ -2,6 +2,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { ArrowUp, Menu, X } from 'lucide-react';
 import { MODULES } from '../content/site';
 import { href } from '../lib/router';
+import { lightUnder } from '../lib/reveal';
 import { Logo } from './Brand';
 
 /** True once the page has scrolled past `threshold()` pixels. */
@@ -27,11 +28,29 @@ export function TopBar({ path }: { path: string }) {
   const listRef = useRef<HTMLUListElement>(null);
   const [thumb, setThumb] = useState<{ x: number; w: number } | null>(null);
 
-  // Over the hero the bar stays clear until the season sequence has played.
-  const scrolled = useScrolledPast(() => {
-    const track = path === '/' ? document.querySelector<HTMLElement>('.hero-track') : null;
-    return track ? track.offsetHeight - window.innerHeight - 8 : 8;
+  // The bar has no chrome of its own: it takes the ink of the chapter under
+  // it, and slides away while reading downwards so it never covers content.
+  const [light, setLight] = useState(false);
+  const [hidden, setHidden] = useState(false);
+  useEffect(() => {
+    let last = window.scrollY;
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      const y = window.scrollY;
+      setLight(lightUnder(36));
+      setHidden(y > 160 && y > last + 4 ? true : y < last - 4 || y <= 160 ? false : hiddenRef.current);
+      last = y;
+    };
+    const onScroll = () => { if (!raf) raf = requestAnimationFrame(update); };
+    update();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => { window.removeEventListener('scroll', onScroll); cancelAnimationFrame(raf); };
   }, [path]);
+  const hiddenRef = useRef(hidden);
+  hiddenRef.current = hidden;
+  // Sticky bars below the header move up while it is away.
+  useEffect(() => { document.documentElement.dataset.header = hidden && !menuOpen ? 'hidden' : 'shown'; }, [hidden, menuOpen]);
 
   useEffect(() => setMenuOpen(false), [path]);
 
@@ -49,18 +68,19 @@ export function TopBar({ path }: { path: string }) {
 
   return (
     <header
-      className={`vt-topbar fixed top-0 left-0 right-0 z-[100] flex items-center justify-between px-4 py-3 sm:px-6 sm:py-4 transition-[background-color,border-color] duration-500 ${
-        scrolled ? 'border-b border-white/[0.06] bg-night-950/75 backdrop-blur-md' : 'border-b border-transparent'
-      }`}
+      className={`vt-topbar fixed top-0 left-0 right-0 z-[100] flex items-center justify-between py-3 transition-[color,transform] duration-300 ease-out sm:py-4 ${
+        light ? 'on-light text-[#111a3d]' : 'text-white'
+      } ${hidden && !menuOpen ? '-translate-y-full' : ''}`}
+      style={{ paddingInline: 'var(--margin)' }}
     >
       <Logo />
 
-      <nav aria-label="Main" className="glass hidden rounded-full p-1.5 lg:block">
+      <nav aria-label="Main" className={`glass hidden rounded-full p-1.5 lg:block ${light ? 'border-[#111a3d]/20 bg-[#111a3d]/[0.06]' : ''}`}>
         <ul ref={listRef} className="relative flex items-center gap-1">
           {thumb && (
             <li
               aria-hidden="true"
-              className="pointer-events-none absolute inset-y-0 left-0 rounded-full border border-white/25 bg-white/[0.16] shadow-[inset_0_1px_0_rgb(255_255_255/0.22)] transition-[transform,width] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
+              className={`pointer-events-none absolute inset-y-0 left-0 rounded-full border transition-[transform,width] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${light ? 'border-[#111a3d]/25 bg-[#111a3d]/10' : 'border-white/25 bg-white/[0.16]'}`}
               style={{ width: thumb.w, transform: `translateX(${thumb.x}px)` }}
             />
           )}
@@ -69,8 +89,8 @@ export function TopBar({ path }: { path: string }) {
               <a
                 href={href(module.path)}
                 aria-current={isActive(module.path) ? 'page' : undefined}
-                className={`relative z-10 block whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium transition-colors duration-300 ${
-                  isActive(module.path) ? 'text-white' : 'text-white/70 hover:text-white'
+                className={`relative z-10 block whitespace-nowrap rounded-full px-4 py-2 text-[0.9375rem] font-medium transition-opacity duration-300 ${
+                  isActive(module.path) ? '' : 'opacity-70 hover:opacity-100'
                 }`}
               >
                 {module.title}

@@ -1,43 +1,23 @@
 /**
- * Site-wide interaction plumbing: pointer light on glass, rows and cards, and
+ * Site-wide interaction plumbing: pointer light on glass buttons and rows, and
  * page transitions in which the page title travels to its new position.
  */
 
 const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-/** Track the pointer over the element it is on, as --px/--py (and card tilt). */
+/** Track the pointer over the glass button or row it is on, as --px/--py. */
 export function installPointerLight() {
-  let current: HTMLElement | null = null;
-
-  const reset = (el: HTMLElement) => {
-    el.style.removeProperty('--rx');
-    el.style.removeProperty('--ry');
-  };
-
   const onMove = (event: PointerEvent) => {
     if (event.pointerType !== 'mouse') return;
-    const el = (event.target as Element | null)?.closest?.<HTMLElement>('.glass-button, .row, .tilt') ?? null;
-    if (current && current !== el) reset(current);
-    current = el;
+    const el = (event.target as Element | null)?.closest?.<HTMLElement>('.glass-button, .row') ?? null;
     if (!el) return;
     const rect = el.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
-    el.style.setProperty('--px', `${x}px`);
-    el.style.setProperty('--py', `${y}px`);
-    if (el.classList.contains('tilt') && !reducedMotion()) {
-      el.style.setProperty('--rx', `${(y / rect.height - 0.5) * -5}deg`);
-      el.style.setProperty('--ry', `${(x / rect.width - 0.5) * 6}deg`);
-    }
+    el.style.setProperty('--px', `${event.clientX - rect.left}px`);
+    el.style.setProperty('--py', `${event.clientY - rect.top}px`);
   };
-  const onLeave = () => current && reset(current);
 
   window.addEventListener('pointermove', onMove, { passive: true });
-  document.addEventListener('pointerleave', onLeave);
-  return () => {
-    window.removeEventListener('pointermove', onMove);
-    document.removeEventListener('pointerleave', onLeave);
-  };
+  return () => window.removeEventListener('pointermove', onMove);
 }
 
 // The title of the card or link just clicked, which becomes the next page's heading.

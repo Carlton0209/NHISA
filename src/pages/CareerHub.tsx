@@ -32,7 +32,7 @@ export default function CareerHub({ path }: { path: string }) {
         title="Your job search, step by step"
         intro="International student support from zero to offer. Start at Step 1 and work your way to the interview: each step has a short guide and the resources to act on it."
         meta={`${CAREER_STEPS.length} steps · ${TOTAL} resources`}
-        jump={CAREER_STEPS.map((step, index) => ({ id: step.id, label: `${index + 1}. ${step.title}` }))}
+        jump={CAREER_STEPS.map((step) => ({ id: step.id, label: step.title }))}
       >
         <SectionList sections={CAREER_STEPS} numbered />
       </PageShell>
@@ -45,7 +45,7 @@ export default function CareerHub({ path }: { path: string }) {
     const signatureBack = { label: 'Email Signature', path: '/career-hub/email-signature' };
     if (sub === 'sample') {
       return (
-        <PageShell path={path} title="A sample signature" back={signatureBack}
+        <PageShell path={path} title="A sample signature" back={signatureBack} compact
           intro="Copy it, paste it into your signature draft, then replace each detail with your own.">
           <SignatureSample />
         </PageShell>
@@ -54,7 +54,7 @@ export default function CareerHub({ path }: { path: string }) {
     if (sub in DEVICES) {
       const device = DEVICES[sub as Device];
       return (
-        <PageShell path={path} title="How to create an email signature?"
+        <PageShell path={path} title="Create your email signature" compact
           intro={`On your ${device.title.toLowerCase()}: ${device.subtitle}, in four steps.`} back={signatureBack}>
           <DeviceSteps device={sub as Device} />
         </PageShell>

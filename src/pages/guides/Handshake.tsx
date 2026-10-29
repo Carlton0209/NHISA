@@ -6,9 +6,9 @@ import { HANDSHAKE } from '../../content/guides';
 /** Steps whose order matters, as a numbered list. */
 function Steps({ items }: { items: { title: string; body: string }[] }) {
   return (
-    <ol className="border-t border-white/[0.08]">
+    <ol className="space-y-2">
       {items.map((item, index) => (
-        <li key={item.title} className="grid grid-cols-[2rem_1fr] gap-x-4 border-b border-white/[0.08] py-6">
+        <li key={item.title} className="grid grid-cols-[2rem_1fr] gap-x-4 rounded-2xl bg-[var(--surface)] p-6">
           <span className="tnum pt-0.5 text-sm font-semibold text-accent">{index + 1}</span>
           <div>
             <h3 className="text-[1.0625rem] font-semibold text-white">{item.title}</h3>
@@ -25,6 +25,7 @@ export default function Handshake() {
     <div className="space-y-28 sm:space-y-36">
       <Topic
         id="why"
+        photo="quad"
         title="Why Handshake?"
         intro={
           <>
@@ -37,9 +38,9 @@ export default function Handshake() {
           </>
         }
       >
-        <dl className="border-t border-white/[0.08]">
+        <dl className="space-y-2">
           {HANDSHAKE.why.map((item) => (
-            <div key={item.title} className="grid gap-2 border-b border-white/[0.08] py-6 sm:grid-cols-[11rem_1fr] sm:gap-8">
+            <div key={item.title} className="grid gap-2 rounded-2xl bg-[var(--surface)] p-6 sm:grid-cols-[12rem_1fr] sm:gap-8">
               <dt className="text-[1.0625rem] font-semibold text-white">{item.title}</dt>
               <dd className="t-body">{item.body}</dd>
             </div>
@@ -47,11 +48,11 @@ export default function Handshake() {
         </dl>
       </Topic>
 
-      <Topic id="first-steps" title="First steps" intro="Account creation and setup.">
+      <Topic id="first-steps" photo="hall" title="First steps" intro="Account creation and setup.">
         <Steps items={HANDSHAKE.firstSteps} />
       </Topic>
 
-      <Topic id="next-steps" title="Make the platform work for you" intro="Bring the right jobs and events to you instead of searching every day.">
+      <Topic id="next-steps" photo="crouse" title="Make the platform work for you" intro="Bring the right jobs and events to you instead of searching every day.">
         <Steps items={HANDSHAKE.nextSteps} />
       </Topic>
 

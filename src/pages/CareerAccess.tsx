@@ -4,8 +4,10 @@ import { Search } from 'lucide-react';
 import PageShell from '../components/PageShell';
 import { ResourceRow } from '../components/Resources';
 import { RESOURCES } from '../content/resources';
+import { PHOTOS, type PhotoKey } from '../content/photos';
 import type { Category, Resource } from '../content/types';
 import { transitionRows } from '../lib/interactions';
+import { href } from '../lib/router';
 
 const ALL = Object.entries(RESOURCES as Record<string, Resource>);
 
@@ -21,6 +23,15 @@ const CATEGORIES: Category[] = [
   'Campus life',
   'Study away',
 ];
+
+// Where most people start, each a filter with a picture of the place it leads to.
+const STARTS: { category: Category; label: string; photo: PhotoKey }[] = [
+  { category: 'Job & internship search', label: 'Find an internship or job', photo: 'studios' },
+  { category: 'International students', label: 'Visas, CPT and OPT', photo: 'school' },
+  { category: 'Campus life', label: 'Get involved on campus', photo: 'quad' },
+];
+
+const scrollBehavior = (): ScrollBehavior => (window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth');
 
 /** Every resource on the site as one filterable library, after the YC company directory. */
 export default function CareerAccess({ path }: { path: string }) {
@@ -47,6 +58,12 @@ export default function CareerAccess({ path }: { path: string }) {
   const count = (c: Category | null) => (c ? searched.filter(([, item]) => item.category === c).length : searched.length);
 
   const choose = (next: Category | null) => transitionRows(() => flushSync(() => setCategory(next)));
+  // The list is below the fold when a starting point is picked, so filter at once and scroll to it;
+  // a row transition here would interrupt the scroll.
+  const start = (next: Category) => {
+    flushSync(() => setCategory(next));
+    document.getElementById('library')?.scrollIntoView({ behavior: scrollBehavior(), block: 'start' });
+  };
   const clear = () => transitionRows(() => flushSync(() => {
     setQuery('');
     setCategory(null);
@@ -59,10 +76,27 @@ export default function CareerAccess({ path }: { path: string }) {
       meta={`${ALL.length} resources · ${CATEGORIES.length} categories`}
       intro="Every resource on NHISA in one place. Search, or filter by what you need right now. As our alumni network grows, internships and jobs they share will be added here too."
     >
-      <div className="grid gap-10 lg:grid-cols-[15rem_1fr] lg:gap-14">
-        <aside aria-label="Filter by category" className="lg:sticky lg:top-28 lg:self-start">
-          <h2 className="t-mono mb-3 hidden lg:block">Category</h2>
-          <div className="no-scrollbar -mx-5 flex gap-2 overflow-x-auto px-5 pb-1 lg:mx-0 lg:flex-col lg:gap-1.5 lg:px-0 lg:pb-0">
+      <section aria-labelledby="starts-title" className="mb-20 md:mb-28">
+        <h2 id="starts-title" data-reveal className="mb-6 text-[var(--step-lead)] font-medium">Where most people start</h2>
+        <ul className="grid gap-x-2 gap-y-8 sm:grid-cols-3">
+          {STARTS.map((item, index) => (
+            <li key={item.category} data-reveal={String(index + 1)}>
+              <button type="button" onClick={() => start(item.category)} aria-pressed={category === item.category} className="group block w-full text-left">
+                <span className="pic-in block aspect-[4/3] overflow-hidden rounded-[1.25rem]">
+                  <img src={PHOTOS[item.photo].src} alt="" loading="lazy" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]" style={{ objectPosition: PHOTOS[item.photo].position }} />
+                </span>
+                <span className="mt-4 block text-[var(--step-lead)] font-medium leading-tight">{item.label}</span>
+                <span className="t-meta tnum mt-1 block">{count(item.category)} resources in {item.category}</span>
+              </button>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <div id="library" className="grid gap-10 lg:grid-cols-[15rem_1fr] lg:gap-14">
+        <aside aria-label="Filter by category" className="min-w-0 lg:sticky lg:top-28 lg:self-start">
+          <h2 className="mb-3 hidden font-medium lg:block">Category</h2>
+          <div className="flex flex-wrap gap-2 lg:flex-col lg:flex-nowrap lg:gap-1.5">
             {[null, ...CATEGORIES].map((c) => {
               const n = count(c);
               return (
@@ -95,15 +129,15 @@ export default function CareerAccess({ path }: { path: string }) {
               aria-label="Search resources"
               className="search-input w-full bg-transparent text-white placeholder:text-white/45"
             />
-            <kbd className="hidden border border-white/[0.18] px-1.5 py-0.5 font-mono text-xs text-white/50 sm:block" aria-hidden="true">/</kbd>
+            <kbd className="hidden rounded-md bg-white/10 px-2 py-0.5 text-[var(--step-small)] text-white/70 sm:block" aria-hidden="true">/</kbd>
           </label>
 
-          <p className="t-mono mt-6" aria-live="polite">
+          <p className="t-meta tnum mt-6" aria-live="polite">
             Showing {results.length} of {ALL.length} resources{category ? ` in ${category}` : ''}
           </p>
 
           {results.length ? (
-            <ul className="mt-3 border-t border-white/[0.08]">
+            <ul className="mt-3 space-y-1">
               {results.map(([id, item]) => (
                 <ResourceRow key={id} id={id} item={item} showCategory />
               ))}
@@ -117,6 +151,14 @@ export default function CareerAccess({ path }: { path: string }) {
               .
             </div>
           )}
+
+          <p data-reveal className="t-body mt-16">
+            Know a resource that belongs here?{' '}
+            <a href={href('/about', 'get-involved')} className="font-medium text-white underline decoration-1 underline-offset-4 hover:decoration-2">
+              Suggest it to NHISA
+            </a>
+            .
+          </p>
         </div>
       </div>
     </PageShell>

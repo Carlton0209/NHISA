@@ -3,16 +3,15 @@ import type { Step } from '../content/email';
 import { href } from '../lib/router';
 import ImageDialog from './ImageDialog';
 
-/** Numbered steps that alternate left and right, as in the hand-drawn layout. */
+/** Ordered steps that alternate left and right, as in the hand-drawn layout. */
 export default function StepTrail({ steps }: { steps: Step[] }) {
   return (
     <ol className="relative space-y-6 sm:space-y-4">
       {steps.map((step, index) => {
         const right = index % 2 === 1;
         return (
-          <li key={step.title} className={`panel relative sm:w-[64%] ${right ? 'sm:ml-auto sm:text-right' : ''}`}>
-            <h3 className={`flex items-baseline gap-4 text-[1.5rem] font-semibold tracking-[-0.02em] text-white ${right ? 'sm:flex-row-reverse' : ''}`}>
-              <span className="tnum text-[2.5rem] leading-none tracking-[-0.04em] text-white/20" aria-hidden="true">{index + 1}</span>
+          <li key={step.title} data-reveal className={`panel relative sm:w-[64%] ${right ? 'sm:ml-auto' : ''}`}>
+            <h3 className="text-[var(--step-lead)] font-medium leading-tight text-white">
               <span className="sr-only">Step {index + 1}: </span>
               {step.title}
             </h3>

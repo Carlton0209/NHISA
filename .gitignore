@@ -5,3 +5,6 @@ dist
 
 # Design-tool cache (local session state)
 .impeccable/hook.cache.json
+
+# taste-skill working files (direction sheet, inspector screenshots)
+.taste-skill/

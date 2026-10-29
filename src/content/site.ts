@@ -77,3 +77,20 @@ export const MODULES: { id: string; title: string; short: string; path: string; 
     summary: 'Our mission, our team, and how to get involved.',
   },
 ];
+
+/**
+ * Each module is a colour chapter: the same field on the homepage, at the top
+ * of its own pages, and in the footer's block wordmark.
+ */
+export const CHAPTERS: Record<string, { field: string; light: boolean }> = {
+  campus: { field: 'field-campus', light: true },
+  'career-hub': { field: 'field-careers', light: false },
+  'career-access': { field: 'field-library', light: true },
+  alumni: { field: 'field-alumni', light: false },
+  about: { field: 'field-about', light: true },
+};
+
+export const chapterFor = (path: string) => {
+  const module = MODULES.find((m) => path === m.path || path.startsWith(`${m.path}/`));
+  return module ? { id: module.id, ...CHAPTERS[module.id] } : null;
+};

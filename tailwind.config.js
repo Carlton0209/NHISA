@@ -9,8 +9,7 @@ export default {
         accent: { DEFAULT: '#aab3ff', strong: '#7f89f4' },
       },
       fontFamily: {
-        display: ['Satoshi', 'system-ui', 'sans-serif'],
-        mono: ['"DM Mono"', 'ui-monospace', 'monospace'],
+        display: ['"General Sans"', 'system-ui', 'sans-serif'],
       },
     },
   },

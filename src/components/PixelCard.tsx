@@ -39,7 +39,7 @@ type PixelCardProps = {
 /** Case-study style tile: on hover a grid of pixels flickers across the artwork. */
 export default function PixelCard({ path, title, subtitle, meta, seed, children }: PixelCardProps) {
   return (
-    <a href={href(path)} className="pixel-card group relative block aspect-[4/3] overflow-hidden bg-night-800">
+    <a href={href(path)} className="pixel-card group relative block aspect-[4/3] overflow-hidden rounded-[1.25rem] bg-night-800">
       <div className="pixel-art absolute inset-0">{children}</div>
       <div className="pixel-grid absolute inset-0" aria-hidden="true">
         {scatter(seed).map((pixel) => (
@@ -57,12 +57,12 @@ export default function PixelCard({ path, title, subtitle, meta, seed, children 
           />
         ))}
       </div>
-      <span className="absolute right-4 top-4 flex h-7 w-7 items-center justify-center border border-white/50 text-white/80 transition-colors group-hover:border-white group-hover:text-white" aria-hidden="true">
-        <Plus size={14} />
+      <span className="glass absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full text-white/85 transition-colors group-hover:text-white" aria-hidden="true">
+        <Plus size={16} />
       </span>
-      <span className="absolute bottom-0 left-0 w-[min(100%,20rem)] bg-white px-5 py-4 text-night-900">
+      <span className="absolute bottom-0 left-0 w-[min(100%,20rem)] rounded-tr-[1.25rem] bg-white px-5 py-4 text-night-900">
         <span className="block text-2xl font-medium tracking-tight">{title}</span>
-        <span className="mt-2 flex items-center justify-between gap-4 text-xs text-night-900/60">
+        <span className="mt-2 flex items-center justify-between gap-4 text-[var(--step-small)] text-night-900/70">
           <span>{subtitle}</span>
           <span className="font-medium text-night-900">{meta}</span>
         </span>

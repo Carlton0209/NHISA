@@ -23,17 +23,17 @@ The structure follows the NHISA site brief: three modules (international student
 
 | Route | Content |
 | --- | --- |
-| `#/` | Hero headline and mission over the campus photo (the cursor reveals the winter version), a flip-through module carousel, then each module with links into its sections |
+| `#/` | The campus photo turning from autumn to winter as you scroll, a short statement of what NHISA is, the five sections as a poster list, one chapter per module, who runs NHISA, and a closing call to the Career Hub |
 | `#/campus` | Campus Resources: Academic & Advising, International Student Resources, Student Life & Support, Study Abroad & Study Away |
 | `#/career-hub` | Career Hub: the job search in six steps, from Explore & Plan to Networking & Outreach |
 | `#/career-hub/linkedin`, `/handshake`, `/email-signature` | Long-form guides; Email Signature has `/laptop`, `/phone` and `/sample` |
-| `#/career-access` | The resource library: every resource, searchable and filterable by category |
+| `#/career-access` | The resource library: three common starting points, then every resource, searchable and filterable by category |
 | `#/alumni` | Alumni Connections: photo wall with an industry filter, stories and advice, events and coffee chats; each person has `#/alumni/<id>` |
 | `#/about` | Mission, team, get involved, contact |
 
 Routes are URL fragments, so deep links work under the GitHub Pages project path without rewrites. `?section=<id>` jumps to a section, e.g. `#/career-hub?section=interviews`. Addresses from the earlier site (`#/job/…`, `#/school/…`, `#/visa`, `#/photo-wall`, `#/community`) redirect to their new homes.
 
-Navigation follows the brief's references: a slim top bar, the main sections in a floating bar at the bottom of the screen (Awwwards), and a footer with a line drawing on a ground line (Common App).
+The navigation is a transparent glass bar at the top right, which hides while you scroll down and switches to dark text over light sections. The footer builds the NHISA wordmark from five blocks, one per section colour, and keeps the small line drawing on a ground line (Common App).
 
 ## Edit content
 
@@ -52,12 +52,16 @@ The sample signature itself is in `src/pages/guides/EmailSignature.tsx`. The Out
 
 `src/assets/hero-autumn.webp` and `hero-winter.webp` must keep the same size and framing. The hero pins while you scroll and a soft snowline descends from the sky, turning autumn into winter (`src/components/RevealLayer.tsx`); with a mouse, a winter lens also follows the cursor. Visitors who prefer reduced motion get a still hero.
 
-Other interactions live in `src/lib/interactions.ts`: pages change inside a View Transition (the clicked card's title travels into the next page's heading, the navigation bars stay put), glass buttons and list rows catch a highlight under the pointer, module cards tilt slightly, and the library re-flows its rows when filtered. Browsers without View Transitions simply switch pages.
+Other interactions live in `src/lib/interactions.ts`: pages change inside a View Transition (a section name clicked on the homepage travels into the next page's heading, the navigation stays put), glass buttons and list rows catch a highlight under the pointer, and the library re-flows its rows when filtered. Browsers without View Transitions simply switch pages.
 
-Inner pages sit on a dark backdrop of faint, static lines drawn by `src/components/FlowLines.tsx`.
+Headings, rows and photographs rise into place as they enter the screen (`src/lib/reveal.ts`); with reduced motion they are simply there.
 
 ## Brand and type
 
 The logo pairs Syracuse University's Block S (`src/components/Brand.tsx`, traced from the university's artwork and kept in its official orange, #F76900) with the NHISA wordmark; the browser tab icon (`public/favicon.svg`) is the Block S alone. University marks belong to Syracuse University and are not covered by this repository's code.
 
-Text is set in Satoshi (Fontshare) with DM Mono for small details such as addresses, counts and dates. Inner pages follow a quiet editorial style on a faint graph-paper grid: medium-weight headings, outline section glyphs (`src/components/Glyph.tsx`) and resource lists rather than cards.
+Text is set in General Sans (Fontshare). Each section has its own colour, used for its homepage chapter and its page header (`CHAPTERS` in `src/content/site.ts`): Campus Resources pale blue, Career Hub deep indigo, Career Access periwinkle, Alumni Connections slate, About Us grey. Everything else sits on the dark night ground, with glass reserved for the navigation and buttons.
+
+## Photographs
+
+`src/content/photos.ts` lists every photograph and where it is used: one at the top of each section's pages, and one beside most long sections. The two hero photographs are NHISA's own. The campus photographs in `src/assets/found/` come from Wikimedia Commons under CC BY-SA 4.0; `credits.json` records each title, photographer and source page, and the footer credits them. Keep that file in step when you add or replace a photograph.

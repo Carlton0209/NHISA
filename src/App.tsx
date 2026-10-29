@@ -9,6 +9,7 @@ import Alumni, { alumniTitle } from './pages/Alumni';
 import About from './pages/About';
 import { useRoute } from './lib/router';
 import { installPointerLight, installTitleCapture } from './lib/interactions';
+import { installReveal } from './lib/reveal';
 
 function resolve(path: string) {
   const section = `/${path.split('/')[1] ?? ''}`;
@@ -30,9 +31,11 @@ export default function App() {
   useEffect(() => {
     const removeLight = installPointerLight();
     const removeCapture = installTitleCapture();
+    const removeReveal = installReveal();
     return () => {
       removeLight();
       removeCapture();
+      removeReveal();
     };
   }, []);
 
@@ -65,7 +68,6 @@ export default function App() {
       }}>
         Skip to content
       </a>
-      <div className="grid-backdrop" aria-hidden="true" />
       <TopBar path={path} />
       {page}
       <SiteFooter />

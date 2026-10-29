@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { ArrowRight, ArrowUpRight, MapPin, Quote, User } from 'lucide-react';
 import PageShell, { SectionHeading } from '../components/PageShell';
+import Topic from '../components/Topic';
+import { PHOTOS } from '../content/photos';
 import { ALUMNI, ALUMNI_SECTIONS, EVENTS, type Alumnus } from '../content/alumni';
 import { href } from '../lib/router';
 
@@ -13,17 +15,20 @@ function ShareYourStory({ className = '' }: { className?: string }) {
   return (
     <a
       href={href('/about', 'get-involved')}
-      className={`panel group flex flex-col justify-between border-accent/25 bg-accent/[0.06] transition-colors duration-300 hover:border-accent/50 ${className}`}
+      className={`group flex flex-col overflow-hidden rounded-[1.25rem] bg-accent/[0.08] transition-colors duration-300 hover:bg-accent/[0.14] ${className}`}
     >
-      <span>
+      <span className="pic-in block min-h-[10rem] flex-1 overflow-hidden">
+        <img src={PHOTOS.school.src} alt={PHOTOS.school.alt} loading="lazy" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]" />
+      </span>
+      <span className="block p-6">
         <span className="block text-[1.0625rem] font-semibold text-white">Are you a Newhouse alum?</span>
         <span className="t-body mt-2 block">
           Share your story over a coffee chat and help the next class of international students find their way.
         </span>
-      </span>
-      <span className="mt-6 flex items-center gap-2 text-sm font-medium text-accent">
-        Get involved
-        <ArrowRight size={16} aria-hidden="true" className="transition-transform duration-500 group-hover:translate-x-1" />
+        <span className="mt-5 flex items-center gap-2 text-sm font-medium text-accent">
+          Get involved
+          <ArrowRight size={16} aria-hidden="true" className="transition-transform duration-500 group-hover:translate-x-1" />
+        </span>
       </span>
     </a>
   );
@@ -38,13 +43,15 @@ function PhotoWall() {
     return (
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {[0, 1, 2].map((i) => (
-          <div key={i} aria-hidden="true" className="flex aspect-[4/5] flex-col items-center justify-center gap-3 border border-dashed border-white/[0.16] text-white/35">
+          <div key={i} aria-hidden="true" data-reveal={String(i + 1)} className="flex aspect-[4/5] flex-col items-center justify-center gap-3 rounded-[1.25rem] bg-[var(--surface)] text-white/55">
             <User size={36} />
-            <span className="t-mono">Coming soon</span>
+            <span className="t-meta">Coming soon</span>
           </div>
         ))}
-        <ShareYourStory className="aspect-auto lg:aspect-[4/5]" />
-        <p className="t-body sm:col-span-2 lg:col-span-4">
+        <div data-reveal="4" className="flex lg:aspect-[4/5]">
+          <ShareYourStory className="w-full" />
+        </div>
+        <p data-reveal className="t-body max-w-[60ch] sm:col-span-2 lg:col-span-4">
           Our first coffee chats are being written up. Every alum and professional we meet gets a place on this wall.
         </p>
       </div>
@@ -84,7 +91,7 @@ function PhotoWall() {
               <span className="block text-sm text-white/60">
                 {person.role}, {person.organization}
               </span>
-              <span className="t-mono mt-2 block">{person.industry}</span>
+              <span className="t-meta mt-2 block">{person.industry}</span>
             </a>
           </li>
         ))}
@@ -104,7 +111,7 @@ function Stories() {
   return (
     <div className="grid gap-x-12 gap-y-12 md:grid-cols-2">
       {withAdvice.map((person) => (
-        <a key={person.id} href={href(`/alumni/${person.id}`)} className="group flex flex-col border-t border-white/[0.12] pt-7">
+        <a key={person.id} href={href(`/alumni/${person.id}`)} className="group flex flex-col rounded-2xl bg-[var(--surface)] p-7 transition-colors hover:bg-[#181d3d]">
           <Quote size={22} aria-hidden="true" className="text-accent" />
           <p className="mt-4 text-xl leading-relaxed tracking-[-0.01em] text-white/90">{person.advice}</p>
           <span className="t-meta mt-6 transition-colors group-hover:text-white/80">
@@ -128,10 +135,10 @@ function Events() {
     );
   }
   return (
-    <ul className="border-t border-white/[0.08]">
+    <ul className="space-y-3">
       {upcoming.map((event) => (
-        <li key={event.id} className="grid gap-4 border-b border-white/[0.08] py-7 sm:grid-cols-[8rem_1fr_auto] sm:items-center">
-          <p className="t-mono text-white/70">
+        <li key={event.id} className="grid gap-4 rounded-2xl bg-[var(--surface)] p-6 sm:grid-cols-[8rem_1fr_auto] sm:items-center">
+          <p className="tnum font-medium">
             {new Date(`${event.date}T12:00:00`).toLocaleDateString('en-US', { month: 'short', day: 'numeric', weekday: 'short' })}
             {event.time && <span className="block text-white/50">{event.time}</span>}
           </p>
@@ -175,7 +182,7 @@ function Profile({ path, person }: { path: string; person: Alumnus }) {
       <div className="grid gap-12 lg:grid-cols-[22rem_1fr]">
         <div className="lg:sticky lg:top-32 lg:self-start">
           <img src={person.photo} alt={person.photoAlt} className="aspect-[4/5] w-full object-cover" />
-          <dl className="mt-6 divide-y divide-white/[0.08] text-sm">
+          <dl className="mt-6 space-y-2 text-[var(--step-small)]">
             {facts.map(([term, value]) => (
               <div key={term} className="flex justify-between gap-4 py-3">
                 <dt className="text-white/50">{term}</dt>
@@ -203,7 +210,7 @@ function Profile({ path, person }: { path: string; person: Alumnus }) {
             ))}
           </div>
           {person.advice && (
-            <aside className="panel mt-14 border-accent/25 bg-accent/[0.06]">
+            <aside className="panel mt-14 bg-accent/[0.08]">
               <h2 className="text-[1.0625rem] font-semibold text-accent">Advice for international students</h2>
               <p className="mt-3 text-xl leading-relaxed tracking-[-0.01em] text-white/90">{person.advice}</p>
             </aside>
@@ -230,7 +237,7 @@ export default function Alumni({ path }: { path: string }) {
   return (
     <PageShell
       path={path}
-      title="Learn from people who’ve been where you are"
+      title="People who did it"
       intro="Every coffee chat with a Newhouse alum or industry professional becomes a profile here: their time at school, their U.S. job search, and their advice for international students."
       jump={ALUMNI_SECTIONS}
     >
@@ -238,20 +245,17 @@ export default function Alumni({ path }: { path: string }) {
         <section id="meet" aria-labelledby="meet-title" className="scroll-mt-40">
           <SectionHeading
             id="meet-title"
-            glyph="grid"
             title="Meet Alumni & Professionals"
             intro={ALUMNI.length ? 'Filter by industry, then open a profile to read the full conversation.' : 'Each coffee chat becomes a profile you can open to read the full conversation.'}
           />
           <PhotoWall />
         </section>
-        <section id="stories" aria-labelledby="stories-title" className="scroll-mt-40">
-          <SectionHeading id="stories-title" glyph="pages" title="Career Stories & Advice" intro="The one thing each person wishes they had known as an international student." />
+        <Topic id="stories" photo="studios" photoBelow title="Career Stories & Advice" intro="The one thing each person wishes they had known as an international student.">
           <Stories />
-        </section>
-        <section id="events" aria-labelledby="events-title" className="scroll-mt-40">
-          <SectionHeading id="events-title" glyph="rings" title="Events & Coffee Chats" intro="Small-group chats with alumni and professionals, open to NHISA members." />
+        </Topic>
+        <Topic id="events" photo="hall" photoBelow title="Events & Coffee Chats" intro="Small-group chats with alumni and professionals, open to NHISA members.">
           <Events />
-        </section>
+        </Topic>
       </div>
     </PageShell>
   );
