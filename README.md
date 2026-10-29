@@ -19,25 +19,34 @@ Pushing to `main` builds the site and publishes `dist/` to GitHub Pages.
 
 ## Pages
 
+The structure follows the NHISA site brief: three modules (international student support, alumni connections, career access) plus campus resources and about pages.
+
 | Route | Content |
 | --- | --- |
-| `#/` | Hero: the autumn campus photo; the cursor reveals the winter version |
-| `#/school` | School Experience: Community, Experience, Academics, IT Support |
-| `#/job` | Job Knowledge: LinkedIn, Handshake, Email Signature, Job Search, Career Planning, and the NHISA toolkits |
-| `#/job/email-signature/laptop`, `/phone`, `/sample` | Step-by-step Outlook guides and a copyable sample signature |
-| `#/visa`, `#/photo-wall`, `#/community` | Placeholders until their content is ready |
+| `#/` | Hero headline and mission over the campus photo (the cursor reveals the winter version), a flip-through module carousel, then each module with links into its sections |
+| `#/campus` | Campus Resources: Academic & Advising, International Student Resources, Student Life & Support, Study Abroad & Study Away |
+| `#/career-hub` | Career Hub: the job search in six steps, from Explore & Plan to Networking & Outreach |
+| `#/career-hub/linkedin`, `/handshake`, `/email-signature` | Long-form guides; Email Signature has `/laptop`, `/phone` and `/sample` |
+| `#/career-access` | The resource library: every resource, searchable and filterable by category |
+| `#/alumni` | Alumni Connections: photo wall with an industry filter, stories and advice, events and coffee chats; each person has `#/alumni/<id>` |
+| `#/about` | Mission, team, get involved, contact |
 
-Routes are URL fragments, so deep links work under the GitHub Pages project path without rewrites.
+Routes are URL fragments, so deep links work under the GitHub Pages project path without rewrites. `?section=<id>` jumps to a section, e.g. `#/career-hub?section=interviews`. Addresses from the earlier site (`#/job/…`, `#/school/…`, `#/visa`, `#/photo-wall`, `#/community`) redirect to their new homes.
+
+Navigation follows the brief's references: a slim top bar, the main sections in a floating bar at the bottom of the screen (Awwwards), and a footer with a line drawing on a ground line (Common App).
 
 ## Edit content
 
 All copy and links live in `src/content/`:
 
-- `school.ts`: School Experience resources, grouped by topic
-- `job.ts`: Job Knowledge topics, toolkits, LinkedIn and Handshake guides, job search and career planning resources
+- `resources.ts`: every resource, once, with its category. Pages pick resources by id.
+- `campus.ts` and `careerHub.ts`: which resources appear in each section or step, with each section's introduction
+- `guides.ts`: the LinkedIn and Handshake guide text
 - `email.ts`: Email Signature steps for laptop and phone, and the screenshots they open
+- `alumni.ts`: alumni profiles and upcoming events. Both start empty; the file explains how to add someone.
+- `site.ts`: mission, audiences and **contact details**. Fill in `CONTACT` (email, Instagram, LinkedIn, join form) before announcing the site; until then the Get involved and Contact sections say "coming soon".
 
-The sample signature itself is in `src/pages/job/EmailSignature.tsx`. The Outlook screenshots in `src/assets/email/` have the original account name and address replaced with placeholders.
+The sample signature itself is in `src/pages/guides/EmailSignature.tsx`. The Outlook screenshots in `src/assets/email/` have the original account name and address replaced with placeholders.
 
 ## Hero photos
 

@@ -1,14 +1,15 @@
 import { ArrowUpRight } from 'lucide-react';
 import { SectionHeading } from '../../components/PageShell';
 import { ResourceCard } from '../../components/ResourceCard';
-import { HANDSHAKE, JOB_SEARCH } from '../../content/job';
+import { HANDSHAKE } from '../../content/guides';
+import { resource } from '../../content/resources';
 
 function NumberedCards({ items }: { items: { title: string; body: string }[] }) {
   return (
     <ol className="grid gap-4 md:grid-cols-3">
       {items.map((item, index) => (
         <li key={item.title} className="card">
-          <span className="font-mono text-sm text-ember">{String(index + 1).padStart(2, '0')}</span>
+          <span className="font-mono text-sm text-accent">{String(index + 1).padStart(2, '0')}</span>
           <h3 className="mt-4 text-lg font-semibold text-white">{item.title}</h3>
           <p className="mt-2 leading-relaxed text-white/65">{item.body}</p>
         </li>
@@ -17,7 +18,7 @@ function NumberedCards({ items }: { items: { title: string; body: string }[] }) 
   );
 }
 
-const cuseWorks = JOB_SEARCH[0].items.find((item) => item.name === 'CuseWorks');
+const cuseWorks = resource('cuseworks');
 
 export default function Handshake() {
   return (
@@ -35,12 +36,12 @@ export default function Handshake() {
       </section>
 
       <section aria-labelledby="first-steps">
-        <SectionHeading id="first-steps" number="01" title="First steps" intro="Account creation and setup." />
+        <SectionHeading id="first-steps" label="01" title="First steps" intro="Account creation and setup." />
         <NumberedCards items={HANDSHAKE.firstSteps} />
       </section>
 
       <section aria-labelledby="next-steps">
-        <SectionHeading id="next-steps" number="02" title="Make the platform work for you" />
+        <SectionHeading id="next-steps" label="02" title="Make the platform work for you" />
         <NumberedCards items={HANDSHAKE.nextSteps} />
       </section>
 
@@ -52,7 +53,7 @@ export default function Handshake() {
           href="https://app.joinhandshake.com/home"
           target="_blank"
           rel="noopener noreferrer"
-          className="card card-link group flex flex-col justify-between bg-ember/[0.08]"
+          className="card card-link group flex flex-col justify-between bg-accent/[0.08]"
         >
           <span>
             <span className="block text-lg font-semibold text-white">Open Handshake</span>

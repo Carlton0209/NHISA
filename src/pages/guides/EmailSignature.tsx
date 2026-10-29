@@ -23,16 +23,16 @@ export function EmailSignature() {
           How to create an email signature?
         </h2>
         <div className="grid gap-5 md:grid-cols-2">
-          <PixelCard path="/job/email-signature/laptop" title="Laptop" subtitle={DEVICES.laptop.subtitle} meta="4 steps" seed={11}>
+          <PixelCard path="/career-hub/email-signature/laptop" title="Laptop" subtitle={DEVICES.laptop.subtitle} meta="4 steps" seed={11}>
             <LaptopArt />
           </PixelCard>
-          <PixelCard path="/job/email-signature/phone" title="Phone" subtitle={DEVICES.phone.subtitle} meta="4 steps" seed={29}>
+          <PixelCard path="/career-hub/email-signature/phone" title="Phone" subtitle={DEVICES.phone.subtitle} meta="4 steps" seed={29}>
             <PhoneArt />
           </PixelCard>
         </div>
         <a
-          href={href('/job/email-signature/sample')}
-          className="mt-8 inline-flex items-center gap-2 font-medium text-ember underline decoration-ember/40 underline-offset-4 hover:decoration-ember"
+          href={href('/career-hub/email-signature/sample')}
+          className="mt-8 inline-flex items-center gap-2 font-medium text-accent underline decoration-accent/40 underline-offset-4 hover:decoration-accent"
         >
           Just need a sample signature to copy?
           <ArrowRight size={16} aria-hidden="true" />
@@ -50,8 +50,8 @@ export function DeviceSteps({ device }: { device: Device }) {
       <p className="mt-12 text-white/60">
         Using your {other} instead?{' '}
         <a
-          href={href(`/job/email-signature/${other}`)}
-          className="font-medium text-ember underline decoration-ember/40 underline-offset-4 hover:decoration-ember"
+          href={href(`/career-hub/email-signature/${other}`)}
+          className="font-medium text-accent underline decoration-accent/40 underline-offset-4 hover:decoration-accent"
         >
           See the {DEVICES[other].title.toLowerCase()} steps
         </a>
@@ -101,8 +101,8 @@ export function SignatureSample() {
         </ol>
         <p className="mt-6 text-sm text-white/50">
           Next: add it in Outlook on your{' '}
-          <a href={href('/job/email-signature/laptop')} className="text-ember underline underline-offset-4">laptop</a> or{' '}
-          <a href={href('/job/email-signature/phone')} className="text-ember underline underline-offset-4">phone</a>.
+          <a href={href('/career-hub/email-signature/laptop')} className="text-accent underline underline-offset-4">laptop</a> or{' '}
+          <a href={href('/career-hub/email-signature/phone')} className="text-accent underline underline-offset-4">phone</a>.
         </p>
       </div>
     </div>

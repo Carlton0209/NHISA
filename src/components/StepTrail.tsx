@@ -11,7 +11,7 @@ export default function StepTrail({ steps }: { steps: Step[] }) {
         const right = index % 2 === 1;
         return (
           <li key={step.title} className={`card relative sm:w-[64%] ${right ? 'sm:ml-auto sm:text-right' : ''}`}>
-            <p className="font-mono text-sm uppercase tracking-[0.18em] text-ember">Step {index + 1}</p>
+            <p className="font-mono text-sm uppercase tracking-[0.18em] text-accent">Step {index + 1}</p>
             <h3 className="mt-3 text-2xl font-semibold tracking-tight text-white">{step.title}</h3>
             {step.body && <p className="mt-3 leading-relaxed text-white/65">{step.body}</p>}
             {step.extras?.map((extra) => (
@@ -26,7 +26,7 @@ export default function StepTrail({ steps }: { steps: Step[] }) {
                     href={extra.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 font-medium text-ember underline decoration-ember/40 underline-offset-4 hover:decoration-ember"
+                    className="inline-flex items-center gap-1 font-medium text-accent underline decoration-accent/40 underline-offset-4 hover:decoration-accent"
                   >
                     {extra.label}
                     <ArrowUpRight size={15} aria-hidden="true" />
@@ -36,7 +36,7 @@ export default function StepTrail({ steps }: { steps: Step[] }) {
                 {extra.kind === 'route' && (
                   <a
                     href={href(extra.path)}
-                    className="inline-flex items-center gap-1 font-medium text-ember underline decoration-ember/40 underline-offset-4 hover:decoration-ember"
+                    className="inline-flex items-center gap-1 font-medium text-accent underline decoration-accent/40 underline-offset-4 hover:decoration-accent"
                   >
                     {extra.label}
                     <ArrowRight size={15} aria-hidden="true" />

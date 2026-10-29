@@ -12,7 +12,7 @@ export default function ImageDialog({ label, src, alt, caption }: ImageDialogPro
       <button
         type="button"
         onClick={() => dialogRef.current?.showModal()}
-        className="font-medium text-ember underline decoration-ember/40 underline-offset-4 transition-colors hover:decoration-ember"
+        className="font-medium text-accent underline decoration-accent/40 underline-offset-4 transition-colors hover:decoration-accent"
       >
         {label}
       </button>

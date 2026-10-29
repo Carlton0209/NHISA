@@ -4,8 +4,9 @@ export default {
   theme: {
     extend: {
       colors: {
-        night: { 950: '#03060b', 900: '#070c15', 800: '#0d1522' },
-        ember: { DEFAULT: '#e8702a', dark: '#d2611f' },
+        // Blue-purple-gray: deep indigo slate with a periwinkle accent.
+        night: { 950: '#090b14', 900: '#0e1120', 800: '#151a2e', 700: '#1e2440' },
+        accent: { DEFAULT: '#aab3ff', strong: '#7f89f4' },
       },
     },
   },

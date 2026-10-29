@@ -34,9 +34,9 @@ export default function FlowLines({ className = '' }: { className?: string }) {
       context.setTransform(dpr, 0, 0, dpr, 0, 0);
 
       const sky = context.createLinearGradient(0, 0, 0, height);
-      sky.addColorStop(0, '#03060b');
-      sky.addColorStop(0.6, '#08101b');
-      sky.addColorStop(1, '#0d1726');
+      sky.addColorStop(0, '#080a13');
+      sky.addColorStop(0.6, '#0c0f1f');
+      sky.addColorStop(1, '#12162b');
       context.fillStyle = sky;
       context.fillRect(0, 0, width, height);
 
@@ -47,7 +47,7 @@ export default function FlowLines({ className = '' }: { className?: string }) {
           const k = i / (b.lines - 1) - 0.5;
           // Brightest through the middle of a bundle, fading at its edges.
           const alpha = 0.02 + 0.045 * (1 - Math.abs(k) * 2) ** 1.5;
-          context.strokeStyle = `rgba(160, 186, 220, ${alpha.toFixed(3)})`;
+          context.strokeStyle = `rgba(176, 182, 240, ${alpha.toFixed(3)})`;
           context.beginPath();
           for (let x = -step; x <= width + step; x += step) {
             const u = x / width;

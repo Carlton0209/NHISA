@@ -20,7 +20,7 @@ function scatter(seed: number): Pixel[] {
         col,
         row,
         delay: Math.round(random() * 520),
-        tone: roll < 0.12 ? '#e8702a' : roll < 0.55 ? '#f4f6fa' : '#03060b',
+        tone: roll < 0.12 ? '#aab3ff' : roll < 0.55 ? '#f4f6fa' : '#03060b',
       });
     }
   }
@@ -79,7 +79,7 @@ function SignatureLines({ x, y, scale = 1 }: { x: number; y: number; scale?: num
     <g transform={`translate(${x} ${y}) scale(${scale})`}>
       <rect width="34" height="1.5" fill={faint} />
       <rect y="8" width="78" height="7" rx="1.5" fill="rgba(255,255,255,0.88)" />
-      <rect y="21" width="112" height="5" rx="1.5" fill="#e8702a" />
+      <rect y="21" width="112" height="5" rx="1.5" fill="#aab3ff" />
       <rect y="31" width="132" height="4" rx="1.5" fill="rgba(255,255,255,0.4)" />
       <rect y="40" width="104" height="4" rx="1.5" fill="rgba(255,255,255,0.4)" />
       <rect y="49" width="70" height="4" rx="1.5" fill="rgba(120,170,255,0.75)" />
@@ -92,7 +92,7 @@ export function LaptopArt() {
     <svg viewBox="0 0 400 300" className="h-full w-full" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
       <defs>
         <radialGradient id="laptop-glow" cx="0.5" cy="0.45" r="0.6">
-          <stop offset="0" stopColor="#1b2c45" />
+          <stop offset="0" stopColor="#1c2246" />
           <stop offset="1" stopColor="#0a111c" />
         </radialGradient>
       </defs>
@@ -121,7 +121,7 @@ export function PhoneArt() {
     <svg viewBox="0 0 400 300" className="h-full w-full" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
       <defs>
         <radialGradient id="phone-glow" cx="0.55" cy="0.4" r="0.6">
-          <stop offset="0" stopColor="#2a2219" />
+          <stop offset="0" stopColor="#251f42" />
           <stop offset="1" stopColor="#0a0f18" />
         </radialGradient>
       </defs>
@@ -139,7 +139,7 @@ export function PhoneArt() {
       <rect x="152" y="101" width="88" height="4" rx="2" fill={screen} />
       <rect x="152" y="110" width="64" height="4" rx="2" fill={screen} />
       <SignatureLines x={152} y={128} scale={0.7} />
-      <rect x="152" y="236" width="96" height="22" rx="11" fill="rgba(232,112,42,0.85)" />
+      <rect x="152" y="236" width="96" height="22" rx="11" fill="rgba(170,179,255,0.85)" />
       </g>
     </svg>
   );

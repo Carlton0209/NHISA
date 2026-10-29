@@ -1,7 +1,7 @@
 import { ArrowUpRight } from 'lucide-react';
 import CopyButton from '../../components/CopyButton';
 import { SectionHeading } from '../../components/PageShell';
-import { LINKEDIN } from '../../content/job';
+import { LINKEDIN } from '../../content/guides';
 
 function PointCard({ title, points }: { title: string; points: string[] }) {
   return (
@@ -10,7 +10,7 @@ function PointCard({ title, points }: { title: string; points: string[] }) {
       <ul className="mt-4 space-y-2.5">
         {points.map((point) => (
           <li key={point} className="flex gap-3 leading-relaxed text-white/65">
-            <span className="mt-[0.6rem] h-1 w-1 shrink-0 rounded-full bg-ember" aria-hidden="true" />
+            <span className="mt-[0.6rem] h-1 w-1 shrink-0 rounded-full bg-accent" aria-hidden="true" />
             {point}
           </li>
         ))}
@@ -44,7 +44,7 @@ export default function LinkedIn() {
           <ol className="mt-5 space-y-4">
             {LINKEDIN.setup.map((step, index) => (
               <li key={step} className="flex items-baseline gap-4">
-                <span className="font-mono text-sm text-ember">{String(index + 1).padStart(2, '0')}</span>
+                <span className="font-mono text-sm text-accent">{String(index + 1).padStart(2, '0')}</span>
                 <span className="leading-relaxed text-white/75">{step}</span>
               </li>
             ))}
@@ -55,7 +55,7 @@ export default function LinkedIn() {
       <section aria-labelledby="profile">
         <SectionHeading
           id="profile"
-          number="01"
+          label="01"
           title="Profile optimization"
           intro="Build a profile that clearly shows who you are, what you can do, and where you want to go."
         />
@@ -69,7 +69,7 @@ export default function LinkedIn() {
       <section aria-labelledby="networking">
         <SectionHeading
           id="networking"
-          number="02"
+          label="02"
           title="Networking & outreach"
           intro="Build meaningful connections through thoughtful conversations and continued engagement."
         />
@@ -83,7 +83,7 @@ export default function LinkedIn() {
       <section aria-labelledby="prompts">
         <SectionHeading
           id="prompts"
-          number="03"
+          label="03"
           title="AI prompts"
           intro="Use these prompts with an AI tool to improve your LinkedIn profile and understand what employers are looking for. Replace the brackets with your information."
         />

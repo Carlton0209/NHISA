@@ -1,28 +1,44 @@
 import { useEffect, useRef } from 'react';
-import Navbar, { NAV_ITEMS } from './components/Navbar';
+import FlowLines from './components/FlowLines';
+import { BackToTop, BottomNav, TopBar } from './components/Navigation';
+import SiteFooter from './components/SiteFooter';
 import Home from './pages/Home';
-import School, { schoolTitle } from './pages/School';
-import Job, { jobTitle } from './pages/Job';
-import ComingSoon from './pages/ComingSoon';
+import Campus from './pages/Campus';
+import CareerHub, { careerHubTitle } from './pages/CareerHub';
+import CareerAccess from './pages/CareerAccess';
+import Alumni, { alumniTitle } from './pages/Alumni';
+import About from './pages/About';
 import { useRoute } from './lib/router';
 
-function resolve(route: string) {
-  const section = `/${route.split('/')[1] ?? ''}`;
-  if (route === '/') return { title: 'NHISA', page: <Home /> };
-  if (section === '/school') return { title: schoolTitle(route), page: <School route={route} /> };
-  if (section === '/job') return { title: jobTitle(route), page: <Job route={route} /> };
-  const item = NAV_ITEMS.find((nav) => nav.path === section);
-  if (item) return { title: item.label, page: <ComingSoon route={route} title={item.label} /> };
-  return { title: 'NHISA', page: <Home /> };
+function resolve(path: string) {
+  const section = `/${path.split('/')[1] ?? ''}`;
+  switch (section) {
+    case '/campus': return { title: 'Campus Resources', page: <Campus path={path} /> };
+    case '/career-hub': return { title: careerHubTitle(path), page: <CareerHub path={path} /> };
+    case '/career-access': return { title: 'Career Access', page: <CareerAccess path={path} /> };
+    case '/alumni': return { title: alumniTitle(path), page: <Alumni path={path} /> };
+    case '/about': return { title: 'About Us', page: <About path={path} /> };
+    default: return { title: 'NHISA', page: <Home /> };
+  }
 }
 
 export default function App() {
-  const route = useRoute();
-  const { title, page } = resolve(route);
+  const { path, section } = useRoute();
+  const { title, page } = resolve(path);
   const firstRender = useRef(true);
 
   useEffect(() => {
-    document.title = title === 'NHISA' ? 'NHISA' : `${title} | NHISA`;
+    document.title = title === 'NHISA' ? 'NHISA · Newhouse International Students' : `${title} | NHISA`;
+    const target = section ? document.getElementById(section) : null;
+    if (target) {
+      // Wait a frame so the new page has laid out before jumping into it.
+      requestAnimationFrame(() => {
+        const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        target.scrollIntoView({ behavior: firstRender.current || reduced ? 'auto' : 'smooth' });
+        firstRender.current = false;
+      });
+      return;
+    }
     if (firstRender.current) {
       firstRender.current = false;
       return;
@@ -30,18 +46,22 @@ export default function App() {
     // A new page: start at the top and move focus to its heading for screen readers.
     window.scrollTo(0, 0);
     document.querySelector<HTMLElement>('[data-page-title]')?.focus({ preventScroll: true });
-  }, [route, title]);
+  }, [path, section, title]);
 
   return (
-    <div className="min-h-screen tracking-[-0.02em]">
+    <div className="min-h-screen tracking-[-0.01em]">
       <a href="#main" className="skip-link" onClick={(event) => {
         event.preventDefault();
         document.querySelector<HTMLElement>('[data-page-title]')?.focus();
       }}>
         Skip to content
       </a>
-      <Navbar route={route} />
+      <FlowLines className="flow-lines-fixed" />
+      <TopBar />
       {page}
+      <SiteFooter />
+      <BackToTop />
+      <BottomNav path={path} />
     </div>
   );
 }
