@@ -29,7 +29,7 @@ export default function Handshake() {
         title="Why Handshake?"
         intro={
           <>
-            <p>Largely similar to LinkedIn, with three differences that matter.</p>
+            <p>Three differences that matter.</p>
             <a href="https://app.joinhandshake.com/home" target="_blank" rel="noopener noreferrer" className="glass-button mt-7 px-5 py-2.5">
               Open Handshake
               <ArrowUpRight size={16} aria-hidden="true" />
@@ -48,15 +48,15 @@ export default function Handshake() {
         </dl>
       </Topic>
 
-      <Topic id="first-steps" photo="hall" title="First steps" intro="Account creation and setup.">
+      <Topic id="first-steps" photo="hall" title="First steps" intro="Set up your account.">
         <Steps items={HANDSHAKE.firstSteps} />
       </Topic>
 
-      <Topic id="next-steps" photo="crouse" title="Make the platform work for you" intro="Bring the right jobs and events to you instead of searching every day.">
+      <Topic id="next-steps" photo="crouse" title="Make the platform work for you" intro="Let the right jobs come to you.">
         <Steps items={HANDSHAKE.nextSteps} />
       </Topic>
 
-      <Topic id="links" title="Where to go next" intro="Handshake itself, and the campus job board that runs on it.">
+      <Topic id="links" title="Where to go next" intro="Handshake and the campus job board built on it.">
         <ResourceList ids={['handshake', 'cuseworks']} />
       </Topic>
     </div>

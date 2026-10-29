@@ -91,9 +91,7 @@ export default function SiteFooter() {
       <div className="mt-14 grid gap-10 text-[0.9375rem] md:grid-cols-12">
         <div className="md:col-span-4">
           <Logo />
-          <p className="mt-4 max-w-xs text-white/75">
-            A professional community and career resource hub for Newhouse international students and alumni.
-          </p>
+          <p className="mt-4 max-w-xs text-white/75">Newhouse International Student Association</p>
         </div>
         <nav aria-label="Footer" className="grid grid-cols-2 gap-8 md:col-span-5">
           <div>
@@ -126,13 +124,13 @@ export default function SiteFooter() {
               ))}
             </ul>
           ) : (
-            <p className="mt-3 text-white/75">Our social channels are coming soon.</p>
+            <p className="mt-3 text-white/75">Coming soon.</p>
           )}
         </div>
       </div>
 
       <div className="mt-12 grid items-end gap-6 text-[var(--step-small)] text-white/70 md:grid-cols-12">
-        <div className="space-y-2 md:col-span-8">
+        <div className="max-w-[60ch] space-y-2 md:col-span-8">
           <details className="group">
             <summary className="cursor-pointer list-none [&::-webkit-details-marker]:hidden">
               Campus photographs by {CREATORS} on Wikimedia Commons, {LICENSES}.{' '}
@@ -149,7 +147,7 @@ export default function SiteFooter() {
               ))}
             </ul>
           </details>
-          <p>© {new Date().getFullYear()} NHISA. Links marked ↗ open official university and partner sites.</p>
+          <p>© {new Date().getFullYear()} Newhouse International Student Association. Links marked ↗ open official sites.</p>
         </div>
         <div className="flex justify-end text-white/45 md:col-span-4">
           <FooterArt />

@@ -16,19 +16,19 @@ const mailto = (subject: string) => (CONTACT.email ? `mailto:${CONTACT.email}?su
 const WAYS = [
   {
     title: 'Join as a student',
-    body: 'Become an NHISA member to hear about coffee chats, workshops and new resources first.',
+    body: 'Hear first about coffee chats, workshops and new resources.',
     action: 'Join NHISA',
     url: CONTACT.joinForm || mailto('Joining NHISA'),
   },
   {
     title: 'Share your story',
-    body: 'Alumni and industry professionals: sit down for a coffee chat and help us build the Alumni Connections wall.',
+    body: 'Alumni and professionals: join us for a coffee chat.',
     action: 'Offer a coffee chat',
     url: mailto('Coffee chat with NHISA'),
   },
   {
     title: 'Suggest a resource',
-    body: 'Found a guide, tool or opportunity that helped you? Tell us and we’ll add it to the library.',
+    body: 'Found something useful? We’ll add it to the library.',
     action: 'Suggest a resource',
     url: mailto('Resource suggestion for NHISA'),
   },
@@ -46,7 +46,7 @@ export default function About({ path }: { path: string }) {
   return (
     <PageShell path={path} title="Built by students" intro={MISSION} jump={JUMP}>
       <div className="space-y-28 sm:space-y-36">
-        <Topic id="mission" photo="hall" title="Our mission" intro="Make useful resources easier to find, and valuable people and opportunities easier to reach.">
+        <Topic id="mission" photo="hall" title="Our mission">
           <div className="space-y-14">
             <div>
               <h3 className={subheading}>Who we serve</h3>
@@ -91,7 +91,7 @@ export default function About({ path }: { path: string }) {
         </Topic>
 
         <Topic id="team" photo="quad" photoBelow title="Our team" intro="NHISA is run by Newhouse international students.">
-          <div className="panel t-body">Team profiles are on the way.</div>
+          <div className="panel t-body">Team profiles coming soon.</div>
         </Topic>
 
         <Topic id="get-involved" photo="school" title="Get involved" intro="Three ways to help NHISA grow.">
@@ -128,7 +128,7 @@ export default function About({ path }: { path: string }) {
               ))}
             </ul>
           ) : (
-            <div className="panel t-body">We’re setting up our contact channels. Check back soon.</div>
+            <div className="panel t-body">Contact channels coming soon.</div>
           )}
         </Topic>
       </div>

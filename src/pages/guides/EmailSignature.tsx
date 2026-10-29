@@ -30,12 +30,12 @@ export function EmailSignature() {
         id="why"
         photo="hall"
         title="Why use an email signature?"
-        intro="An email signature makes your emails look professional and helps recipients quickly find your name, role, and contact information."
+        intro="People see who you are and how to reach you at a glance."
       >
-        <SignaturePreview caption="A finished signature, as it appears at the end of an email." />
+        <SignaturePreview caption="A finished signature at the end of an email." />
       </Topic>
 
-      <Topic id="how" photo="school" title="How to create an email signature?" intro="Choose the device you use Outlook on.">
+      <Topic id="how" photo="school" title="How to create an email signature?" intro="Pick your device.">
         <div className="grid gap-5 md:grid-cols-2">
           <PixelCard path="/career-hub/email-signature/laptop" title="Laptop" subtitle={DEVICES.laptop.subtitle} meta="4 steps" seed={11}>
             <LaptopArt />
@@ -48,7 +48,7 @@ export function EmailSignature() {
           href={href('/career-hub/email-signature/sample')}
           className="mt-8 inline-flex items-center gap-2 font-medium text-white underline decoration-1 underline-offset-4 hover:decoration-2"
         >
-          Just need a sample signature to copy?
+          Just want a sample to copy?
           <ArrowRight size={16} aria-hidden="true" />
         </a>
       </Topic>
@@ -95,7 +95,7 @@ export function SignatureSample() {
   return (
     <div className="grid gap-10 lg:grid-cols-[1.2fr_1fr] lg:items-start">
       <div data-reveal>
-        <SignaturePreview caption="Select the signature, or use the button to copy it with its formatting." />
+        <SignaturePreview caption="Select it, or use the button below." />
         <div className="mt-6 flex flex-wrap items-center gap-4">
           <CopyButton text={SAMPLE_TEXT} html={SAMPLE_HTML} label="Copy signature" />
           <span className="t-meta">Formatting is kept when you paste into Outlook.</span>
@@ -108,7 +108,7 @@ export function SignatureSample() {
           <li><span className="text-white">School and class year.</span></li>
           <li><span className="text-white">Major and minor.</span></li>
           <li><span className="text-white">Your organization and role</span>, if you have one.</li>
-          <li><span className="text-white">Your SU email</span>, linked so it opens a new message.</li>
+          <li><span className="text-white">Your SU email</span>, as a link.</li>
         </ol>
         <p className="t-meta mt-6">
           Next: add it in Outlook on your{' '}

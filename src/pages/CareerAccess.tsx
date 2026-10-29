@@ -74,10 +74,10 @@ export default function CareerAccess({ path }: { path: string }) {
       path={path}
       title="The NHISA resource library"
       meta={`${ALL.length} resources · ${CATEGORIES.length} categories`}
-      intro="Every resource on NHISA in one place. Search, or filter by what you need right now. As our alumni network grows, internships and jobs they share will be added here too."
+      intro="Every resource on NHISA, searchable. Jobs shared by alumni will join them soon."
     >
       <section aria-labelledby="starts-title" className="mb-20 md:mb-28">
-        <h2 id="starts-title" data-reveal className="mb-6 text-[var(--step-lead)] font-medium">Where most people start</h2>
+        <h2 id="starts-title" data-reveal className="mb-6 text-[var(--step-lead)] font-medium">Start here</h2>
         <ul className="grid gap-x-2 gap-y-8 sm:grid-cols-3">
           {STARTS.map((item, index) => (
             <li key={item.category} data-reveal={String(index + 1)}>
@@ -86,7 +86,7 @@ export default function CareerAccess({ path }: { path: string }) {
                   <img src={PHOTOS[item.photo].src} alt="" loading="lazy" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]" style={{ objectPosition: PHOTOS[item.photo].position }} />
                 </span>
                 <span className="mt-4 block text-[var(--step-lead)] font-medium leading-tight">{item.label}</span>
-                <span className="t-meta tnum mt-1 block">{count(item.category)} resources in {item.category}</span>
+                <span className="t-meta tnum mt-1 block">{count(item.category)} resources</span>
               </button>
             </li>
           ))}
@@ -153,9 +153,9 @@ export default function CareerAccess({ path }: { path: string }) {
           )}
 
           <p data-reveal className="t-body mt-16">
-            Know a resource that belongs here?{' '}
+            Missing something?{' '}
             <a href={href('/about', 'get-involved')} className="font-medium text-white underline decoration-1 underline-offset-4 hover:decoration-2">
-              Suggest it to NHISA
+              Suggest a resource
             </a>
             .
           </p>

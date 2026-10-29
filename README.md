@@ -1,6 +1,6 @@
 # NHISA website
 
-Community and career resources for Newhouse international students and alumni.
+The website of the Newhouse International Student Association (NHISA): career resources and community for Newhouse international students and alumni.
 
 - **Website:** https://Carlton0209.github.io/NHISA/
 - **Deployment history:** https://github.com/Carlton0209/NHISA/actions/workflows/deploy-pages.yml
@@ -58,7 +58,7 @@ Headings, rows and photographs rise into place as they enter the screen (`src/li
 
 ## Brand and type
 
-The logo pairs Syracuse University's Block S (`src/components/Brand.tsx`, traced from the university's artwork and kept in its official orange, #F76900) with the NHISA wordmark; the browser tab icon (`public/favicon.svg`) is the Block S alone. University marks belong to Syracuse University and are not covered by this repository's code.
+The logo pairs Syracuse University's Block S (`src/components/Brand.tsx`, traced from the university's artwork and kept in its official orange, #F76900) with the NHISA wordmark; the browser tab icon (`public/favicon.svg`) redraws the Newhouse School’s own: the Block S over “Newhouse School” on Syracuse navy. University marks belong to Syracuse University and are not covered by this repository's code.
 
 Text is set in General Sans (Fontshare). Each section has its own colour, used for its homepage chapter and its page header (`CHAPTERS` in `src/content/site.ts`): Campus Resources pale blue, Career Hub deep indigo, Career Access periwinkle, Alumni Connections slate, About Us grey. Everything else sits on the dark night ground, with glass reserved for the navigation and buttons.
 

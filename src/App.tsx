@@ -40,7 +40,7 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    document.title = title === 'NHISA' ? 'NHISA · Newhouse International Students' : `${title} | NHISA`;
+    document.title = title === 'NHISA' ? 'NHISA · Newhouse International Student Association' : `${title} | NHISA`;
     const target = section ? document.getElementById(section) : null;
     if (target) {
       // Wait a frame so the new page has laid out before jumping into it.

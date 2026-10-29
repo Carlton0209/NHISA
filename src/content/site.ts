@@ -11,26 +11,26 @@ export const CONTACT = {
 };
 
 export const MISSION =
-  'NHISA is a professional community and career resource hub for Newhouse international students and alumni. We make useful resources easier to find, and valuable people and opportunities easier to reach.';
+  'The Newhouse International Student Association is a career community for Newhouse international students and alumni. We make resources easier to find, and people easier to reach.';
 
 export const AUDIENCES = [
   {
     title: 'Newhouse international students',
-    body: 'Find internships and entry-level jobs, learn how the U.S. job search works, and meet people who have done it before you.',
+    body: 'Find internships and jobs, learn the U.S. job search, and meet people who have done it.',
   },
   {
     title: 'Alumni & industry professionals',
-    body: 'Share your experience, offer career guidance, and open doors for the next class of Newhouse international students.',
+    body: 'Share your experience and open doors for the next class.',
   },
 ];
 
 /** The problems NHISA exists to solve. */
 export const PROBLEMS = [
-  'Students don’t know where to look for internships and entry-level jobs that fit them.',
-  'International students have few ways to connect with alumni and industry professionals.',
-  'The U.S. job search—résumés, interviews, networking—works differently from what many of us know.',
-  'Useful resources and real experience are scattered across different websites and social platforms.',
-  'A new organization needs a professional home to show its value, attract members and build trust.',
+  'Students don’t know where to find internships and jobs that fit.',
+  'International students have few ways to meet alumni and professionals.',
+  'The U.S. job search works differently from what many of us know.',
+  'Useful resources are scattered across many sites and platforms.',
+  'A new organization needs a professional home to build trust.',
 ];
 
 export type ModuleTone = 'blue' | 'indigo' | 'violet' | 'slate' | 'gray';
@@ -42,7 +42,7 @@ export const MODULES: { id: string; title: string; short: string; path: string; 
     short: 'Campus',
     path: '/campus',
     tone: 'blue',
-    summary: 'Advising, international student services, student life and study away, gathered in one place.',
+    summary: 'Advising, visas, student life and study away, in one place.',
   },
   {
     id: 'career-hub',
@@ -50,7 +50,7 @@ export const MODULES: { id: string; title: string; short: string; path: string; 
     short: 'Careers',
     path: '/career-hub',
     tone: 'indigo',
-    summary: 'Every step of the job search, from your first LinkedIn profile to the thank-you email after an interview.',
+    summary: 'The job search step by step, from LinkedIn to the thank-you email.',
   },
   {
     id: 'career-access',
@@ -58,7 +58,7 @@ export const MODULES: { id: string; title: string; short: string; path: string; 
     short: 'Library',
     path: '/career-access',
     tone: 'violet',
-    summary: 'A searchable library of every resource on NHISA. Filter by what you need right now.',
+    summary: 'Every resource on NHISA, searchable.',
   },
   {
     id: 'alumni',
@@ -66,7 +66,7 @@ export const MODULES: { id: string; title: string; short: string; path: string; 
     short: 'Alumni',
     path: '/alumni',
     tone: 'slate',
-    summary: 'Meet Newhouse alumni and professionals through our coffee chats, and learn from their stories.',
+    summary: 'Coffee chats and stories from Newhouse alumni and professionals.',
   },
   {
     id: 'about',
@@ -74,7 +74,7 @@ export const MODULES: { id: string; title: string; short: string; path: string; 
     short: 'About',
     path: '/about',
     tone: 'gray',
-    summary: 'Our mission, our team, and how to get involved.',
+    summary: 'Our mission, team and how to get involved.',
   },
 ];
 

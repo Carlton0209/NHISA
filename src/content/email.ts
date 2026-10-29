@@ -45,10 +45,10 @@ export const DEVICES = {
         title: 'Customize your signature',
         body: 'Type your details and format them with the toolbar: bold, colors, links.',
         extras: [
-          { kind: 'external', prompt: 'Watch the video to have more info:', label: 'Microsoft’s signature guide', url: MICROSOFT_GUIDE },
+          { kind: 'external', prompt: 'More help:', label: 'Microsoft’s signature guide', url: MICROSOFT_GUIDE },
           {
             kind: 'route',
-            prompt: 'Here’s a sample — you can copy & paste it into your own signature draft directly!',
+            prompt: 'Or copy our sample:',
             label: 'Open the sample',
             path: '/career-hub/email-signature/sample',
           },
@@ -56,7 +56,7 @@ export const DEVICES = {
       },
       {
         title: 'Make sure to save',
-        body: 'Don’t forget to choose when your signature appears—on new emails, replies, or both.',
+        body: 'Choose when it appears: new emails, replies, or both.',
         extras: [
           {
             kind: 'image',
@@ -73,12 +73,12 @@ export const DEVICES = {
     title: 'Phone',
     subtitle: 'Outlook mobile app',
     steps: [
-      { title: 'Open Outlook', body: 'Open the Outlook app and sign in with your Syracuse University email.' },
-      { title: 'Navigate to the side menu', body: 'Tap your profile picture or the menu icon in the top-left corner.' },
+      { title: 'Open Outlook', body: 'Sign in with your Syracuse University email.' },
+      { title: 'Navigate to the side menu', body: 'Tap your profile picture or the menu icon, top left.' },
       { title: 'Open Settings', body: 'Tap the gear icon at the bottom of the side menu.' },
       {
         title: 'Tap on Signature',
-        body: 'You’re all set to edit! Paste in your signature and it will be added to emails you send from your phone.',
+        body: 'Paste in your signature. It’s added to emails you send from your phone.',
         extras: [
           {
             kind: 'route',

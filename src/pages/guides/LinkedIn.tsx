@@ -21,7 +21,7 @@ export default function LinkedIn() {
           </>
         }
       >
-        <h3 className="mb-4 text-[var(--step-lead)] font-medium text-white">How to create a LinkedIn account</h3>
+        <h3 className="mb-4 text-[var(--step-lead)] font-medium text-white">Create your account</h3>
         <ol className="space-y-2">
           {LINKEDIN.setup.map((step, index) => (
             <li key={step} className="flex items-baseline gap-5 rounded-2xl bg-[var(--surface)] px-6 py-4">
@@ -32,11 +32,11 @@ export default function LinkedIn() {
         </ol>
       </Topic>
 
-      <Topic id="profile" photo="school" title="Profile optimization" intro="Build a profile that clearly shows who you are, what you can do, and where you want to go.">
+      <Topic id="profile" photo="school" title="Profile optimization" intro="Show who you are, what you can do and where you’re headed.">
         <PointList items={LINKEDIN.profile} />
       </Topic>
 
-      <Topic id="networking" photo="quad" title="Networking & outreach" intro="Build meaningful connections through thoughtful conversations and continued engagement.">
+      <Topic id="networking" photo="quad" title="Networking & outreach" intro="Build real connections and keep them going.">
         <PointList items={LINKEDIN.networking} />
       </Topic>
 
@@ -45,13 +45,8 @@ export default function LinkedIn() {
         title="AI prompts"
         intro={
           <>
-            <p>
-              Use these prompts with an AI tool to improve your LinkedIn profile and understand what employers are looking for.
-              Replace the brackets with your information.
-            </p>
-            <p className="t-meta mt-4 italic">
-              Remove sensitive personal information before uploading materials, and review AI suggestions for accuracy.
-            </p>
+            <p>Paste these into an AI tool and fill in the brackets.</p>
+            <p className="t-meta mt-4 italic">Leave out sensitive personal details, and check what the AI writes.</p>
           </>
         }
       >

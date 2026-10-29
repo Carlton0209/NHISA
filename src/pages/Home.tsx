@@ -35,7 +35,7 @@ const SHOWCASE: { id: string; layout: 'right' | 'left' | 'wide'; src: string; po
     src: hallOfLanguages,
     position: '50% 40%',
     alt: 'The Hall of Languages, Syracuse University’s first building, seen across the lawn',
-    sentence: 'Advising, international student services, student life and study away.',
+    sentence: 'Advising, visas, student life and study away.',
   },
   {
     id: 'career-hub',
@@ -43,7 +43,7 @@ const SHOWCASE: { id: string; layout: 'right' | 'left' | 'wide'; src: string; po
     src: newhouseStudios,
     position: '40% 50%',
     alt: 'The glass front of the Dick Clark Studios in Newhouse 2',
-    sentence: 'Six steps from your first LinkedIn profile to the thank-you email.',
+    sentence: 'Six steps from LinkedIn profile to thank-you email.',
   },
   {
     id: 'career-access',
@@ -51,7 +51,7 @@ const SHOWCASE: { id: string; layout: 'right' | 'left' | 'wide'; src: string; po
     src: birdLibrary,
     position: '50% 8%',
     alt: 'Bird Library, Syracuse University’s main library',
-    sentence: `All ${RESOURCE_COUNT} resources in one library you can search and filter.`,
+    sentence: `All ${RESOURCE_COUNT} resources, searchable.`,
   },
   {
     id: 'alumni',
@@ -59,7 +59,7 @@ const SHOWCASE: { id: string; layout: 'right' | 'left' | 'wide'; src: string; po
     src: shawQuad,
     position: '45% 50%',
     alt: 'Students and alumni gathered under a tent on the Shaw Quad',
-    sentence: 'Alumni and professionals, met over coffee, sharing what they learned.',
+    sentence: 'What alumni and professionals learned, over coffee.',
   },
 ];
 
@@ -84,7 +84,7 @@ export default function Home() {
           <div className="hero-scrim" aria-hidden="true" />
           <div className="hero-dusk" aria-hidden="true" />
           <h1 tabIndex={-1} data-page-title className="sr-only">
-            NHISA: a community and career hub for Newhouse international students and alumni
+            NHISA: Newhouse International Student Association
           </h1>
           <div className="hero-copy absolute inset-x-0 bottom-[20%] z-50 flex justify-center px-5 text-white">
             <a href={href('/', 'modules')} className="glass-button rise-in px-9 py-3.5 text-base">
@@ -108,7 +108,7 @@ export default function Home() {
             <div className="grid grid-cols-2 gap-2 md:contents">
               <div className="field-about flex aspect-square flex-col justify-end rounded-[1.25rem] p-5 md:col-span-4 md:aspect-auto md:p-8">
                 <p data-reveal className="tnum t-display">{RESOURCE_COUNT}</p>
-                <p data-reveal="2" className="mt-3 text-[var(--step-small)] font-medium">resources, gathered in one library</p>
+                <p data-reveal="2" className="mt-3 text-[var(--step-small)] font-medium">resources in one library</p>
               </div>
               <div className="pic-in aspect-square overflow-hidden rounded-[1.25rem] md:col-span-4 md:aspect-auto">
                 <img src={newhouseSchool} alt="The S.I. Newhouse School of Public Communications on a summer day" loading="lazy" className="h-full w-full object-cover" />
@@ -117,8 +117,7 @@ export default function Home() {
           </div>
           <div className="grid py-16 md:grid-cols-12 md:py-28">
             <p data-reveal className="t-lede md:col-span-6 md:col-start-7">
-              {MISSION} We serve two groups: Newhouse international students, who are learning how the U.S. job search works, and
-              alumni and industry professionals, who share their experience, guidance and opportunities with the next class.
+              {MISSION}
             </p>
           </div>
         </section>
@@ -220,7 +219,7 @@ export default function Home() {
           <h2 id="close-title" data-reveal className="t-display max-w-[10ch] lg:pt-16">Your path starts here.</h2>
           <div className="flex flex-col gap-6 pb-4 md:flex-row md:items-end md:justify-between">
             <p data-reveal="2" className="max-w-[34ch] text-[var(--step-lead)] leading-snug">
-              Start with the first step of the job search, or browse everything in the library.
+              Start with step one, or browse the library.
             </p>
             <a href={href('/career-hub')} data-reveal="3" className="glass-button min-h-[56px] self-start px-8 text-base md:self-auto">
               Open the Career Hub

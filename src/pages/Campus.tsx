@@ -9,14 +9,13 @@ export default function Campus({ path }: { path: string }) {
     <PageShell
       path={path}
       title="Everything on campus"
-      intro="Advising, international student services, student life and study away. Each link comes with a line on why it’s worth opening."
+      intro="Advising, visas, student life and study away, each with a line on why it matters."
       meta={`${CAMPUS_SECTIONS.length} sections · ${TOTAL} resources`}
       jump={CAMPUS_SECTIONS.map((section) => ({ id: section.id, label: section.title }))}
     >
       <SectionList sections={CAMPUS_SECTIONS} />
       <p className="t-meta mt-16 max-w-2xl">
-        NHISA shares general information. For anything about your visa or work authorization, confirm with the Center for
-        International Services.
+        General information only. Confirm visa and work questions with the Center for International Services.
       </p>
     </PageShell>
   );

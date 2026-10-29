@@ -30,7 +30,7 @@ export default function CareerHub({ path }: { path: string }) {
       <PageShell
         path={path}
         title="Your job search, step by step"
-        intro="International student support from zero to offer. Start at Step 1 and work your way to the interview: each step has a short guide and the resources to act on it."
+        intro="From zero to offer. Each step has a short guide and the resources for it."
         meta={`${CAREER_STEPS.length} steps · ${TOTAL} resources`}
         jump={CAREER_STEPS.map((step) => ({ id: step.id, label: step.title }))}
       >
@@ -46,7 +46,7 @@ export default function CareerHub({ path }: { path: string }) {
     if (sub === 'sample') {
       return (
         <PageShell path={path} title="A sample signature" back={signatureBack} compact
-          intro="Copy it, paste it into your signature draft, then replace each detail with your own.">
+          intro="Copy it, paste it into Outlook, and swap in your details.">
           <SignatureSample />
         </PageShell>
       );

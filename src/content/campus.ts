@@ -4,7 +4,7 @@ export const CAMPUS_SECTIONS: Section[] = [
   {
     id: 'academics',
     title: 'Academic & Advising',
-    intro: 'Plan your courses, check what your degree requires and find the right advisor. Research databases and production gear for your projects are here too.',
+    intro: 'Plan courses, check degree requirements and find your advisor. Research databases and production gear are here too.',
     groups: [
       { title: 'Advising & planning', ids: ['ug-advising', 'grad-advising', 'guidebook', 'advising-directory', 'myslice', 'academic-calendar'] },
       { title: 'Research', ids: ['library-guides', 'sage', 'mri', 'statista', 'mintel', 'warc'] },
@@ -14,7 +14,7 @@ export const CAMPUS_SECTIONS: Section[] = [
   {
     id: 'international',
     title: 'International Student Resources',
-    intro: 'Stay in status and understand your options for working in the U.S. The Center for International Services is the official source for anything about your visa.',
+    intro: 'Stay in status and learn your work options. The Center for International Services is the official source.',
     groups: [
       { ids: ['cis', 'cis-status', 'cis-cpt', 'cis-opt', 'cis-stem', 'intl-job-seeking'] },
     ],
@@ -22,7 +22,7 @@ export const CAMPUS_SECTIONS: Section[] = [
   {
     id: 'student-life',
     title: 'Student Life & Support',
-    intro: 'Join a club, catch a talk, get hands-on in a student studio, and get help when your tech breaks.',
+    intro: 'Clubs, talks, student studios and tech help.',
     groups: [
       { title: 'Clubs & events', ids: ['extracurricular', 'events', 'event-promotion', 'style-guide'] },
       { title: 'Hands-on experience', ids: ['creator-crew', 'weiss', 'centers'] },
@@ -32,7 +32,7 @@ export const CAMPUS_SECTIONS: Section[] = [
   {
     id: 'study-away',
     title: 'Study Abroad & Study Away',
-    intro: 'Spend a semester in a media capital or abroad, build your network there, and still earn credit.',
+    intro: 'Spend a semester in a media capital or abroad and still earn credit.',
     groups: [{ ids: ['study-away', 'nh-nyc', 'nh-la', 'su-abroad-apply'] }],
   },
 ];

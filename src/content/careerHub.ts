@@ -5,37 +5,37 @@ export const CAREER_STEPS: Section[] = [
   {
     id: 'explore',
     title: 'Explore & Plan',
-    intro: 'Decide where you want to go before you start applying. Talk to a career advisor and work through the Job Search Playbook to find your focus.',
+    intro: 'Know where you want to go before you apply. Start with a career advisor and the Job Search Playbook.',
     groups: [{ ids: ['cdc', 'cdc-resources', 'playbook', 'su-career-services', 'gemini'] }],
   },
   {
     id: 'profile',
     title: 'Build Your Profile',
-    intro: 'Recruiters look you up before they reply. Make your LinkedIn, headshot and email signature tell the same professional story.',
+    intro: 'Recruiters look you up first. Make your LinkedIn, headshot and signature tell one story.',
     groups: [{ ids: ['guide-linkedin', 'iris-photo', 'guide-email-signature'] }],
   },
   {
     id: 'opportunities',
     title: 'Find Opportunities',
-    intro: 'Search where employers actively recruit students, and filter for roles that fit your work authorization.',
+    intro: 'Search where employers recruit students, and filter by work authorization.',
     groups: [{ ids: ['guide-handshake', 'handshake', 'interstride', 'careershift', 'cuseworks', 'glassdoor'] }],
   },
   {
     id: 'applications',
     title: 'Applications',
-    intro: 'Tailor every résumé and cover letter to the job description. Recruiters can tell when you have read it closely.',
+    intro: 'Tailor every résumé and cover letter to the job description.',
     groups: [{ ids: ['resume-toolkit', 'su-resume', 'word-cloud', 'ai-prompts'] }],
   },
   {
     id: 'interviews',
     title: 'Interviews',
-    intro: 'Structure your answers with the STAR method, practice out loud, and send a thank-you email within a day.',
+    intro: 'Use the STAR method, practice out loud, and send a thank-you within a day.',
     groups: [{ ids: ['interview-toolkit', 'yoodli', 'cdc-interview-guide', 'su-interview'] }],
   },
   {
     id: 'networking',
     title: 'Networking & Outreach',
-    intro: 'Most opportunities come through people. Reach out to alumni, ask to learn before you ask for a referral, and keep in touch.',
+    intro: 'Most opportunities come through people. Ask to learn before you ask for a referral.',
     groups: [{ ids: ['guide-networking', 'interview-toolkit', 'su-network', 'otter'] }],
   },
 ];

@@ -37,13 +37,15 @@ export default function PageShell({ path, title, intro, meta, jump, back, compac
       >
         <div className="flex flex-col lg:col-span-7">
           {back && (
-            <a
-              href={href(back.path, back.section)}
-              className="group mb-10 inline-flex items-center gap-2 self-start text-[var(--step-small)] font-medium opacity-75 transition-opacity hover:opacity-100"
-            >
-              <ArrowLeft size={16} aria-hidden="true" className="transition-transform duration-500 group-hover:-translate-x-1" />
-              {back.label}
-            </a>
+            <nav aria-label="Breadcrumb" className="mb-10 self-start">
+              <a
+                href={href(back.path, back.section)}
+                className="group inline-flex items-center gap-2 text-[var(--step-small)] font-medium opacity-75 transition-opacity hover:opacity-100"
+              >
+                <ArrowLeft size={16} aria-hidden="true" className="transition-transform duration-500 group-hover:-translate-x-1" />
+                {back.label}
+              </a>
+            </nav>
           )}
           <h1 tabIndex={-1} data-page-title className={`${compact ? 't-heading' : 't-title'} outline-none`}>
             {title}

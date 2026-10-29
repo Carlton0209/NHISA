@@ -67,11 +67,20 @@ export function ResourceRow({ id, item, showCategory = false }: { id: string; it
       </li>
     );
   }
+  // Elsewhere the destination closes the row at the margin; on phones it stays under the intro.
   return (
     <li data-row-id={id} data-reveal>
       <a href={target} {...newTab(target)} className="row -mx-4 grid grid-cols-[1fr_auto] items-start gap-x-6 px-4 py-5">
-        <span className="min-w-0">{details}</span>
-        <span className="pt-1">{arrow('')}</span>
+        <span className="min-w-0">
+          <span className="row-title block text-[var(--step-lead)] font-medium leading-tight">{item.name}</span>
+          <span className="t-body mt-1.5 block">{item.intro}</span>
+          {item.note && <span className="t-meta mt-2 block">{item.note}</span>}
+          {meta && <span className={`t-meta mt-2.5 block sm:hidden ${item.path ? '!text-[var(--accent)]' : ''}`}>{meta}</span>}
+        </span>
+        <span className="flex items-center gap-2 pt-1">
+          {meta && <span className={`t-meta hidden whitespace-nowrap sm:inline ${item.path ? '!text-[var(--accent)]' : ''}`}>{meta}</span>}
+          {arrow('')}
+        </span>
         {external && <span className="sr-only">(opens in a new tab)</span>}
       </a>
     </li>

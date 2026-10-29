@@ -8,49 +8,49 @@ export const RESOURCES = {
   // ---------- Career services ----------
   cdc: {
     name: 'Newhouse Career Development Center',
-    intro: 'Book career advising, get résumé and interview support, and find internships and career events.',
+    intro: 'Career advising, résumé and interview help, internships and events.',
     category: 'Career services',
     url: 'https://newhouse.syracuse.edu/students/career-development-center/',
   },
   'cdc-resources': {
     name: 'Newhouse CDC Resources',
-    intro: 'Internships and jobs, résumé and cover letter guides, interview prep, networking events, and one-on-one appointments with a career advisor.',
+    intro: 'Job listings, résumé guides, interview prep and one-on-one advising.',
     category: 'Career services',
     url: 'https://resources.newhouse.syr.edu/cdc/',
   },
   'su-career-services': {
     name: 'Syracuse University Career Services',
-    intro: 'University-wide career coaching, workshops and employer events, open to students in every school.',
+    intro: 'University-wide coaching, workshops and employer events.',
     category: 'Career services',
     url: 'https://careerservices.syr.edu/',
   },
   'su-resume': {
     name: 'Create a Résumé & Cover Letter',
-    intro: 'Career Services’ guides and templates for writing a résumé and cover letter.',
+    intro: 'Guides and templates from Career Services.',
     category: 'Career services',
     url: 'https://careerservices.syr.edu/channels/create-a-resume-cover-letter/',
   },
   'su-interview': {
     name: 'Prepare for an Interview',
-    intro: 'Career Services’ advice on researching employers, answering common questions and following up.',
+    intro: 'Research the employer, answer common questions, follow up.',
     category: 'Career services',
     url: 'https://careerservices.syr.edu/channels/prepare-for-an-interview/',
   },
   'su-network': {
     name: 'Network',
-    intro: 'Career Services’ guides to informational interviews, LinkedIn and building professional relationships.',
+    intro: 'Informational interviews, LinkedIn and building relationships.',
     category: 'Career services',
     url: 'https://careerservices.syr.edu/channels/network/',
   },
   'cdc-interview-guide': {
     name: 'The Interview (CDC guide)',
-    intro: 'Newhouse CDC’s PDF on preparing for, handling and following up on an interview.',
+    intro: 'The CDC’s PDF on preparing, interviewing and following up.',
     category: 'Career services',
     url: 'https://resources.newhouse.syr.edu/cdc/wp-content/uploads/sites/5/2020/06/The-Interview-8.17-A.pdf',
   },
   weiss: {
     name: 'Weiss Center',
-    intro: 'Learn AI, influencer marketing and analytics from industry experts and workshops.',
+    intro: 'Workshops on AI, influencer marketing and analytics.',
     category: 'Career services',
     url: 'https://newhouse.syracuse.edu/centers/weiss-center/',
   },
@@ -58,32 +58,32 @@ export const RESOURCES = {
   // ---------- Job & internship search ----------
   handshake: {
     name: 'Handshake',
-    intro: 'Search internships and full-time roles, apply for campus jobs, sign up for career fairs and networking events, and connect with recruiters.',
+    intro: 'Internships, full-time roles, campus jobs, career fairs and recruiters.',
     category: 'Job & internship search',
     url: 'https://app.joinhandshake.com/home',
   },
   interstride: {
     name: 'Interstride',
-    intro: 'Search U.S. internships and jobs by visa and work authorization type, check employers’ H-1B sponsorship history and find international career resources.',
+    intro: 'Search jobs by work authorization and check employers’ H-1B history.',
     category: 'Job & internship search',
     url: 'https://www.interstride.com/syracuse/',
   },
   careershift: {
     name: 'CareerShift',
-    intro: 'Search job listings and find people at your target companies, including recruiters’ work emails, for networking and referrals.',
+    intro: 'Find jobs, and the people at your target companies with their work emails.',
     category: 'Job & internship search',
     url: 'https://www.careershift.com/Account/Login?ReturnUrl=%2fApp%2fContacts%2fSearch',
     note: 'Sign in with your SU email.',
   },
   cuseworks: {
     name: 'CuseWorks',
-    intro: 'Find part-time jobs on campus through Handshake, and check student employment policies, pay rates and internship funding.',
+    intro: 'On-campus jobs, pay rates and internship funding.',
     category: 'Job & internship search',
     url: 'https://experience.syracuse.edu/cuseworks/',
   },
   glassdoor: {
     name: 'Glassdoor Recruiter',
-    intro: 'A free matching tool (beta) that recommends roles from your experience, preferences and salary goals. You choose whether recruiters can contact you.',
+    intro: 'A free tool (beta) that matches you to roles. You decide if recruiters can reach you.',
     category: 'Job & internship search',
     url: 'https://www.glassdoor.com/recruiter',
   },
@@ -91,49 +91,49 @@ export const RESOURCES = {
   // ---------- Guides & toolkits ----------
   'guide-linkedin': {
     name: 'LinkedIn guide',
-    intro: 'Set up your account, optimize your profile and personal brand, network with intent, and use two AI prompts.',
+    intro: 'Setup, profile tips, networking and two AI prompts.',
     category: 'Guides & toolkits',
     path: '/career-hub/linkedin',
   },
   'guide-handshake': {
     name: 'Handshake guide',
-    intro: 'Why Handshake matters, how to set up your account, and how to make the platform bring jobs to you.',
+    intro: 'Why it matters, setup, and how to make jobs come to you.',
     category: 'Guides & toolkits',
     path: '/career-hub/handshake',
   },
   'guide-email-signature': {
     name: 'Email signature guide',
-    intro: 'Four steps in Outlook on a laptop or phone, plus a sample signature to copy.',
+    intro: 'Four steps in Outlook, plus a sample to copy.',
     category: 'Guides & toolkits',
     path: '/career-hub/email-signature',
   },
   'ai-prompts': {
     name: 'AI prompts for your profile and job descriptions',
-    intro: 'Two ready-to-use prompts: one improves your LinkedIn headline and About section, one breaks down a job description.',
+    intro: 'One for your LinkedIn profile, one for reading a job description.',
     category: 'Guides & toolkits',
     path: '/career-hub/linkedin',
   },
   'guide-networking': {
     name: 'Networking & outreach tips',
-    intro: 'Start with your own community, personalize every message, ask to learn before asking for a referral, and stay in touch.',
+    intro: 'Start close, personalize, ask to learn, stay in touch.',
     category: 'Guides & toolkits',
     path: '/career-hub/linkedin',
   },
   playbook: {
     name: 'The Job Search Playbook',
-    intro: 'NHISA’s six-part workbook: career focus, target companies, employer research, networking, AI-assisted searching and an action plan, with quizzes and templates.',
+    intro: 'NHISA’s six-part workbook, from career focus to an action plan.',
     category: 'Guides & toolkits',
     url: 'https://docs.google.com/document/d/1yoLkWUvhvyt1e5BOxqGNfis9jbZ2F3rVPjnRH14qQh8/edit',
   },
   'resume-toolkit': {
     name: 'Résumé & Cover Letter Toolkit',
-    intro: 'NHISA’s guide to résumé structure, the Action Verb Formula, analyzing a job description and writing a cover letter, with examples.',
+    intro: 'Résumé structure, action verbs and cover letters, with examples.',
     category: 'Guides & toolkits',
     url: 'https://docs.google.com/document/d/16hNXj4SUa4O6NvoiicBevIeECtKgbQAnS0oEtlcFhQE/edit',
   },
   'interview-toolkit': {
     name: 'Interview & Professional Outreach Toolkit',
-    intro: 'NHISA’s guide to the STAR method, common interview questions, networking emails and thank-you emails after an interview.',
+    intro: 'The STAR method, common questions, outreach and thank-you emails.',
     category: 'Guides & toolkits',
     url: 'https://docs.google.com/document/d/1IQ1jwa-Nu8zZEHobZ5wt5b672_elTzLRhySQK3UIb9M/edit',
   },
@@ -141,32 +141,32 @@ export const RESOURCES = {
   // ---------- AI & practice tools ----------
   gemini: {
     name: 'Gemini for Students',
-    intro: 'Google’s AI tools for students to improve a résumé, practice interviews and explore careers. Eligible students get a free year of Google AI Pro.',
+    intro: 'Google’s AI for résumés, interview practice and career ideas. Eligible students get a free year of AI Pro.',
     category: 'AI & practice tools',
     url: 'https://gemini.google/students/',
   },
   yoodli: {
     name: 'Yoodli',
-    intro: 'Rehearse mock interviews, workplace conversations and presentations with an AI coach, and get personal feedback on how you speak.',
+    intro: 'Rehearse interviews and presentations with an AI speaking coach.',
     category: 'AI & practice tools',
     url: 'https://yoodli.ai/',
   },
   otter: {
     name: 'Otter.ai',
-    intro: 'An AI meeting assistant with live transcription, summaries and action items, handy for notes from coffee chats and informational interviews.',
+    intro: 'Live transcripts and summaries of coffee chats and interviews.',
     category: 'AI & practice tools',
     url: 'https://otter.ai/',
-    note: 'Always ask before you record a conversation.',
+    note: 'Ask before you record.',
   },
   'word-cloud': {
     name: 'Free Word Cloud Generator',
-    intro: 'Paste in a job description to see which skills and requirements come up most, then tailor your résumé and cover letter to them.',
+    intro: 'Paste a job description to see which skills come up most.',
     category: 'AI & practice tools',
     url: 'https://www.freewordcloudgenerator.com/generatewordcloud',
   },
   'iris-photo': {
     name: 'Iris Photo Booth',
-    intro: 'Take a free, self-service professional headshot for LinkedIn, Handshake and other professional profiles.',
+    intro: 'A free, self-service headshot for your profiles.',
     category: 'Career services',
     url: 'https://www.syracuse.edu/campus-life/student-services/career-services/',
   },
@@ -174,37 +174,37 @@ export const RESOURCES = {
   // ---------- International students ----------
   cis: {
     name: 'Center for International Services',
-    intro: 'Syracuse’s official office for F-1 and J-1 students: immigration advising, travel signatures and work authorization.',
+    intro: 'The official office for F-1 and J-1 students: advising, travel signatures, work authorization.',
     category: 'International students',
     url: 'https://experience.syracuse.edu/intercultural-collective/center-for-international-services/',
   },
   'cis-status': {
     name: 'Maintaining Your Status',
-    intro: 'What you must do each semester to keep your F-1 or J-1 status, from enrollment to address updates.',
+    intro: 'What to do each semester to keep your F-1 or J-1 status.',
     category: 'International students',
     url: 'https://experience.syracuse.edu/intercultural-collective/center-for-international-services/maintaining-status/',
   },
   'cis-cpt': {
     name: 'Curricular Practical Training (CPT)',
-    intro: 'Work authorization for internships that are part of your curriculum, and how to apply through CIS.',
+    intro: 'Work authorization for internships in your curriculum.',
     category: 'International students',
     url: 'https://experience.syracuse.edu/intercultural-collective/center-for-international-services/employment/curricular-practical-training/',
   },
   'cis-opt': {
     name: 'Optional Practical Training (OPT)',
-    intro: 'Up to 12 months of work authorization in your field, before or after you graduate, and when to apply.',
+    intro: 'Up to 12 months of work in your field, and when to apply.',
     category: 'International students',
     url: 'https://experience.syracuse.edu/intercultural-collective/center-for-international-services/employment/optional-practical-training/',
   },
   'cis-stem': {
     name: 'STEM OPT Extension',
-    intro: 'A 24-month extension of OPT for eligible STEM degrees, and the employer requirements that come with it.',
+    intro: 'A 24-month OPT extension for eligible STEM degrees.',
     category: 'International students',
     url: 'https://experience.syracuse.edu/intercultural-collective/center-for-international-services/employment/stem-extension/',
   },
   'intl-job-seeking': {
     name: 'Job Seeking for International Students',
-    intro: 'A Syracuse guide to the U.S. job search when you need work authorization: timelines, sponsorship questions and where to look.',
+    intro: 'Timelines, sponsorship questions and where to look.',
     category: 'International students',
     url: 'https://artsandsciences.syracuse.edu/student-success/international-student-success/job-seeking-for-international-students/',
   },
@@ -212,7 +212,7 @@ export const RESOURCES = {
   // ---------- Academics ----------
   'ug-advising': {
     name: 'Undergraduate Advising',
-    intro: 'Get help planning courses and staying on track to graduate.',
+    intro: 'Plan courses and stay on track to graduate.',
     category: 'Academics',
     url: 'https://newhouse.syracuse.edu/students/academic-advising/',
   },
@@ -251,13 +251,13 @@ export const RESOURCES = {
   // ---------- Research ----------
   'library-guides': {
     name: 'Library Research Guides',
-    intro: 'Browse subject guides to find the best databases and sources for your project.',
+    intro: 'Find the best databases for your subject.',
     category: 'Research',
     url: 'https://researchguides.library.syr.edu/',
   },
   sage: {
     name: 'Sage Research Methods',
-    intro: 'Learn how to design surveys, interviews and focus groups for your project.',
+    intro: 'Design surveys, interviews and focus groups.',
     category: 'Research',
     url: 'https://researchguides.library.syr.edu/comsyracuse/srmo',
   },
@@ -289,7 +289,7 @@ export const RESOURCES = {
   // ---------- Production & tech ----------
   facilities: {
     name: 'Newhouse Facilities',
-    intro: 'Discover the photo, film, broadcast and editing spaces you can use.',
+    intro: 'Photo, film, broadcast and editing spaces you can use.',
     category: 'Production & tech',
     url: 'https://newhouse.syracuse.edu/about/facilities/',
   },
@@ -298,7 +298,7 @@ export const RESOURCES = {
     intro: 'Record a podcast or create content in the Center’s spaces.',
     category: 'Production & tech',
     url: 'https://creatoreconomy.syracuse.edu/student-experience/venues-and-resources-on-campus/',
-    note: 'Some spaces are open only to students affiliated with the Center.',
+    note: 'Some spaces are for Center students only.',
   },
   cage: {
     name: 'CAGE',
@@ -325,13 +325,13 @@ export const RESOURCES = {
   },
   windows365: {
     name: 'Windows 365',
-    intro: 'Use a cloud Windows PC from your own device when your laptop falls short.',
+    intro: 'A cloud Windows PC on your own device.',
     category: 'Production & tech',
     url: 'https://windows.cloud.microsoft/#/devices',
   },
   'classroom-tech': {
     name: 'Classroom Technology',
-    intro: 'Connect your laptop to classroom screens and present with confidence.',
+    intro: 'Connect your laptop to classroom screens.',
     category: 'Production & tech',
     url: 'https://su-jsm.atlassian.net/wiki/spaces/newh/pages/161644664/Classroom+Technology',
   },
@@ -357,7 +357,7 @@ export const RESOURCES = {
   // ---------- Campus life ----------
   extracurricular: {
     name: 'Extracurricular',
-    intro: 'Find a club that fits you and meet people who share your interests.',
+    intro: 'Find a club and people who share your interests.',
     category: 'Campus life',
     url: 'https://newhouse.syracuse.edu/students/extracurricular/',
   },
@@ -372,11 +372,11 @@ export const RESOURCES = {
     intro: 'Get your event on school calendars, screens and social media.',
     category: 'Campus life',
     url: 'https://su-jsm.atlassian.net/wiki/spaces/newh/pages/161644795/Event+Promotion',
-    note: 'Official school events usually need coordination or approval before they are published.',
+    note: 'Official events usually need approval first.',
   },
   'style-guide': {
     name: 'Style Guide and Templates',
-    intro: 'Make posters that match the Newhouse brand using ready templates.',
+    intro: 'Templates for on-brand Newhouse posters.',
     category: 'Campus life',
     url: 'https://su-jsm.atlassian.net/wiki/spaces/newh/pages/161644765/Style+Guide',
   },
@@ -388,7 +388,7 @@ export const RESOURCES = {
   },
   centers: {
     name: 'Centers and Special Programs',
-    intro: 'Explore centers and programs to go deeper into the field you love.',
+    intro: 'Go deeper into your field.',
     category: 'Campus life',
     url: 'https://newhouse.syracuse.edu/about/centers-and-special-programs/',
   },
@@ -396,7 +396,7 @@ export const RESOURCES = {
   // ---------- Study away ----------
   'study-away': {
     name: 'Study Abroad and Study Away',
-    intro: 'Spend a semester or short term in another U.S. city and still earn credit.',
+    intro: 'Spend a semester away and still earn credit.',
     category: 'Study away',
     url: 'https://www.syracuse.edu/academics/study-abroad-away/study-away/',
   },
@@ -414,7 +414,7 @@ export const RESOURCES = {
   },
   'su-abroad-apply': {
     name: 'SU Abroad: How to Apply',
-    intro: 'Check deadlines, eligibility and application steps for semester, summer and short-term programs, and apply through OrangeAbroad.',
+    intro: 'Deadlines, eligibility and how to apply through OrangeAbroad.',
     category: 'Study away',
     url: 'https://suabroad.syr.edu/apply/',
   },

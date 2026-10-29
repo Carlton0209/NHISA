@@ -23,7 +23,7 @@ function ShareYourStory({ className = '' }: { className?: string }) {
       <span className="block p-6">
         <span className="block text-[1.0625rem] font-semibold text-white">Are you a Newhouse alum?</span>
         <span className="t-body mt-2 block">
-          Share your story over a coffee chat and help the next class of international students find their way.
+          Share your story over coffee and help the next class.
         </span>
         <span className="mt-5 flex items-center gap-2 text-sm font-medium text-accent">
           Get involved
@@ -52,7 +52,7 @@ function PhotoWall() {
           <ShareYourStory className="w-full" />
         </div>
         <p data-reveal className="t-body max-w-[60ch] sm:col-span-2 lg:col-span-4">
-          Our first coffee chats are being written up. Every alum and professional we meet gets a place on this wall.
+          Our first coffee chats are being written up. Everyone we meet gets a place here.
         </p>
       </div>
     );
@@ -129,7 +129,7 @@ function Events() {
   if (!upcoming.length) {
     return (
       <div className="panel t-body flex max-w-2xl flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
-        <span>No coffee chats are scheduled right now. Get involved to hear about the next one.</span>
+        <span>No coffee chats scheduled yet. Get involved to hear about the next one.</span>
         <a href={href('/about', 'get-involved')} className="glass-button shrink-0 px-5 py-2.5">Get involved</a>
       </div>
     );
@@ -238,7 +238,7 @@ export default function Alumni({ path }: { path: string }) {
     <PageShell
       path={path}
       title="People who did it"
-      intro="Every coffee chat with a Newhouse alum or industry professional becomes a profile here: their time at school, their U.S. job search, and their advice for international students."
+      intro="Every coffee chat with a Newhouse alum or professional becomes a profile: their path, their job search, their advice."
       jump={ALUMNI_SECTIONS}
     >
       <div className="space-y-28 sm:space-y-36">
@@ -246,14 +246,14 @@ export default function Alumni({ path }: { path: string }) {
           <SectionHeading
             id="meet-title"
             title="Meet Alumni & Professionals"
-            intro={ALUMNI.length ? 'Filter by industry, then open a profile to read the full conversation.' : 'Each coffee chat becomes a profile you can open to read the full conversation.'}
+            intro={ALUMNI.length ? 'Filter by industry, then open a profile.' : 'Open a profile to read the full conversation.'}
           />
           <PhotoWall />
         </section>
-        <Topic id="stories" photo="studios" photoBelow title="Career Stories & Advice" intro="The one thing each person wishes they had known as an international student.">
+        <Topic id="stories" photo="studios" photoBelow title="Career Stories & Advice" intro="What each person wishes they’d known.">
           <Stories />
         </Topic>
-        <Topic id="events" photo="hall" photoBelow title="Events & Coffee Chats" intro="Small-group chats with alumni and professionals, open to NHISA members.">
+        <Topic id="events" photo="hall" photoBelow title="Events & Coffee Chats" intro="Small-group chats, open to NHISA members.">
           <Events />
         </Topic>
       </div>
