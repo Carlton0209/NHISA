@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { ArrowUp, BriefcaseBusiness, GraduationCap, Home, Info, Library, Users, type LucideIcon } from 'lucide-react';
 import { MODULES } from '../content/site';
 import { href } from '../lib/router';
@@ -14,8 +14,8 @@ const ICONS: Record<string, LucideIcon> = {
 export function Logo({ className = '' }: { className?: string }) {
   return (
     <a href={href('/')} className={`flex items-center gap-2 rounded-full focus-visible:outline-offset-4 ${className}`}>
-      <LogoMark size={26} />
-      <span className="text-white text-2xl font-playfair italic">NHISA</span>
+      <LogoMark size={24} />
+      <span className="text-white text-[1.375rem] font-playfair italic">NHISA</span>
     </a>
   );
 }
@@ -28,24 +28,34 @@ function LogoMark({ size }: { size: number }) {
   );
 }
 
-function useScrolled(threshold: number) {
-  const [scrolled, setScrolled] = useState(false);
+/** True once the page has scrolled past `threshold()` pixels. */
+function useScrolledPast(threshold: () => number, deps: unknown[] = []) {
+  const [past, setPast] = useState(false);
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > threshold);
+    const onScroll = () => setPast(window.scrollY > threshold());
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, [threshold]);
-  return scrolled;
+    window.addEventListener('resize', onScroll);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+    };
+  }, deps); // eslint-disable-line react-hooks/exhaustive-deps
+  return past;
 }
 
 /** Logo and the one call to action; the sections live in the bottom bar. */
-export function TopBar() {
-  const scrolled = useScrolled(8);
+export function TopBar({ path }: { path: string }) {
+  // Over the hero the bar stays clear until the season sequence has played.
+  const scrolled = useScrolledPast(() => {
+    const track = path === '/' ? document.querySelector<HTMLElement>('.hero-track') : null;
+    return track ? track.offsetHeight - window.innerHeight - 8 : 8;
+  }, [path]);
+
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-[100] flex items-center justify-between px-4 py-3 sm:px-6 sm:py-4 transition-colors duration-300 ${
-        scrolled ? 'bg-night-950/70 backdrop-blur-md border-b border-white/[0.06]' : ''
+      className={`vt-topbar fixed top-0 left-0 right-0 z-[100] flex items-center justify-between px-4 py-3 sm:px-6 sm:py-4 transition-[background-color,border-color] duration-500 ${
+        scrolled ? 'border-b border-white/[0.06] bg-night-950/75 backdrop-blur-md' : 'border-b border-transparent'
       }`}
     >
       <Logo />
@@ -56,28 +66,55 @@ export function TopBar() {
   );
 }
 
-/** Always-visible section bar, after the one on Awwwards. */
+/** Always-visible section bar, after the one on Awwwards; a glass pill slides to the current page. */
 export function BottomNav({ path }: { path: string }) {
   const isActive = (target: string) => path === target || path.startsWith(`${target}/`);
+  const listRef = useRef<HTMLUListElement>(null);
+  const [thumb, setThumb] = useState<{ x: number; w: number } | null>(null);
+
+  useLayoutEffect(() => {
+    const measure = () => {
+      // Home has a phone and a desktop link; measure whichever is showing.
+      const el = [...(listRef.current?.querySelectorAll<HTMLElement>('a[aria-current="page"]') ?? [])].find((a) => a.offsetParent);
+      setThumb(el ? { x: el.offsetLeft, w: el.offsetWidth } : null);
+    };
+    measure();
+    window.addEventListener('resize', measure);
+    document.fonts?.ready.then(measure);
+    return () => window.removeEventListener('resize', measure);
+  }, [path]);
+
+  const itemClass = (active: boolean) =>
+    `relative z-10 flex w-full flex-col items-center gap-1 rounded-2xl py-2 text-[0.68rem] font-medium transition-colors duration-300 md:w-auto md:flex-row md:rounded-full md:px-4 md:py-2.5 md:text-sm ${
+      active ? 'text-white' : 'text-white/60 hover:text-white'
+    }`;
 
   return (
     <nav
       aria-label="Main"
-      className="glass-dark fixed bottom-3 left-3 right-3 z-[100] rounded-[1.4rem] p-1.5 md:bottom-5 md:left-1/2 md:right-auto md:-translate-x-1/2 md:rounded-full"
+      className="vt-bottomnav glass-dark fixed bottom-3 left-3 right-3 z-[100] rounded-[1.4rem] p-1.5 md:bottom-5 md:left-1/2 md:right-auto md:-translate-x-1/2 md:rounded-full"
     >
-      <ul className="flex items-center gap-0.5 md:gap-1">
+      <ul ref={listRef} className="relative flex items-center gap-0.5 md:gap-1">
+        {thumb && (
+          <li
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-y-0 left-0 rounded-2xl border border-white/20 bg-white/[0.14] shadow-[inset_0_1px_0_rgb(255_255_255/0.22)] transition-[transform,width] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] md:rounded-full"
+            style={{ width: thumb.w, transform: `translateX(${thumb.x}px)` }}
+          />
+        )}
         <li className="min-w-0 flex-1 md:hidden">
-          <a
-            href={href('/')}
-            aria-current={path === '/' ? 'page' : undefined}
-            className="flex w-full flex-col items-center gap-1 rounded-2xl py-2 text-[0.68rem] font-medium text-white/65 aria-[current=page]:bg-white/[0.14] aria-[current=page]:text-white"
-          >
+          <a href={href('/')} aria-current={path === '/' ? 'page' : undefined} className={itemClass(path === '/')}>
             <Home size={18} aria-hidden="true" />
             Home
           </a>
         </li>
         <li className="hidden md:block">
-          <a href={href('/')} aria-label="Home" aria-current={path === '/' ? 'page' : undefined} className="glass-button h-10 w-10">
+          <a
+            href={href('/')}
+            aria-label="Home"
+            aria-current={path === '/' ? 'page' : undefined}
+            className="relative z-10 flex h-10 w-10 items-center justify-center rounded-full"
+          >
             <LogoMark size={16} />
           </a>
         </li>
@@ -86,13 +123,7 @@ export function BottomNav({ path }: { path: string }) {
           const active = isActive(module.path);
           return (
             <li key={module.id} className="min-w-0 flex-1 md:flex-none">
-              <a
-                href={href(module.path)}
-                aria-current={active ? 'page' : undefined}
-                className={`flex w-full flex-col items-center gap-1 rounded-2xl py-2 text-[0.68rem] font-medium transition-colors md:w-auto md:flex-row md:rounded-full md:px-4 md:py-2.5 md:text-sm ${
-                  active ? 'bg-white/[0.16] text-white shadow-[inset_0_1px_0_rgb(255_255_255/0.2)]' : 'text-white/65 hover:bg-white/[0.08] hover:text-white'
-                }`}
-              >
+              <a href={href(module.path)} aria-current={active ? 'page' : undefined} className={itemClass(active)}>
                 <Icon size={18} className="md:hidden" aria-hidden="true" />
                 <span className="md:hidden">{module.short}</span>
                 <span className="hidden whitespace-nowrap md:inline">{module.title}</span>
@@ -106,14 +137,14 @@ export function BottomNav({ path }: { path: string }) {
 }
 
 export function BackToTop() {
-  const visible = useScrolled(700);
+  const visible = useScrolledPast(() => 900);
   return (
     <button
       type="button"
       aria-label="Back to top"
       onClick={() => window.scrollTo({ top: 0, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' })}
       className={`glass-button fixed bottom-[5.75rem] right-3 z-[90] h-11 w-11 md:bottom-5 md:left-5 md:right-auto ${
-        visible ? 'opacity-100' : 'pointer-events-none opacity-0'
+        visible ? 'opacity-100' : 'pointer-events-none translate-y-2 opacity-0'
       }`}
       tabIndex={visible ? 0 : -1}
     >

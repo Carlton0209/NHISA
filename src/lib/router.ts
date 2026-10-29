@@ -1,4 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { flushSync } from 'react-dom';
+import { transitionPage } from './interactions';
 
 export type Route = { path: string; section: string | null };
 
@@ -31,9 +33,27 @@ function read(): Route {
 
 export function useRoute() {
   const [route, setRoute] = useState(read);
+  const current = useRef(route);
 
   useEffect(() => {
-    const onChange = () => setRoute(read());
+    const onChange = () => {
+      const next = read();
+      const samePage = next.path === current.current.path;
+      current.current = next;
+      if (samePage) {
+        setRoute(next);
+        return;
+      }
+      // A new page: render it inside a view transition, starting at the top
+      // unless the address points at a section.
+      transitionPage(
+        () => {
+          flushSync(() => setRoute(next));
+          if (!next.section) window.scrollTo(0, 0);
+        },
+        { toHome: next.path === '/' },
+      );
+    };
     window.addEventListener('hashchange', onChange);
     return () => window.removeEventListener('hashchange', onChange);
   }, []);

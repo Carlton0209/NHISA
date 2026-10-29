@@ -1,5 +1,6 @@
-import { ArrowRight, ArrowUpRight, Instagram, Linkedin, Mail, Users } from 'lucide-react';
-import PageShell, { SectionHeading } from '../components/PageShell';
+import { ArrowRight, ArrowUpRight, Instagram, Linkedin, Mail } from 'lucide-react';
+import PageShell from '../components/PageShell';
+import Topic from '../components/Topic';
 import { AUDIENCES, CONTACT, MISSION, MODULES, PROBLEMS } from '../content/site';
 import { href, newTab } from '../lib/router';
 
@@ -33,6 +34,8 @@ const WAYS = [
   },
 ];
 
+const subheading = 'mb-2 text-sm font-medium text-white/55';
+
 export default function About({ path }: { path: string }) {
   const channels = [
     CONTACT.email && { label: CONTACT.email, url: `mailto:${CONTACT.email}`, Icon: Mail },
@@ -41,76 +44,78 @@ export default function About({ path }: { path: string }) {
   ].filter(Boolean) as { label: string; url: string; Icon: typeof Mail }[];
 
   return (
-    <PageShell path={path} eyebrow="About Us" title="A home for Newhouse international students" intro={MISSION} jump={JUMP}>
-      <div className="space-y-24">
-        <section id="mission" aria-labelledby="mission-title" className="scroll-mt-36">
-          <SectionHeading id="mission-title" title="Our mission" intro="Make useful resources easier to find, and valuable people and opportunities easier to reach." />
-          <h3 className="mb-4 text-sm font-semibold uppercase tracking-[0.14em] text-white/50">Who we serve</h3>
-          <div className="grid gap-4 md:grid-cols-2">
-            {AUDIENCES.map((audience) => (
-              <div key={audience.title} className="card">
-                <h4 className="text-lg font-semibold text-white">{audience.title}</h4>
-                <p className="mt-2 leading-relaxed text-white/65">{audience.body}</p>
+    <PageShell path={path} title="A home for Newhouse international students" intro={MISSION} jump={JUMP}>
+      <div className="space-y-28 sm:space-y-36">
+        <Topic id="mission" title="Our mission" intro="Make useful resources easier to find, and valuable people and opportunities easier to reach.">
+          <div className="space-y-14">
+            <div>
+              <h3 className={subheading}>Who we serve</h3>
+              <div className="grid gap-x-10 border-t border-white/[0.08] sm:grid-cols-2">
+                {AUDIENCES.map((audience) => (
+                  <div key={audience.title} className="border-b border-white/[0.08] py-6">
+                    <h4 className="text-[1.0625rem] font-semibold text-white">{audience.title}</h4>
+                    <p className="t-body mt-2">{audience.body}</p>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
+            </div>
 
-          <h3 className="mb-4 mt-12 text-sm font-semibold uppercase tracking-[0.14em] text-white/50">Why we exist</h3>
-          <ol className="grid gap-x-10 md:grid-cols-2">
-            {PROBLEMS.map((problem, index) => (
-              <li key={problem} className="flex gap-4 border-b border-white/[0.08] py-4">
-                <span className="font-mono text-sm text-accent">{String(index + 1).padStart(2, '0')}</span>
-                <span className="leading-relaxed text-white/75">{problem}</span>
+            <div>
+              <h3 className={subheading}>Why we exist</h3>
+              <ul className="border-t border-white/[0.08]">
+                {PROBLEMS.map((problem) => (
+                  <li key={problem} className="border-b border-white/[0.08] py-4 text-white/80">
+                    {problem}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div>
+              <h3 className={subheading}>What we do</h3>
+              <ul className="border-t border-white/[0.08]">
+                {MODULES.filter((m) => m.id !== 'about').map((module) => (
+                  <li key={module.id} className="border-b border-white/[0.08]">
+                    <a href={href(module.path)} className="row -mx-4 grid grid-cols-[1fr_auto] items-start gap-x-6 rounded-2xl px-4 py-6">
+                      <span>
+                        <span data-vt-title className="row-title block text-[1.0625rem] font-semibold text-white">{module.title}</span>
+                        <span className="t-body mt-1.5 block">{module.summary}</span>
+                      </span>
+                      <ArrowRight size={18} aria-hidden="true" className="row-arrow is-forward mt-1 text-accent" />
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </Topic>
+
+        <Topic id="team" title="Our team" intro="NHISA is run by Newhouse international students.">
+          <div className="panel t-body">Team profiles are on the way.</div>
+        </Topic>
+
+        <Topic id="get-involved" title="Get involved" intro="Three ways to help NHISA grow.">
+          <ul className="border-t border-white/[0.08]">
+            {WAYS.map((way) => (
+              <li key={way.title} className="grid gap-4 border-b border-white/[0.08] py-7 sm:grid-cols-[1fr_auto] sm:items-center sm:gap-8">
+                <div>
+                  <h3 className="text-[1.0625rem] font-semibold text-white">{way.title}</h3>
+                  <p className="t-body mt-1.5">{way.body}</p>
+                </div>
+                {way.url ? (
+                  <a href={way.url} {...newTab(way.url)} className="glass-button justify-self-start px-5 py-2.5">
+                    {way.action}
+                    <ArrowUpRight size={15} aria-hidden="true" />
+                  </a>
+                ) : (
+                  <span className="t-meta">Sign-ups open soon</span>
+                )}
               </li>
             ))}
-          </ol>
+          </ul>
+        </Topic>
 
-          <h3 className="mb-4 mt-12 text-sm font-semibold uppercase tracking-[0.14em] text-white/50">What we do</h3>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {MODULES.filter((m) => m.id !== 'about').map((module) => (
-              <a key={module.id} href={href(module.path)} className={`tone-${module.tone} tone-card group flex flex-col rounded-2xl p-6`}>
-                <span className="text-lg font-bold tracking-tight">{module.title}</span>
-                <span className="mt-2 text-sm leading-relaxed opacity-75">{module.summary}</span>
-                <ArrowRight size={18} aria-hidden="true" className="mt-6 transition-transform group-hover:translate-x-1" />
-              </a>
-            ))}
-          </div>
-        </section>
-
-        <section id="team" aria-labelledby="team-title" className="scroll-mt-36">
-          <SectionHeading id="team-title" title="Our team" intro="NHISA is run by Newhouse international students." />
-          <div className="card flex max-w-2xl items-center gap-5 text-white/65">
-            <span className="glass-button h-12 w-12 shrink-0" aria-hidden="true">
-              <Users size={20} />
-            </span>
-            Team profiles are on the way.
-          </div>
-        </section>
-
-        <section id="get-involved" aria-labelledby="involved-title" className="scroll-mt-36">
-          <SectionHeading id="involved-title" title="Get involved" intro="Three ways to help NHISA grow." />
-          <div className="grid gap-4 md:grid-cols-3">
-            {WAYS.map((way) => (
-              <div key={way.title} className="card flex flex-col">
-                <h3 className="text-lg font-semibold text-white">{way.title}</h3>
-                <p className="mt-2 leading-relaxed text-white/65">{way.body}</p>
-                <div className="mt-auto pt-6">
-                  {way.url ? (
-                    <a href={way.url} {...newTab(way.url)} className="glass-button px-5 py-2.5">
-                      {way.action}
-                      <ArrowUpRight size={15} aria-hidden="true" />
-                    </a>
-                  ) : (
-                    <span className="text-sm text-white/45">Sign-ups open soon.</span>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <section id="contact" aria-labelledby="contact-title" className="scroll-mt-36">
-          <SectionHeading id="contact-title" title="Contact us" />
+        <Topic id="contact" title="Contact us">
           {channels.length ? (
             <ul className="flex flex-wrap gap-3">
               {channels.map(({ label, url, Icon }) => (
@@ -123,9 +128,9 @@ export default function About({ path }: { path: string }) {
               ))}
             </ul>
           ) : (
-            <div className="card max-w-2xl text-white/65">We’re setting up our contact channels. Check back soon.</div>
+            <div className="panel t-body">We’re setting up our contact channels. Check back soon.</div>
           )}
-        </section>
+        </Topic>
       </div>
     </PageShell>
   );

@@ -9,6 +9,7 @@ import CareerAccess from './pages/CareerAccess';
 import Alumni, { alumniTitle } from './pages/Alumni';
 import About from './pages/About';
 import { useRoute } from './lib/router';
+import { installPointerLight, installTitleCapture } from './lib/interactions';
 
 function resolve(path: string) {
   const section = `/${path.split('/')[1] ?? ''}`;
@@ -28,6 +29,15 @@ export default function App() {
   const firstRender = useRef(true);
 
   useEffect(() => {
+    const removeLight = installPointerLight();
+    const removeCapture = installTitleCapture();
+    return () => {
+      removeLight();
+      removeCapture();
+    };
+  }, []);
+
+  useEffect(() => {
     document.title = title === 'NHISA' ? 'NHISA · Newhouse International Students' : `${title} | NHISA`;
     const target = section ? document.getElementById(section) : null;
     if (target) {
@@ -43,13 +53,13 @@ export default function App() {
       firstRender.current = false;
       return;
     }
-    // A new page: start at the top and move focus to its heading for screen readers.
-    window.scrollTo(0, 0);
+    // A new page (the router has already reset the scroll): move focus to its
+    // heading for screen readers.
     document.querySelector<HTMLElement>('[data-page-title]')?.focus({ preventScroll: true });
   }, [path, section, title]);
 
   return (
-    <div className="min-h-screen tracking-[-0.01em]">
+    <div className="min-h-screen">
       <a href="#main" className="skip-link" onClick={(event) => {
         event.preventDefault();
         document.querySelector<HTMLElement>('[data-page-title]')?.focus();
@@ -57,7 +67,7 @@ export default function App() {
         Skip to content
       </a>
       <FlowLines className="flow-lines-fixed" />
-      <TopBar />
+      <TopBar path={path} />
       {page}
       <SiteFooter />
       <BackToTop />

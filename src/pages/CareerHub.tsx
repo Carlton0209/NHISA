@@ -1,5 +1,5 @@
 import PageShell from '../components/PageShell';
-import { SectionList } from '../components/ResourceCard';
+import { SectionList } from '../components/Resources';
 import { CAREER_STEPS } from '../content/careerHub';
 import { DEVICES, type Device } from '../content/email';
 import { GUIDES } from '../content/guides';
@@ -27,12 +27,11 @@ export default function CareerHub({ path }: { path: string }) {
     return (
       <PageShell
         path={path}
-        eyebrow="Career Hub"
         title="Your job search, step by step"
         intro="International student support from zero to offer. Start at Step 1 and work your way to the interview: each step has a short guide and the resources to act on it."
         jump={CAREER_STEPS.map((step, index) => ({ id: step.id, label: `${index + 1}. ${step.title}` }))}
       >
-        <SectionList sections={CAREER_STEPS} label={(index) => `Step ${index + 1}`} />
+        <SectionList sections={CAREER_STEPS} numbered />
       </PageShell>
     );
   }
@@ -43,7 +42,7 @@ export default function CareerHub({ path }: { path: string }) {
     const signatureBack = { label: 'Email Signature', path: '/career-hub/email-signature' };
     if (sub === 'sample') {
       return (
-        <PageShell path={path} eyebrow="Email Signature" title="A sample signature" back={signatureBack}
+        <PageShell path={path} title="A sample signature" back={signatureBack}
           intro="Copy it, paste it into your signature draft, then replace each detail with your own.">
           <SignatureSample />
         </PageShell>
@@ -52,8 +51,8 @@ export default function CareerHub({ path }: { path: string }) {
     if (sub in DEVICES) {
       const device = DEVICES[sub as Device];
       return (
-        <PageShell path={path} eyebrow={`Email Signature · ${device.title}`} title="How to create an email signature?"
-          intro={`${device.subtitle}, in four steps.`} back={signatureBack}>
+        <PageShell path={path} title="How to create an email signature?"
+          intro={`On your ${device.title.toLowerCase()}: ${device.subtitle}, in four steps.`} back={signatureBack}>
           <DeviceSteps device={sub as Device} />
         </PageShell>
       );
@@ -67,7 +66,7 @@ export default function CareerHub({ path }: { path: string }) {
   };
 
   return (
-    <PageShell path={path} eyebrow="Career Hub guide" title={guide.title} intro={guide.intro} back={back}>
+    <PageShell path={path} title={guide.title} intro={guide.intro} back={back}>
       {pages[guide.slug]}
     </PageShell>
   );

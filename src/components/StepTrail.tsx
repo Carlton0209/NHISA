@@ -10,10 +10,13 @@ export default function StepTrail({ steps }: { steps: Step[] }) {
       {steps.map((step, index) => {
         const right = index % 2 === 1;
         return (
-          <li key={step.title} className={`card relative sm:w-[64%] ${right ? 'sm:ml-auto sm:text-right' : ''}`}>
-            <p className="font-mono text-sm uppercase tracking-[0.18em] text-accent">Step {index + 1}</p>
-            <h3 className="mt-3 text-2xl font-semibold tracking-tight text-white">{step.title}</h3>
-            {step.body && <p className="mt-3 leading-relaxed text-white/65">{step.body}</p>}
+          <li key={step.title} className={`panel relative sm:w-[64%] ${right ? 'sm:ml-auto sm:text-right' : ''}`}>
+            <h3 className={`flex items-baseline gap-4 text-[1.5rem] font-semibold tracking-[-0.02em] text-white ${right ? 'sm:flex-row-reverse' : ''}`}>
+              <span className="tnum text-[2.5rem] leading-none tracking-[-0.04em] text-white/20" aria-hidden="true">{index + 1}</span>
+              <span className="sr-only">Step {index + 1}: </span>
+              {step.title}
+            </h3>
+            {step.body && <p className="t-body mt-4">{step.body}</p>}
             {step.extras?.map((extra) => (
               // A div, not a p: the image link renders its <dialog> here.
               <div key={extra.label} className="mt-4 text-white/80">

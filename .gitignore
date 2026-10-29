@@ -2,3 +2,6 @@ node_modules
 dist
 *.local
 .DS_Store
+
+# Design-tool cache (local session state)
+.impeccable/hook.cache.json

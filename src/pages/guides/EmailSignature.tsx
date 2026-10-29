@@ -90,7 +90,7 @@ export function SignatureSample() {
           <span className="text-sm text-white/50">Formatting is kept when you paste into Outlook.</span>
         </div>
       </div>
-      <div className="card">
+      <div className="panel">
         <h2 className="text-lg font-semibold text-white">What goes on each line</h2>
         <ol className="mt-4 space-y-3 text-white/65">
           <li><span className="text-white">Name and pronouns</span>, so people know how to address you.</li>

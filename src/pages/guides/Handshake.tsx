@@ -1,72 +1,63 @@
 import { ArrowUpRight } from 'lucide-react';
-import { SectionHeading } from '../../components/PageShell';
-import { ResourceCard } from '../../components/ResourceCard';
+import Topic from '../../components/Topic';
+import { ResourceList } from '../../components/Resources';
 import { HANDSHAKE } from '../../content/guides';
-import { resource } from '../../content/resources';
 
-function NumberedCards({ items }: { items: { title: string; body: string }[] }) {
+/** Steps whose order matters, as a numbered list. */
+function Steps({ items }: { items: { title: string; body: string }[] }) {
   return (
-    <ol className="grid gap-4 md:grid-cols-3">
+    <ol className="border-t border-white/[0.08]">
       {items.map((item, index) => (
-        <li key={item.title} className="card">
-          <span className="font-mono text-sm text-accent">{String(index + 1).padStart(2, '0')}</span>
-          <h3 className="mt-4 text-lg font-semibold text-white">{item.title}</h3>
-          <p className="mt-2 leading-relaxed text-white/65">{item.body}</p>
+        <li key={item.title} className="grid grid-cols-[2rem_1fr] gap-x-4 border-b border-white/[0.08] py-6">
+          <span className="tnum pt-0.5 text-sm font-semibold text-accent">{index + 1}</span>
+          <div>
+            <h3 className="text-[1.0625rem] font-semibold text-white">{item.title}</h3>
+            <p className="t-body mt-1.5">{item.body}</p>
+          </div>
         </li>
       ))}
     </ol>
   );
 }
 
-const cuseWorks = resource('cuseworks');
-
 export default function Handshake() {
   return (
-    <div className="space-y-20">
-      <section aria-labelledby="why-handshake">
-        <SectionHeading id="why-handshake" title="Why Handshake?" intro="Largely similar to LinkedIn, with three differences that matter." />
-        <div className="grid gap-4 md:grid-cols-3">
+    <div className="space-y-28 sm:space-y-36">
+      <Topic
+        id="why"
+        title="Why Handshake?"
+        intro={
+          <>
+            <p>Largely similar to LinkedIn, with three differences that matter.</p>
+            <a href="https://app.joinhandshake.com/home" target="_blank" rel="noopener noreferrer" className="glass-button mt-7 px-5 py-2.5">
+              Open Handshake
+              <ArrowUpRight size={16} aria-hidden="true" />
+              <span className="sr-only">(opens in a new tab)</span>
+            </a>
+          </>
+        }
+      >
+        <dl className="border-t border-white/[0.08]">
           {HANDSHAKE.why.map((item) => (
-            <div key={item.title} className="card">
-              <h3 className="text-lg font-semibold text-white">{item.title}</h3>
-              <p className="mt-2 leading-relaxed text-white/65">{item.body}</p>
+            <div key={item.title} className="grid gap-2 border-b border-white/[0.08] py-6 sm:grid-cols-[11rem_1fr] sm:gap-8">
+              <dt className="text-[1.0625rem] font-semibold text-white">{item.title}</dt>
+              <dd className="t-body">{item.body}</dd>
             </div>
           ))}
-        </div>
-      </section>
+        </dl>
+      </Topic>
 
-      <section aria-labelledby="first-steps">
-        <SectionHeading id="first-steps" label="01" title="First steps" intro="Account creation and setup." />
-        <NumberedCards items={HANDSHAKE.firstSteps} />
-      </section>
+      <Topic id="first-steps" title="First steps" intro="Account creation and setup.">
+        <Steps items={HANDSHAKE.firstSteps} />
+      </Topic>
 
-      <section aria-labelledby="next-steps">
-        <SectionHeading id="next-steps" label="02" title="Make the platform work for you" />
-        <NumberedCards items={HANDSHAKE.nextSteps} />
-      </section>
+      <Topic id="next-steps" title="Make the platform work for you" intro="Bring the right jobs and events to you instead of searching every day.">
+        <Steps items={HANDSHAKE.nextSteps} />
+      </Topic>
 
-      <section aria-labelledby="handshake-links" className="grid gap-4 md:grid-cols-2">
-        <h2 id="handshake-links" className="sr-only">
-          Handshake links
-        </h2>
-        <a
-          href="https://app.joinhandshake.com/home"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="card card-link group flex flex-col justify-between bg-accent/[0.08]"
-        >
-          <span>
-            <span className="block text-lg font-semibold text-white">Open Handshake</span>
-            <span className="mt-2 block leading-relaxed text-white/65">Sign in and start setting up your profile.</span>
-          </span>
-          <span className="mt-6 flex items-center gap-2 text-sm text-white/60 group-hover:text-white">
-            app.joinhandshake.com
-            <ArrowUpRight size={16} aria-hidden="true" />
-            <span className="sr-only">(opens in a new tab)</span>
-          </span>
-        </a>
-        {cuseWorks && <ResourceCard resource={cuseWorks} />}
-      </section>
+      <Topic id="links" title="Where to go next" intro="Handshake itself, and the campus job board that runs on it.">
+        <ResourceList ids={['handshake', 'cuseworks']} />
+      </Topic>
     </div>
   );
 }

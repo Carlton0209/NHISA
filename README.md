@@ -48,6 +48,10 @@ All copy and links live in `src/content/`:
 
 The sample signature itself is in `src/pages/guides/EmailSignature.tsx`. The Outlook screenshots in `src/assets/email/` have the original account name and address replaced with placeholders.
 
-## Hero photos
+## Hero and interactions
 
-`src/assets/hero-autumn.jpg` is shown by default and `hero-winter.jpg` is revealed under the cursor. The two must keep the same size and framing so the reveal lines up. Inner pages sit on a dark backdrop of faint, static lines drawn by `src/components/FlowLines.tsx`.
+`src/assets/hero-autumn.webp` and `hero-winter.webp` must keep the same size and framing. The hero pins while you scroll and a soft snowline descends from the sky, turning autumn into winter (`src/components/RevealLayer.tsx`); with a mouse, a winter lens also follows the cursor. Visitors who prefer reduced motion get a still hero.
+
+Other interactions live in `src/lib/interactions.ts`: pages change inside a View Transition (the clicked card's title travels into the next page's heading, the navigation bars stay put), glass buttons and list rows catch a highlight under the pointer, module cards tilt slightly, and the library re-flows its rows when filtered. Browsers without View Transitions simply switch pages.
+
+Inner pages sit on a dark backdrop of faint, static lines drawn by `src/components/FlowLines.tsx`.

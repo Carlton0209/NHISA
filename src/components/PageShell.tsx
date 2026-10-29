@@ -6,7 +6,6 @@ export type JumpItem = { id: string; label: string };
 
 type PageShellProps = {
   path: string;
-  eyebrow: string;
   title: ReactNode;
   intro?: ReactNode;
   jump?: JumpItem[];
@@ -15,34 +14,29 @@ type PageShellProps = {
 };
 
 /** Inner-page frame: header, optional section jump bar, content. */
-export default function PageShell({ path, eyebrow, title, intro, jump, back, children }: PageShellProps) {
+export default function PageShell({ path, title, intro, jump, back, children }: PageShellProps) {
   return (
-    <main id="main" className="relative z-10 mx-auto w-full max-w-6xl px-5 pt-28 sm:px-8 sm:pt-36">
+    <main id="main" className="relative z-10 mx-auto w-full max-w-6xl px-5 pt-32 sm:px-8 sm:pt-44">
       {back && (
         <a
           href={href(back.path, back.section)}
-          className="mb-8 inline-flex items-center gap-2 text-sm text-white/60 transition-colors hover:text-white"
+          className="group mb-10 inline-flex items-center gap-2 text-sm text-white/55 transition-colors hover:text-white"
         >
-          <ArrowLeft size={16} aria-hidden="true" />
+          <ArrowLeft size={16} aria-hidden="true" className="transition-transform duration-500 group-hover:-translate-x-1" />
           {back.label}
         </a>
       )}
 
-      <header className="max-w-3xl">
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">{eyebrow}</p>
-        <h1
-          tabIndex={-1}
-          data-page-title
-          className="mt-4 text-4xl font-bold leading-[1.08] tracking-[-0.03em] text-white outline-none sm:text-6xl"
-        >
+      <header className="max-w-4xl">
+        <h1 tabIndex={-1} data-page-title className="t-title text-white outline-none">
           {title}
         </h1>
-        {intro && <div className="mt-6 text-base leading-relaxed text-white/70 sm:text-lg">{intro}</div>}
+        {intro && <div className="t-lede mt-7 max-w-[42rem]">{intro}</div>}
       </header>
 
       {jump && <JumpNav path={path} items={jump} />}
 
-      <div className="mt-14 sm:mt-16">{children}</div>
+      <div className="mt-16 sm:mt-24">{children}</div>
     </main>
   );
 }
@@ -88,7 +82,7 @@ function JumpNav({ path, items }: { path: string; items: JumpItem[] }) {
   };
 
   return (
-    <nav ref={barRef} aria-label="On this page" className={`${stuck ? 'jump-bar' : ''} sticky top-[4.25rem] z-30 -mx-5 mt-10 px-5 py-3 sm:top-[4.75rem] sm:mx-0 sm:px-0`}>
+    <nav ref={barRef} aria-label="On this page" className={`${stuck ? 'jump-bar' : ''} sticky top-[4.25rem] z-30 -mx-5 mt-12 px-5 py-3 sm:top-[4.75rem] sm:mx-0 sm:px-0`}>
       <ul className="no-scrollbar flex gap-2 overflow-x-auto">
         {items.map((item) => (
           <li key={item.id} className="shrink-0">
@@ -107,14 +101,13 @@ function JumpNav({ path, items }: { path: string; items: JumpItem[] }) {
   );
 }
 
-export function SectionHeading({ id, label, title, intro }: { id?: string; label?: string; title: string; intro?: string }) {
+export function SectionHeading({ id, title, intro }: { id?: string; title: string; intro?: string }) {
   return (
-    <div className="mb-8 max-w-2xl">
-      {label && <p className="mb-3 font-mono text-xs uppercase tracking-[0.16em] text-accent">{label}</p>}
-      <h2 id={id} className="text-2xl font-semibold tracking-tight text-white sm:text-3xl">
+    <div className="mb-10 max-w-2xl">
+      <h2 id={id} className="t-heading text-white">
         {title}
       </h2>
-      {intro && <p className="mt-3 leading-relaxed text-white/60">{intro}</p>}
+      {intro && <p className="t-body mt-4">{intro}</p>}
     </div>
   );
 }
