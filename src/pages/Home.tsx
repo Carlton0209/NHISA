@@ -34,20 +34,12 @@ export default function Home() {
           <div className="hero-scrim" aria-hidden="true" />
           <div className="hero-dusk" aria-hidden="true" />
 
-          <div className="hero-copy absolute inset-x-0 top-[16%] z-50 mx-auto max-w-5xl px-5 text-center sm:top-[18%]">
-            <h1 tabIndex={-1} data-page-title className="hero-title t-display rise-in text-white outline-none">
-              Find your path.
-              <br />
-              Find your people.
-            </h1>
-            <p className="hero-title rise-in-2 mx-auto mt-7 max-w-[38rem] text-[1.0625rem] leading-relaxed text-white/85 sm:text-lg">
-              NHISA is a community and career hub for Newhouse international students and alumni: the resources, people and
-              opportunities you need, in one place.
-            </p>
-          </div>
+          <h1 tabIndex={-1} data-page-title className="sr-only">
+            NHISA: a community and career hub for Newhouse international students and alumni
+          </h1>
 
           <div className="hero-copy absolute inset-x-0 bottom-[20%] z-50 flex justify-center px-5">
-            <a href={href('/', 'modules')} className="glass-button rise-in-3 px-9 py-3.5 text-base">
+            <a href={href('/', 'modules')} className="glass-button rise-in px-9 py-3.5 text-base">
               Start Exploring
             </a>
           </div>

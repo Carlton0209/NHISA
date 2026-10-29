@@ -1,7 +1,7 @@
 import { Instagram, Linkedin, Mail } from 'lucide-react';
 import { CONTACT, MODULES } from '../content/site';
 import { href, newTab } from '../lib/router';
-import { Logo } from './Navigation';
+import { Logo } from './Brand';
 
 const ABOUT_LINKS = [
   { label: 'Our mission', section: 'mission' },
@@ -65,16 +65,16 @@ export default function SiteFooter() {
   ].filter(Boolean) as { label: string; url: string; Icon: typeof Mail }[];
 
   return (
-    <footer className="relative z-10 mt-24 bg-night-800/80 backdrop-blur-sm">
+    <footer className="relative z-10 mt-32 border-t border-white/[0.1] bg-[#0b0d17]">
       <div className="mx-auto grid w-full max-w-6xl gap-10 px-5 pt-14 sm:px-8 md:grid-cols-[1.3fr_1fr_1fr_1fr]">
         <div>
           <Logo />
-          <p className="mt-4 max-w-xs text-sm leading-relaxed text-white/55">
+          <p className="t-meta mt-5 max-w-xs leading-relaxed">
             A professional community and career resource hub for Newhouse international students and alumni.
           </p>
         </div>
         <div>
-          <h2 className="text-sm font-semibold text-white">Explore</h2>
+          <h2 className="t-mono">Explore</h2>
           <ul className="mt-4 space-y-2.5 text-sm">
             {MODULES.filter((m) => m.id !== 'about').map((m) => (
               <li key={m.id}>
@@ -84,7 +84,7 @@ export default function SiteFooter() {
           </ul>
         </div>
         <div>
-          <h2 className="text-sm font-semibold text-white">About</h2>
+          <h2 className="t-mono">About</h2>
           <ul className="mt-4 space-y-2.5 text-sm">
             {ABOUT_LINKS.map((link) => (
               <li key={link.section}>
@@ -94,7 +94,7 @@ export default function SiteFooter() {
           </ul>
         </div>
         <div>
-          <h2 className="text-sm font-semibold text-white">Connect with <span className="text-accent">NHISA</span></h2>
+          <h2 className="t-mono">Connect with NHISA</h2>
           {socials.length ? (
             <ul className="mt-4 flex gap-2">
               {socials.map(({ label, url, Icon }) => (
@@ -106,16 +106,16 @@ export default function SiteFooter() {
               ))}
             </ul>
           ) : (
-            <p className="mt-4 text-sm text-white/50">Our social channels are coming soon.</p>
+            <p className="t-meta mt-4">Our social channels are coming soon.</p>
           )}
         </div>
       </div>
 
-      <div className="relative mx-auto mt-6 flex w-full max-w-6xl justify-end px-5 text-accent sm:px-8">
+      <div className="relative mx-auto mt-6 flex w-full max-w-6xl justify-end px-5 text-white/45 sm:px-8">
         <FooterArt />
       </div>
-      <div className="h-px bg-accent/60" aria-hidden="true" />
-      <div className="mx-auto flex w-full max-w-6xl flex-col gap-2 px-5 pb-28 pt-5 text-xs text-white/45 sm:flex-row sm:justify-between sm:px-8 md:pb-24">
+      <div className="h-px bg-white/30" aria-hidden="true" />
+      <div className="t-mono mx-auto flex w-full max-w-6xl flex-col gap-2 px-5 pb-10 pt-5 sm:flex-row sm:justify-between sm:px-8">
         <p>© {new Date().getFullYear()} NHISA · Newhouse international students and alumni</p>
         <p>Links marked ↗ open official university and partner sites.</p>
       </div>

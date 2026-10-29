@@ -55,3 +55,9 @@ The sample signature itself is in `src/pages/guides/EmailSignature.tsx`. The Out
 Other interactions live in `src/lib/interactions.ts`: pages change inside a View Transition (the clicked card's title travels into the next page's heading, the navigation bars stay put), glass buttons and list rows catch a highlight under the pointer, module cards tilt slightly, and the library re-flows its rows when filtered. Browsers without View Transitions simply switch pages.
 
 Inner pages sit on a dark backdrop of faint, static lines drawn by `src/components/FlowLines.tsx`.
+
+## Brand and type
+
+The logo pairs Syracuse University's Block S (`src/components/Brand.tsx`, traced from the university's artwork and kept in its official orange, #F76900) with the NHISA wordmark; the browser tab icon (`public/favicon.svg`) is the Block S alone. University marks belong to Syracuse University and are not covered by this repository's code.
+
+Text is set in Satoshi (Fontshare) with DM Mono for small details such as addresses, counts and dates. Inner pages follow a quiet editorial style on a faint graph-paper grid: medium-weight headings, outline section glyphs (`src/components/Glyph.tsx`) and resource lists rather than cards.

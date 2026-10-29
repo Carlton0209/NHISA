@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import { href } from '../lib/router';
+import Glyph, { type GlyphName } from './Glyph';
 
 export type JumpItem = { id: string; label: string };
 
@@ -8,21 +9,23 @@ type PageShellProps = {
   path: string;
   title: ReactNode;
   intro?: ReactNode;
+  /** Short data line under the introduction, e.g. "4 sections · 31 resources". */
+  meta?: string;
   jump?: JumpItem[];
   back?: { label: string; path: string; section?: string };
   children: ReactNode;
 };
 
 /** Inner-page frame: header, optional section jump bar, content. */
-export default function PageShell({ path, title, intro, jump, back, children }: PageShellProps) {
+export default function PageShell({ path, title, intro, meta, jump, back, children }: PageShellProps) {
   return (
     <main id="main" className="relative z-10 mx-auto w-full max-w-6xl px-5 pt-32 sm:px-8 sm:pt-44">
       {back && (
         <a
           href={href(back.path, back.section)}
-          className="group mb-10 inline-flex items-center gap-2 text-sm text-white/55 transition-colors hover:text-white"
+          className="t-mono group mb-10 inline-flex items-center gap-2 transition-colors hover:text-white"
         >
-          <ArrowLeft size={16} aria-hidden="true" className="transition-transform duration-500 group-hover:-translate-x-1" />
+          <ArrowLeft size={14} strokeWidth={1.5} aria-hidden="true" className="transition-transform duration-500 group-hover:-translate-x-1" />
           {back.label}
         </a>
       )}
@@ -32,6 +35,7 @@ export default function PageShell({ path, title, intro, jump, back, children }: 
           {title}
         </h1>
         {intro && <div className="t-lede mt-7 max-w-[42rem]">{intro}</div>}
+        {meta && <p className="t-mono mt-8">{meta}</p>}
       </header>
 
       {jump && <JumpNav path={path} items={jump} />}
@@ -90,7 +94,7 @@ function JumpNav({ path, items }: { path: string; items: JumpItem[] }) {
               type="button"
               onClick={() => jumpTo(item.id)}
               aria-current={active === item.id ? 'true' : undefined}
-              className={`glass-button px-4 py-2 ${active === item.id ? '' : 'text-white/75 hover:text-white'}`}
+              className={`glass-button px-4 py-2 font-mono text-xs uppercase tracking-[0.06em] ${active === item.id ? '' : 'text-white/70 hover:text-white'}`}
             >
               {item.label}
             </button>
@@ -101,9 +105,10 @@ function JumpNav({ path, items }: { path: string; items: JumpItem[] }) {
   );
 }
 
-export function SectionHeading({ id, title, intro }: { id?: string; title: string; intro?: string }) {
+export function SectionHeading({ id, title, intro, glyph }: { id?: string; title: string; intro?: string; glyph?: GlyphName }) {
   return (
     <div className="mb-10 max-w-2xl">
+      {glyph && <Glyph name={glyph} className="mb-7 text-white/55" />}
       <h2 id={id} className="t-heading text-white">
         {title}
       </h2>

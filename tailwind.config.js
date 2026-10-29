@@ -8,6 +8,10 @@ export default {
         night: { 950: '#090b14', 900: '#0e1120', 800: '#151a2e', 700: '#1e2440' },
         accent: { DEFAULT: '#aab3ff', strong: '#7f89f4' },
       },
+      fontFamily: {
+        display: ['Satoshi', 'system-ui', 'sans-serif'],
+        mono: ['"DM Mono"', 'ui-monospace', 'monospace'],
+      },
     },
   },
   plugins: [],

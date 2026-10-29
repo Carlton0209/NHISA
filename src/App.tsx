@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react';
-import FlowLines from './components/FlowLines';
-import { BackToTop, BottomNav, TopBar } from './components/Navigation';
+import { BackToTop, TopBar } from './components/Navigation';
 import SiteFooter from './components/SiteFooter';
 import Home from './pages/Home';
 import Campus from './pages/Campus';
@@ -66,12 +65,11 @@ export default function App() {
       }}>
         Skip to content
       </a>
-      <FlowLines className="flow-lines-fixed" />
+      <div className="grid-backdrop" aria-hidden="true" />
       <TopBar path={path} />
       {page}
       <SiteFooter />
       <BackToTop />
-      <BottomNav path={path} />
     </div>
   );
 }

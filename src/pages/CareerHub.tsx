@@ -7,6 +7,8 @@ import LinkedIn from './guides/LinkedIn';
 import Handshake from './guides/Handshake';
 import { DeviceSteps, EmailSignature, SignatureSample } from './guides/EmailSignature';
 
+const TOTAL = new Set(CAREER_STEPS.flatMap((s) => s.groups.flatMap((g) => g.ids))).size;
+
 // The Career Hub step each guide belongs to, for its back link.
 const GUIDE_STEP: Record<string, string> = { linkedin: 'profile', handshake: 'opportunities', 'email-signature': 'profile' };
 
@@ -29,6 +31,7 @@ export default function CareerHub({ path }: { path: string }) {
         path={path}
         title="Your job search, step by step"
         intro="International student support from zero to offer. Start at Step 1 and work your way to the interview: each step has a short guide and the resources to act on it."
+        meta={`${CAREER_STEPS.length} steps · ${TOTAL} resources`}
         jump={CAREER_STEPS.map((step, index) => ({ id: step.id, label: `${index + 1}. ${step.title}` }))}
       >
         <SectionList sections={CAREER_STEPS} numbered />

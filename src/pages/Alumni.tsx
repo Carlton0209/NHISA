@@ -38,9 +38,9 @@ function PhotoWall() {
     return (
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {[0, 1, 2].map((i) => (
-          <div key={i} aria-hidden="true" className="flex aspect-[4/5] flex-col items-center justify-center gap-3 rounded-3xl border border-dashed border-white/[0.14] text-white/30">
+          <div key={i} aria-hidden="true" className="flex aspect-[4/5] flex-col items-center justify-center gap-3 border border-dashed border-white/[0.16] text-white/35">
             <User size={36} />
-            <span className="text-sm">Coming soon</span>
+            <span className="t-mono">Coming soon</span>
           </div>
         ))}
         <ShareYourStory className="aspect-auto lg:aspect-[4/5]" />
@@ -72,7 +72,7 @@ function PhotoWall() {
         {people.map((person) => (
           <li key={person.id}>
             <a href={href(`/alumni/${person.id}`)} className="group block">
-              <span className="block aspect-[4/5] overflow-hidden rounded-3xl bg-night-800">
+              <span className="block aspect-[4/5] overflow-hidden bg-night-800">
                 <img
                   src={person.photo}
                   alt={person.photoAlt}
@@ -84,7 +84,7 @@ function PhotoWall() {
               <span className="block text-sm text-white/60">
                 {person.role}, {person.organization}
               </span>
-              <span className="t-meta mt-1 block text-accent">{person.industry}</span>
+              <span className="t-mono mt-2 block">{person.industry}</span>
             </a>
           </li>
         ))}
@@ -131,7 +131,7 @@ function Events() {
     <ul className="border-t border-white/[0.08]">
       {upcoming.map((event) => (
         <li key={event.id} className="grid gap-4 border-b border-white/[0.08] py-7 sm:grid-cols-[8rem_1fr_auto] sm:items-center">
-          <p className="tnum text-sm font-semibold text-accent">
+          <p className="t-mono text-white/70">
             {new Date(`${event.date}T12:00:00`).toLocaleDateString('en-US', { month: 'short', day: 'numeric', weekday: 'short' })}
             {event.time && <span className="block text-white/50">{event.time}</span>}
           </p>
@@ -174,7 +174,7 @@ function Profile({ path, person }: { path: string; person: Alumnus }) {
     >
       <div className="grid gap-12 lg:grid-cols-[22rem_1fr]">
         <div className="lg:sticky lg:top-32 lg:self-start">
-          <img src={person.photo} alt={person.photoAlt} className="aspect-[4/5] w-full rounded-3xl object-cover" />
+          <img src={person.photo} alt={person.photoAlt} className="aspect-[4/5] w-full object-cover" />
           <dl className="mt-6 divide-y divide-white/[0.08] text-sm">
             {facts.map(([term, value]) => (
               <div key={term} className="flex justify-between gap-4 py-3">
@@ -238,17 +238,18 @@ export default function Alumni({ path }: { path: string }) {
         <section id="meet" aria-labelledby="meet-title" className="scroll-mt-40">
           <SectionHeading
             id="meet-title"
+            glyph="grid"
             title="Meet Alumni & Professionals"
             intro={ALUMNI.length ? 'Filter by industry, then open a profile to read the full conversation.' : 'Each coffee chat becomes a profile you can open to read the full conversation.'}
           />
           <PhotoWall />
         </section>
         <section id="stories" aria-labelledby="stories-title" className="scroll-mt-40">
-          <SectionHeading id="stories-title" title="Career Stories & Advice" intro="The one thing each person wishes they had known as an international student." />
+          <SectionHeading id="stories-title" glyph="pages" title="Career Stories & Advice" intro="The one thing each person wishes they had known as an international student." />
           <Stories />
         </section>
         <section id="events" aria-labelledby="events-title" className="scroll-mt-40">
-          <SectionHeading id="events-title" title="Events & Coffee Chats" intro="Small-group chats with alumni and professionals, open to NHISA members." />
+          <SectionHeading id="events-title" glyph="rings" title="Events & Coffee Chats" intro="Small-group chats with alumni and professionals, open to NHISA members." />
           <Events />
         </section>
       </div>

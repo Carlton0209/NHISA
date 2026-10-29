@@ -56,11 +56,12 @@ export default function CareerAccess({ path }: { path: string }) {
     <PageShell
       path={path}
       title="The NHISA resource library"
+      meta={`${ALL.length} resources · ${CATEGORIES.length} categories`}
       intro="Every resource on NHISA in one place. Search, or filter by what you need right now. As our alumni network grows, internships and jobs they share will be added here too."
     >
       <div className="grid gap-10 lg:grid-cols-[15rem_1fr] lg:gap-14">
         <aside aria-label="Filter by category" className="lg:sticky lg:top-28 lg:self-start">
-          <h2 className="mb-3 hidden text-sm font-medium text-white/55 lg:block">Category</h2>
+          <h2 className="t-mono mb-3 hidden lg:block">Category</h2>
           <div className="no-scrollbar -mx-5 flex gap-2 overflow-x-auto px-5 pb-1 lg:mx-0 lg:flex-col lg:gap-1.5 lg:px-0 lg:pb-0">
             {[null, ...CATEGORIES].map((c) => {
               const n = count(c);
@@ -94,10 +95,10 @@ export default function CareerAccess({ path }: { path: string }) {
               aria-label="Search resources"
               className="search-input w-full bg-transparent text-white placeholder:text-white/45"
             />
-            <kbd className="hidden rounded-md border border-white/15 px-1.5 py-0.5 text-xs text-white/45 sm:block" aria-hidden="true">/</kbd>
+            <kbd className="hidden border border-white/[0.18] px-1.5 py-0.5 font-mono text-xs text-white/50 sm:block" aria-hidden="true">/</kbd>
           </label>
 
-          <p className="t-meta tnum mt-6" aria-live="polite">
+          <p className="t-mono mt-6" aria-live="polite">
             Showing {results.length} of {ALL.length} resources{category ? ` in ${category}` : ''}
           </p>
 
