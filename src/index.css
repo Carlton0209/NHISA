@@ -200,6 +200,93 @@ img.scenery { animation: slowZoom 2.6s var(--ease-out) both; }
 .no-scrollbar { scrollbar-width: none; }
 .no-scrollbar::-webkit-scrollbar { display: none; }
 
+/* ---------- Photo wall ---------- */
+
+/* Polaroids pinned at a tilt. Sizes run off --u, the width of a portrait polaroid. */
+.wall-board { position: absolute; inset: 0; z-index: 10; margin: 0; padding: 0; list-style: none; pointer-events: none; }
+.wall-item {
+  position: absolute;
+  width: calc(var(--u) * var(--k));
+  transform: translate(-50%, -50%) rotate(var(--r));
+  pointer-events: auto;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+.wall-drop { transition: opacity 0.6s var(--ease-out), transform 0.9s var(--ease-out); transition-delay: calc(var(--i, 0) * 45ms); }
+.js .photo-wall:not(.is-in) .wall-drop { opacity: 0; transform: translateY(-16px) scale(1.08); }
+.wall-item.is-new .wall-drop { animation: pinDrop 0.7s var(--ease-out) both; }
+@keyframes pinDrop {
+  from { opacity: 0; transform: translateY(-36px) scale(1.18); }
+}
+.wall-lift { position: relative; transition: transform 0.4s var(--ease-out); }
+.wall-photo {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 5% 5% 15%;
+  border-radius: 2px;
+  background: #f6f5f1;
+  box-shadow: 0 1px 1px rgb(0 0 0 / 22%), 0 14px 26px -10px rgb(4 6 20 / 60%);
+  cursor: grab;
+  transition: box-shadow 0.4s var(--ease-out);
+}
+.wall-photo img { display: block; width: 100%; aspect-ratio: var(--ratio); object-fit: cover; background: #d9dce8; pointer-events: none; }
+.wall-pin {
+  position: absolute;
+  top: calc(var(--u) * -0.09);
+  left: var(--pin-x, 50%);
+  width: calc(var(--u) * 0.24);
+  translate: -50% 0;
+  filter: drop-shadow(2px 4px 2.5px rgb(4 6 20 / 45%));
+  pointer-events: none;
+  transition: transform 0.4s var(--ease-out), filter 0.4s var(--ease-out);
+}
+@media (hover: hover) {
+  .wall-item:hover .wall-lift { transform: scale(1.045) rotate(calc(var(--r) * -0.35)); }
+  .wall-item:hover .wall-photo { box-shadow: 0 2px 2px rgb(0 0 0 / 18%), 0 24px 38px -12px rgb(4 6 20 / 65%); }
+}
+.wall-item.is-dragging .wall-lift { transform: scale(1.08) rotate(calc(var(--r) * -0.5)); }
+.wall-item.is-dragging .wall-photo { cursor: grabbing; box-shadow: 0 34px 54px -14px rgb(4 6 20 / 75%); }
+.wall-item.is-dragging .wall-pin { transform: translateY(-3px) scale(1.08); filter: drop-shadow(4px 9px 4px rgb(4 6 20 / 40%)); }
+/* On a visitor's own photo until an officer approves it, in the polaroid's bottom border. */
+.wall-tag {
+  position: absolute;
+  bottom: 2.5%;
+  left: 50%;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 1px 8px;
+  translate: -50% 0;
+  border-radius: 999px;
+  background: var(--careers);
+  color: var(--careers-ink);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.6;
+  white-space: nowrap;
+}
+.send-dialog { width: min(92vw, 34rem); padding: 1.5rem; }
+/* Only on photos a visitor added; with a mouse it appears on hover. */
+.wall-remove {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  background: rgb(9 11 20 / 88%);
+  color: #fff;
+  opacity: 0;
+  transition: opacity 0.25s var(--ease-out);
+}
+.wall-item:hover .wall-remove, .wall-item:focus-within .wall-remove { opacity: 1; }
+@media (hover: none) { .wall-remove { display: none; } }
+
 /* ---------- Email signature tiles ---------- */
 
 .pixel-card .pixel-art { transition: transform 0.9s var(--ease-out), filter 0.9s ease; }
@@ -246,8 +333,8 @@ html.vt-rows::view-transition-old(root), html.vt-rows::view-transition-new(root)
   .hero { position: relative; }
   .hero-copy { opacity: 1; transform: none; }
   .js [data-reveal], .js .pic-in img { opacity: 1; transform: none; transition: none; }
-  .rise-in, img.scenery, .pixel-card .pixel, .image-dialog[open] { animation: none !important; }
-  .pixel-card .pixel-art, .row .row-title, .row .row-arrow { transition: none; }
+  .rise-in, img.scenery, .pixel-card .pixel, .image-dialog[open], .wall-item.is-new .wall-drop { animation: none !important; }
+  .pixel-card .pixel-art, .row .row-title, .row .row-arrow, .wall-drop, .wall-lift, .wall-pin { transition: none; }
   .row:hover .row-title, .pixel-card:hover .pixel-art { transform: none; }
   ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
 }

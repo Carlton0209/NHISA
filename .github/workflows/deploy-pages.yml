@@ -28,6 +28,12 @@ jobs:
         run: npm ci
       - name: Type-check and build
         run: npm run build
+        # The shared photo wall (README, "Photo wall"). Repository variables, not
+        # secrets: these keys are public by design. Unset, the wall stays local.
+        env:
+          VITE_SUPABASE_URL: ${{ vars.SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ vars.SUPABASE_ANON_KEY }}
+          VITE_TURNSTILE_SITE_KEY: ${{ vars.TURNSTILE_SITE_KEY }}
       - name: Upload static website
         uses: actions/upload-pages-artifact@v4
         with:

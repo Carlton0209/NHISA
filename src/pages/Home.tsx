@@ -1,4 +1,5 @@
 import { ArrowRight } from 'lucide-react';
+import PhotoWall from '../components/PhotoWall';
 import RevealLayer from '../components/RevealLayer';
 import { BLOCK_S_CLIP } from '../components/Brand';
 import { CAMPUS_SECTIONS } from '../content/campus';
@@ -95,16 +96,10 @@ export default function Home() {
       </div>
 
       <main id="main" className="relative z-10">
-        {/* Statement tiles: what NHISA is, before anything else. */}
+        {/* Statement tiles: what NHISA is, before anything else. The first is a pinboard of our people. */}
         <section aria-labelledby="intro-title" className="frame pt-6" data-ink="dark">
           <div className="grid gap-2 md:grid-cols-12 md:grid-rows-[38svh_38svh]">
-            <div className="field-careers flex min-h-[46svh] items-end rounded-[1.25rem] p-5 md:col-span-8 md:row-span-2 md:min-h-0 md:p-8">
-              <h2 id="intro-title" data-reveal className="t-display">
-                Find your
-                <br />
-                people.
-              </h2>
-            </div>
+            <PhotoWall className="min-h-[78svh] md:col-span-8 md:row-span-2 md:min-h-0" />
             <div className="grid grid-cols-2 gap-2 md:contents">
               <div className="field-about flex aspect-square flex-col justify-end rounded-[1.25rem] p-5 md:col-span-4 md:aspect-auto md:p-8">
                 <p data-reveal className="tnum t-display">{RESOURCE_COUNT}</p>
