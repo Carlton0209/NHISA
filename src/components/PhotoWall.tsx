@@ -62,9 +62,9 @@ function tilt(rnd: () => number) {
   return { r: (rnd() < 0.5 ? -1 : 1) * (2 + rnd() * 6), pin: 40 + rnd() * 20 };
 }
 
-/** A portrait polaroid's width. The full wall grows to fit, so only its width counts there, and its photos are larger. */
+/** A portrait polaroid's width. The full wall grows to fit, so only its width counts there. */
 const unitFor = (W: number, H: number, full: boolean) =>
-  full ? Math.max(60, W < 560 ? W * 0.4 : Math.min(W * 0.15, 260)) : Math.max(60, W < 560 ? W * 0.29 : Math.min(W * 0.14, H * 0.24));
+  full ? Math.max(60, W < 560 ? W * 0.3 : Math.min(W * 0.11, 190)) : Math.max(60, W < 560 ? W * 0.29 : Math.min(W * 0.14, H * 0.24));
 const padFor = (W: number) => Math.max(10, W * 0.025);
 
 /** How tall the full wall has to be for `count` photos to get a place each, below its buttons. */
@@ -864,10 +864,11 @@ export default function PhotoWall({ className = '', variant = 'home' }: { classN
             )}
           </div>
           <p className={`t-meta max-w-[30ch] ${full ? '' : 'xl:text-right'}`} aria-live="polite">
+            {/* The full wall shows only what has just happened; the homepage also says how it works. */}
             {status ||
               (paused ? (
                 'Adding photos is paused right now.'
-              ) : (
+              ) : full ? null : (
                 <>
                   <span className="[@media(hover:none)]:hidden">Drag photos around. </span>
                   <span className="hidden [@media(hover:none)]:inline">Hold a photo to move it. </span>

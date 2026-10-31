@@ -9,7 +9,6 @@ export default function Wall({ path }: { path: string }) {
       compact
       back={{ label: 'Home', path: '/' }}
       title="Find your moment."
-      intro="Every photo from NHISA’s International Food Festival, and the ones members add. Drag them around, open one, or pin your own."
     >
       <PhotoWall variant="full" />
     </PageShell>

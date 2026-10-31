@@ -30,7 +30,7 @@ The structure follows the NHISA site brief: three modules (international student
 | `#/career-access` | The resource library: three common starting points, then every resource, searchable and filterable by category |
 | `#/alumni` | Alumni Connections: photo wall with an industry filter, stories and advice, events and coffee chats; each person has `#/alumni/<id>` |
 | `#/about` | Mission, team, get involved, contact |
-| `#/wall` | The full photo wall: every festival photo and up to 60 approved visitor photos, larger, on a board as tall as they need |
+| `#/wall` | The full photo wall: every festival photo and up to 60 approved visitor photos, on a board as tall as they need |
 | `#/wall/review` | Officers approve the photos visitors send to the homepage wall (not in the navigation; see Photo wall) |
 
 Routes are URL fragments, so deep links work under the GitHub Pages project path without rewrites. `?section=<id>` jumps to a section, e.g. `#/career-hub?section=interviews`. Addresses from the earlier site (`#/job/…`, `#/school/…`, `#/visa`, `#/photo-wall`, `#/community`) redirect to their new homes.
@@ -60,7 +60,7 @@ Headings, rows and photographs rise into place as they enter the screen (`src/li
 
 ## Photo wall
 
-“Find your moment.” on the homepage is a pinboard (`src/components/PhotoWall.tsx`): polaroids pinned at a tilt with Syracuse-orange pins, scattered around the heading and re-laid out for any screen size (a phone shows the nine that fit). **See the full wall** opens `#/wall` (`src/pages/Wall.tsx`), the same board as a page of its own: larger photos, all of them, and a board that grows as tall as they need. Visitors can drag photos around (hold first on a touch screen), click one to see it larger, move a focused one with the arrow keys, and add their own with **Add your photo** or by dropping image files on the board. Added photos are cropped to a polaroid shape and shrunk before they are kept.
+“Find your moment.” on the homepage is a pinboard (`src/components/PhotoWall.tsx`): polaroids pinned at a tilt with Syracuse-orange pins, scattered around the heading and re-laid out for any screen size (a phone shows the nine that fit). **See the full wall** opens `#/wall` (`src/pages/Wall.tsx`), the same board as a page of its own, with no text but the title: all the photos, on a board that grows as tall as they need. Visitors can drag photos around (hold first on a touch screen), click one to see it larger, move a focused one with the arrow keys, and add their own with **Add your photo** or by dropping image files on the board. Added photos are cropped to a polaroid shape and shrunk before they are kept.
 
 Where a visitor leaves things stays in their own browser (each wall keeps its own arrangement), and the round-arrow button puts the photos back where they started.
 
