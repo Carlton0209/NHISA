@@ -99,7 +99,7 @@ export default function Home() {
         {/* Statement tiles: what NHISA is, before anything else. The first is a pinboard of our people. */}
         <section aria-labelledby="intro-title" className="frame pt-6" data-ink="dark">
           <div className="grid gap-2 md:grid-cols-12 md:grid-rows-[38svh_38svh]">
-            <PhotoWall className="min-h-[78svh] md:col-span-8 md:row-span-2 md:min-h-0" />
+            <PhotoWall className="min-h-[84svh] md:col-span-8 md:row-span-2 md:min-h-0" />
             <div className="grid grid-cols-2 gap-2 md:contents">
               <div className="field-about flex aspect-square flex-col justify-end rounded-[1.25rem] p-5 md:col-span-4 md:aspect-auto md:p-8">
                 <p data-reveal className="tnum t-display">{RESOURCE_COUNT}</p>

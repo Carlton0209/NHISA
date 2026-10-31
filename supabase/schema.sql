@@ -1,4 +1,4 @@
--- The shared photo wall on the homepage ("Find your people.").
+-- The shared photo wall on the homepage ("Find your moment.").
 --
 -- Visitors sign in anonymously (behind a captcha) and send photos into a
 -- private waiting bucket. Nothing is public until an officer listed in

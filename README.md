@@ -23,13 +23,14 @@ The structure follows the NHISA site brief: three modules (international student
 
 | Route | Content |
 | --- | --- |
-| `#/` | The campus photo turning from autumn to winter as you scroll, a pinboard of NHISA photos behind “Find your people.”, a short statement of what NHISA is, the five sections as a poster list, one chapter per module, who runs NHISA, and a closing call to the Career Hub |
+| `#/` | The campus photo turning from autumn to winter as you scroll, a pinboard of NHISA photos behind “Find your moment.”, a short statement of what NHISA is, the five sections as a poster list, one chapter per module, who runs NHISA, and a closing call to the Career Hub |
 | `#/campus` | Campus Resources: Academic & Advising, International Student Resources, Student Life & Support, Study Abroad & Study Away |
 | `#/career-hub` | Career Hub: the job search in six steps, from Explore & Plan to Networking & Outreach |
 | `#/career-hub/linkedin`, `/handshake`, `/email-signature` | Long-form guides; Email Signature has `/laptop`, `/phone` and `/sample` |
 | `#/career-access` | The resource library: three common starting points, then every resource, searchable and filterable by category |
 | `#/alumni` | Alumni Connections: photo wall with an industry filter, stories and advice, events and coffee chats; each person has `#/alumni/<id>` |
 | `#/about` | Mission, team, get involved, contact |
+| `#/wall` | The full photo wall: every festival photo and up to 60 approved visitor photos, larger, on a board as tall as they need |
 | `#/wall/review` | Officers approve the photos visitors send to the homepage wall (not in the navigation; see Photo wall) |
 
 Routes are URL fragments, so deep links work under the GitHub Pages project path without rewrites. `?section=<id>` jumps to a section, e.g. `#/career-hub?section=interviews`. Addresses from the earlier site (`#/job/…`, `#/school/…`, `#/visa`, `#/photo-wall`, `#/community`) redirect to their new homes.
@@ -59,9 +60,9 @@ Headings, rows and photographs rise into place as they enter the screen (`src/li
 
 ## Photo wall
 
-“Find your people.” on the homepage is a pinboard (`src/components/PhotoWall.tsx`): polaroids pinned at a tilt with Syracuse-orange pins, scattered around the heading and re-laid out for any screen size (a phone shows the nine that fit). Visitors can drag photos around (hold first on a touch screen), click one to see it larger, move a focused one with the arrow keys, and add their own with **Add your photo** or by dropping image files on the board. Added photos are cropped to a polaroid shape and shrunk before they are kept.
+“Find your moment.” on the homepage is a pinboard (`src/components/PhotoWall.tsx`): polaroids pinned at a tilt with Syracuse-orange pins, scattered around the heading and re-laid out for any screen size (a phone shows the nine that fit). **See the full wall** opens `#/wall` (`src/pages/Wall.tsx`), the same board as a page of its own: larger photos, all of them, and a board that grows as tall as they need. Visitors can drag photos around (hold first on a touch screen), click one to see it larger, move a focused one with the arrow keys, and add their own with **Add your photo** or by dropping image files on the board. Added photos are cropped to a polaroid shape and shrunk before they are kept.
 
-Where a visitor leaves things stays in their own browser, and the round-arrow button puts the photos back where they started.
+Where a visitor leaves things stays in their own browser (each wall keeps its own arrangement), and the round-arrow button puts the photos back where they started.
 
 ### Visitors’ photos for everyone
 
@@ -69,7 +70,7 @@ Out of the box, photos a visitor adds stay in their own browser and nobody else 
 
 - The visitor ticks a consent box (“Everyone in the photo is happy for it to be on the NHISA website”), passes an invisible Cloudflare Turnstile check, and sends the photo. It shows on their own wall with a **Waiting** tag; nobody else sees it yet.
 - An officer approves it or turns it down at `#/wall/review`, which is not in the navigation. Officers sign in with a code emailed to them.
-- Approved photos appear for everyone. The newest eight take the place of festival photos, alternating with them, so the wall keeps its sixteen and is at most half visitors’ photos; a phone shows the nine that fit.
+- Approved photos appear for everyone. On the homepage the newest eight take the place of festival photos, alternating with them, so the tile keeps its sixteen and is at most half visitors’ photos; a phone shows the nine that fit. The full wall shows the festival photos and the newest 60.
 - Visitors can take their own photo down from the same browser at any time, waiting or approved. Officers can take any photo down.
 - If Supabase can’t be reached (for example, a free project paused after a week without visits), the wall shows the festival photos and says adding photos is paused.
 

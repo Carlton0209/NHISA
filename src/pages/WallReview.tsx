@@ -264,7 +264,7 @@ function Photos() {
         <h2 id="published-title" className="t-heading mb-3">
           On the wall <span className="tnum text-white/50">{queue.published.length}</span>
         </h2>
-        <p className="t-body mb-6 max-w-[60ch]">The homepage shows the newest eight, alongside the festival photos.</p>
+        <p className="t-body mb-6 max-w-[60ch]">The homepage shows the newest eight among the festival photos; the full wall shows up to 60.</p>
         {queue.published.length ? (
           <ul className={grid}>
             {queue.published.map((photo) =>

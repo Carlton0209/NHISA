@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
-import { Hourglass, ImagePlus, RotateCcw, Trash2, X } from 'lucide-react';
+import { ArrowRight, Hourglass, ImagePlus, RotateCcw, Trash2, X } from 'lucide-react';
 import { WALL_CAPTION, WALL_PHOTOS, type WallShape } from '../content/photos';
 import { CONTACT } from '../content/site';
+import { href } from '../lib/router';
 import {
   MAX_WAITING,
   SHARED,
@@ -25,11 +26,14 @@ type Upload = { id: string; src: string; shape: WallShape; sent?: Sent };
 /** What a visitor has done to the wall, kept in their own browser only. */
 type Saved = { uploads: Upload[]; moved: Record<string, Spot>; order: string[] };
 type Box = { x: number; y: number; w: number; h: number };
-type Frame = { W: number; H: number; blocks: Box[] };
+/** The board's size, what to keep clear of, and whether it is the full wall, which grows to fit its photos. */
+type Frame = { W: number; H: number; blocks: Box[]; full: boolean };
 type Slot = { cy: number; a: number; b: number };
 type Layout = { u: number; W: number; H: number; spots: Record<string, Spot>; slots: Slot[] };
 
+// The visitor's photos and the homepage arrangement; the full wall keeps its own arrangement.
 const KEY = 'nhisa.photo-wall.v1';
+const FULL_KEY = 'nhisa.photo-wall.full.v1';
 const MAX_UPLOADS = 24;
 const UPLOAD_WIDTH = 720;
 const SHAPES: Record<WallShape, { k: number; ratio: number; css: string }> = {
@@ -58,29 +62,47 @@ function tilt(rnd: () => number) {
   return { r: (rnd() < 0.5 ? -1 : 1) * (2 + rnd() * 6), pin: 40 + rnd() * 20 };
 }
 
+/** A portrait polaroid's width. The full wall grows to fit, so only its width counts there, and its photos are larger. */
+const unitFor = (W: number, H: number, full: boolean) =>
+  full ? Math.max(60, W < 560 ? W * 0.4 : Math.min(W * 0.15, 260)) : Math.max(60, W < 560 ? W * 0.29 : Math.min(W * 0.14, H * 0.24));
+const padFor = (W: number) => Math.max(10, W * 0.025);
+
+/** How tall the full wall has to be for `count` photos to get a place each, below its buttons. */
+function fullHeight(count: number, W: number, blocks: Box[]) {
+  const u = unitFor(W, 0, true);
+  const pad = padFor(W);
+  const perRow = Math.max(1, Math.floor((W - 2 * pad) / (u * 0.97)));
+  const top = Math.max(0, ...blocks.map((k) => k.y + k.h));
+  return Math.ceil(top + 2 * pad + u * tall('portrait') + (Math.ceil(count / perRow) - 1) * u * 1.2);
+}
+
 /**
  * Scatter the photos in loose rows across the board, around the heading and
  * the buttons (`blocks`), spreading them over every row rather than filling
  * the first ones. More photos than room go in a second layer between the rows,
- * except on a phone, which shows only what fits.
+ * except on a phone's homepage wall, which shows only what fits.
  */
-function scatter(photos: { id: string; shape: WallShape }[], { W, H, blocks }: Frame): Layout {
+function scatter(photos: { id: string; shape: WallShape }[], { W, H, blocks, full }: Frame): Layout {
   const small = W < 560;
-  const u = Math.max(60, Math.min(W * (small ? 0.29 : 0.14), H * 0.24));
-  const pad = Math.max(10, W * 0.025);
+  const u = unitFor(W, H, full);
+  const pad = padFor(W);
   const half = (u * tall('portrait')) / 2;
   const margin = u * 0.2;
   const gap = u * 0.08;
-  // Rows stop above anything too wide to fit a photo beside, like the heading on a phone.
+  // Rows keep clear of anything too wide to fit a photo beside: the heading at
+  // the bottom of a phone's homepage wall, the buttons at the top of the full wall.
   const roomy = (k: Box) => Math.max(k.x - pad, W - pad - k.x - k.w) - margin >= u;
-  const floor = Math.min(H - pad, ...blocks.filter((k) => !roomy(k)).map((k) => k.y - gap));
-  const room = floor - pad - 2 * half;
+  const blocking = blocks.filter((k) => !roomy(k));
+  // Below a block, leave room for the pins too.
+  const ceiling = Math.max(pad, ...blocking.filter((k) => k.y + k.h / 2 < H / 2).map((k) => k.y + k.h + gap + u * 0.12));
+  const floor = Math.min(H - pad, ...blocking.filter((k) => k.y + k.h / 2 >= H / 2).map((k) => k.y - gap));
+  const room = floor - ceiling - 2 * half;
   const rows = Math.max(1, Math.floor(room / (u * 1.15)) + 1);
   const step = rows > 1 ? Math.min(room / (rows - 1), u * 1.25) : 0;
 
   const slots: Slot[] = [];
   for (let i = 0; i < rows; i++) {
-    const cy = pad + half + i * step;
+    const cy = ceiling + half + i * step;
     let spans: [number, number][] = [[pad, W - pad]];
     for (const k of blocks) {
       if (k.y - gap >= cy + half || k.y + k.h + gap <= cy - half) continue;
@@ -131,13 +153,22 @@ function scatter(photos: { id: string; shape: WallShape }[], { W, H, blocks }: F
       x += widths[j] + gap;
     });
   });
-  // A phone shows only the photos that fit.
-  for (; next < photos.length && !small; next++) {
+  // A phone's homepage wall shows only the photos that fit.
+  for (; next < photos.length && (full || !small); next++) {
     const p = photos[next];
     const slot = slots[next % Math.max(1, slots.length)];
     const rnd = random(`${p.id}:extra`);
-    if (slot) put(p.id, p.shape, slot.a + rnd() * (slot.b - slot.a), slot.cy + step / 2, `${p.id}:extra`);
-    else put(p.id, p.shape, W / 2, H / 2);
+    if (!slot) {
+      put(p.id, p.shape, W / 2, H / 2);
+      continue;
+    }
+    // Between this row and the next, unless that would cover the heading or the buttons.
+    const cx = slot.a + rnd() * (slot.b - slot.a);
+    const w = u * SHAPES[p.shape].k;
+    const h = w * tall(p.shape);
+    const below = slot.cy + step / 2;
+    const covers = blocks.some((k) => cx + w / 2 > k.x - margin && cx - w / 2 < k.x + k.w + margin && below + h / 2 > k.y - gap && below - h / 2 < k.y + k.h + gap);
+    put(p.id, p.shape, cx, covers ? slot.cy : below, `${p.id}:extra`);
   }
   return { u, W, H, spots, slots };
 }
@@ -186,33 +217,43 @@ const isSpot = (s: unknown): s is Spot =>
 const isSent = (s: unknown): s is Sent =>
   !!s && typeof s === 'object' && ['id', 'path', 'user'].every((k) => typeof (s as Record<string, unknown>)[k] === 'string');
 
-function load(): Saved {
-  const empty: Saved = { uploads: [], moved: {}, order: [] };
+function read(key: string): Record<string, unknown> {
   try {
-    const s = JSON.parse(localStorage.getItem(KEY) ?? 'null');
-    if (!s || typeof s !== 'object') return empty;
-    return {
-      uploads: Array.isArray(s.uploads)
-        ? s.uploads.filter(
-            (p: Upload) =>
-              typeof p?.id === 'string' &&
-              typeof p.src === 'string' &&
-              p.src.startsWith('data:image/') &&
-              p.shape in SHAPES &&
-              (p.sent === undefined || isSent(p.sent)),
-          )
-        : [],
-      moved: Object.fromEntries(Object.entries(s.moved ?? {}).filter(([, spot]) => isSpot(spot))) as Record<string, Spot>,
-      order: Array.isArray(s.order) ? s.order.filter((id: unknown) => typeof id === 'string') : [],
-    };
+    const s = JSON.parse(localStorage.getItem(key) ?? 'null');
+    return s && typeof s === 'object' ? s : {};
   } catch {
-    return empty;
+    return {};
   }
 }
 
-function store(saved: Saved) {
+function load(full: boolean): Saved {
+  const s = read(KEY);
+  const board = full ? read(FULL_KEY) : s;
+  return {
+    uploads: Array.isArray(s.uploads)
+      ? s.uploads.filter(
+          (p: Upload) =>
+            typeof p?.id === 'string' &&
+            typeof p.src === 'string' &&
+            p.src.startsWith('data:image/') &&
+            p.shape in SHAPES &&
+            (p.sent === undefined || isSent(p.sent)),
+        )
+      : [],
+    moved: Object.fromEntries(Object.entries(board.moved ?? {}).filter(([, spot]) => isSpot(spot))) as Record<string, Spot>,
+    order: Array.isArray(board.order) ? board.order.filter((id: unknown) => typeof id === 'string') : [],
+  };
+}
+
+function store(full: boolean, saved: Saved) {
   try {
-    localStorage.setItem(KEY, JSON.stringify(saved));
+    if (!full) {
+      localStorage.setItem(KEY, JSON.stringify(saved));
+      return true;
+    }
+    // The full wall shares the visitor's photos with the homepage and keeps its own arrangement.
+    localStorage.setItem(KEY, JSON.stringify({ ...read(KEY), uploads: saved.uploads }));
+    localStorage.setItem(FULL_KEY, JSON.stringify({ moved: saved.moved, order: saved.order }));
     return true;
   } catch {
     return false;
@@ -389,8 +430,12 @@ function WallItem({ photo, spot, z, index, half, fresh, onFront, onMove, onOpen,
 type Point = { x: number; y: number };
 type Ask = { files: File[]; at?: Point };
 
-/** The most community photos on the wall at once; they alternate with the festival photos, so a full wall is at most half theirs. */
-const COMMUNITY_LIMIT = 8;
+/**
+ * The most community photos at once. On the homepage they alternate with the
+ * festival photos and take their places, so it is at most half theirs; the
+ * full wall shows the festival photos and up to 60 more.
+ */
+const COMMUNITY_LIMIT = { home: 8, full: 60 };
 const FESTIVAL: Pinned[] = WALL_PHOTOS.map((p) => ({ ...p, caption: WALL_CAPTION }));
 const isImage = (file: File) => file.type.startsWith('image/');
 
@@ -404,13 +449,17 @@ function interleave<T>(a: T[], b: T[]) {
 }
 
 /**
- * "Find your people." as a pinboard: NHISA's festival photos pinned at a tilt,
+ * "Find your moment." as a pinboard: NHISA's festival photos pinned at a tilt,
  * which visitors can drag around, open, and add their own to. Where a visitor
  * leaves things stays in their browser. With a Supabase project set up
  * (lib/wall.ts), photos they add go to an officer and, once approved, onto
  * everyone's wall; without one, they stay in that browser too.
+ *
+ * `home` is the homepage tile, with the heading and a link to the full wall;
+ * `full` is that page's board, which grows as tall as its photos need.
  */
-export default function PhotoWall({ className = '' }: { className?: string }) {
+export default function PhotoWall({ className = '', variant = 'home' }: { className?: string; variant?: 'home' | 'full' }) {
+  const full = variant === 'full';
   const boardRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const controlsRef = useRef<HTMLDivElement>(null);
@@ -421,7 +470,7 @@ export default function PhotoWall({ className = '' }: { className?: string }) {
   const check = useRef<ReturnType<typeof captcha> | null>(null);
   const warned = useRef(false);
 
-  const [saved, setSaved] = useState<Saved>(load);
+  const [saved, setSaved] = useState<Saved>(() => load(full));
   const [frame, setFrame] = useState<Frame | null>(null);
   const [inView, setInView] = useState(false);
   const [viewing, setViewing] = useState<Pinned | null>(null);
@@ -438,9 +487,9 @@ export default function PhotoWall({ className = '' }: { className?: string }) {
 
   useLayoutEffect(() => {
     const board = boardRef.current!;
-    const parts = [headingRef.current!, controlsRef.current!];
+    const parts = ([headingRef.current, controlsRef.current] as (HTMLElement | null)[]).filter((el): el is HTMLElement => Boolean(el));
     const measure = () =>
-      setFrame({ W: board.clientWidth, H: board.clientHeight, blocks: parts.map((el) => boxWithin(el, board)) });
+      setFrame({ W: board.clientWidth, H: board.clientHeight, blocks: parts.map((el) => boxWithin(el, board)), full });
     measure();
     const observer = new ResizeObserver(measure);
     [board, ...parts].forEach((el) => observer.observe(el));
@@ -466,7 +515,7 @@ export default function PhotoWall({ className = '' }: { className?: string }) {
       firstSave.current = false;
       return;
     }
-    if (!store(saved) && !warned.current) {
+    if (!store(full, saved) && !warned.current) {
       warned.current = true;
       setStatus('This browser has no room to keep your photos, so they will be gone when you leave.');
     }
@@ -486,7 +535,7 @@ export default function PhotoWall({ className = '' }: { className?: string }) {
   useEffect(() => {
     if (!SHARED) return;
     let live = true;
-    approvedPhotos(COMMUNITY_LIMIT).then(
+    approvedPhotos(COMMUNITY_LIMIT[variant]).then(
       (rows) => live && setCommunity(rows),
       () => live && setPaused(true),
     );
@@ -544,10 +593,13 @@ export default function PhotoWall({ className = '' }: { className?: string }) {
       caption: mine.has(c.id) ? 'Your photo, on the wall for everyone.' : 'From the NHISA community',
       mine: mine.has(c.id),
     }));
-    // Community photos take festival photos' places, so the wall keeps its size.
-    return interleave<Pinned>(shared, FESTIVAL).slice(0, FESTIVAL.length);
-  }, [community, saved.uploads]);
+    const all = interleave<Pinned>(shared, FESTIVAL);
+    // On the homepage, community photos take festival photos' places, so the tile keeps its sixteen.
+    return full ? all : all.slice(0, FESTIVAL.length);
+  }, [community, saved.uploads, full]);
   const layout = useMemo(() => (frame ? scatter(seeds, frame) : null), [frame, seeds]);
+  // The full wall's height: enough rows for every photo, whatever the screen width.
+  const tallEnough = full && frame ? fullHeight(seeds.length + saved.uploads.length, frame.W, frame.blocks) : 0;
   const pinned = useMemo<Pinned[]>(() => {
     const onWall = new Set(community.map((c) => c.id));
     const own = saved.uploads
@@ -722,7 +774,8 @@ export default function PhotoWall({ className = '' }: { className?: string }) {
   return (
     <div
       ref={boardRef}
-      className={`photo-wall field-careers relative isolate flex flex-col justify-end overflow-hidden rounded-[1.25rem] p-5 md:p-8 ${inView ? 'is-in' : ''} ${className}`}
+      className={`photo-wall field-careers relative isolate flex flex-col overflow-hidden rounded-[1.25rem] p-5 md:p-8 ${full ? 'justify-start' : 'justify-end'} ${inView ? 'is-in' : ''} ${className}`}
+      style={tallEnough ? { height: tallEnough } : undefined}
       onDragOver={(event) => {
         if (paused || !event.dataTransfer.types.includes('Files')) return;
         event.preventDefault();
@@ -758,7 +811,8 @@ export default function PhotoWall({ className = '' }: { className?: string }) {
       {layout && (
         <ul className="wall-board" aria-label="Photos from NHISA events and members" style={{ '--u': `${layout.u}px` } as CSSProperties}>
           {pinned.map((photo, index) => {
-            const spot = saved.moved[photo.id] ?? layout.spots[photo.id];
+            // A visitor's own photo added on the other wall has no place here yet: give it one.
+            const spot = saved.moved[photo.id] ?? layout.spots[photo.id] ?? (photo.mine ? placeUpload(photo.id, layout) : undefined);
             if (!spot) return null;
             const w = layout.u * SHAPES[photo.shape].k;
             return (
@@ -784,13 +838,15 @@ export default function PhotoWall({ className = '' }: { className?: string }) {
       </p>
 
       <div className="relative flex flex-col gap-5 xl:flex-row xl:items-end xl:justify-between">
-        <h2 ref={headingRef} id="intro-title" data-reveal className="t-display relative w-fit xl:shrink-0">
-          Find your
-          <br />
-          people.
-        </h2>
-        <div ref={controlsRef} className="relative z-30 flex min-w-0 flex-col items-start gap-2.5 xl:items-end">
-          <div className="flex gap-2">
+        {!full && (
+          <h2 ref={headingRef} id="intro-title" data-reveal className="t-display relative w-fit xl:shrink-0">
+            Find your
+            <br />
+            moment.
+          </h2>
+        )}
+        <div ref={controlsRef} className={`relative z-30 flex min-w-0 flex-col items-start gap-2.5 ${full ? '' : 'xl:items-end'}`}>
+          <div className={`flex flex-wrap gap-2 ${full ? '' : 'xl:justify-end'}`}>
             {moved && (
               <button type="button" onClick={tidy} aria-label="Put the photos back" title="Put the photos back" className="glass-button w-11">
                 <RotateCcw size={16} aria-hidden="true" />
@@ -800,8 +856,14 @@ export default function PhotoWall({ className = '' }: { className?: string }) {
               <ImagePlus size={17} aria-hidden="true" />
               {busy && !ask ? 'Pinning…' : 'Add your photo'}
             </button>
+            {!full && (
+              <a href={href('/wall')} className="glass-button whitespace-nowrap px-5">
+                See the full wall
+                <ArrowRight size={17} aria-hidden="true" />
+              </a>
+            )}
           </div>
-          <p className="t-meta max-w-[30ch] xl:text-right" aria-live="polite">
+          <p className={`t-meta max-w-[30ch] ${full ? '' : 'xl:text-right'}`} aria-live="polite">
             {status ||
               (paused ? (
                 'Adding photos is paused right now.'

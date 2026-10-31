@@ -7,6 +7,7 @@ import CareerHub, { careerHubTitle } from './pages/CareerHub';
 import CareerAccess from './pages/CareerAccess';
 import Alumni, { alumniTitle } from './pages/Alumni';
 import About from './pages/About';
+import Wall from './pages/Wall';
 import WallReview from './pages/WallReview';
 import { useRoute } from './lib/router';
 import { installPointerLight, installTitleCapture } from './lib/interactions';
@@ -20,7 +21,10 @@ function resolve(path: string) {
     case '/career-access': return { title: 'Career Access', page: <CareerAccess path={path} /> };
     case '/alumni': return { title: alumniTitle(path), page: <Alumni path={path} /> };
     case '/about': return { title: 'About Us', page: <About path={path} /> };
-    case '/wall': return { title: 'Photo wall review', page: <WallReview path={path} /> };
+    case '/wall':
+      return path === '/wall/review'
+        ? { title: 'Photo wall review', page: <WallReview path={path} /> }
+        : { title: 'Find your moment', page: <Wall path={path} /> };
     default: return { title: 'NHISA', page: <Home /> };
   }
 }

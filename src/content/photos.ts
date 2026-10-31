@@ -69,7 +69,7 @@ export type WallPhoto = { id: string; src: string; alt: string; shape: WallShape
 export const WALL_CAPTION = 'International Food Festival, April 2025';
 
 /**
- * The pinned photo wall behind "Find your people." on the homepage, from NHISA's
+ * The pinned photo wall behind "Find your moment." on the homepage, from NHISA's
  * International Food Festival album. The wall fills its rows in this order, so
  * shapes alternate.
  */
