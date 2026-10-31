@@ -64,16 +64,32 @@ function tilt(rnd: () => number) {
 
 /** A portrait polaroid's width. The full wall grows to fit, so only its width counts there. */
 const unitFor = (W: number, H: number, full: boolean) =>
-  full ? Math.max(60, W < 560 ? W * 0.3 : Math.min(W * 0.11, 190)) : Math.max(60, W < 560 ? W * 0.29 : Math.min(W * 0.14, H * 0.24));
+  full ? Math.max(60, W < 560 ? W * 0.24 : Math.min(W * 0.1, 170)) : Math.max(60, W < 560 ? W * 0.29 : Math.min(W * 0.14, H * 0.24));
 const padFor = (W: number) => Math.max(10, W * 0.025);
 
-/** How tall the full wall has to be for `count` photos to get a place each, below its buttons. */
+/**
+ * How far apart photos sit, per unit of polaroid width: `across` a row, `down`
+ * to the next (at least, and `most`), and how far each may stray (`stray`).
+ * The homepage tile packs them so they overlap a little; the full wall leaves
+ * space between them, and lets them wander more within it.
+ */
+const spacing = (W: number, full: boolean) =>
+  full
+    ? { across: W < 560 ? 1.12 : 1.3, down: 1.6, most: 2.2, stray: { x: W < 560 ? 0.2 : 0.5, y: 0.7 } }
+    : { across: 0.86, down: 1.15, most: 1.25, stray: { x: 0.18, y: 0.24 } };
+
+/** How tall the full wall has to be for `count` photos to get a place each, below its buttons; it is never shorter than the screen. */
 function fullHeight(count: number, W: number, blocks: Box[]) {
   const u = unitFor(W, 0, true);
   const pad = padFor(W);
-  const perRow = Math.max(1, Math.floor((W - 2 * pad) / (u * 0.97)));
-  const top = Math.max(0, ...blocks.map((k) => k.y + k.h));
-  return Math.ceil(top + 2 * pad + u * tall('portrait') + (Math.ceil(count / perRow) - 1) * u * 1.2);
+  const { across, down } = spacing(W, true);
+  // An average polaroid is about 1.13 portrait widths. A phone gets a spare row:
+  // its rows hold so few photos that a couple of wide ones push one along.
+  const perRow = Math.max(1, Math.floor((W - 2 * pad) / (u * 1.13 * across)));
+  const rows = Math.ceil(count / perRow) + (W < 560 ? 1 : 0);
+  // Rows start below the buttons and their pins, as scatter() places them.
+  const top = Math.max(pad, ...blocks.map((k) => k.y + k.h + u * 0.2));
+  return Math.ceil(top + pad + u * tall('portrait') + (rows - 1) * u * down) + 1;
 }
 
 /**
@@ -97,8 +113,9 @@ function scatter(photos: { id: string; shape: WallShape }[], { W, H, blocks, ful
   const ceiling = Math.max(pad, ...blocking.filter((k) => k.y + k.h / 2 < H / 2).map((k) => k.y + k.h + gap + u * 0.12));
   const floor = Math.min(H - pad, ...blocking.filter((k) => k.y + k.h / 2 >= H / 2).map((k) => k.y - gap));
   const room = floor - ceiling - 2 * half;
-  const rows = Math.max(1, Math.floor(room / (u * 1.15)) + 1);
-  const step = rows > 1 ? Math.min(room / (rows - 1), u * 1.25) : 0;
+  const space = spacing(W, full);
+  const rows = Math.max(1, Math.floor(room / (u * space.down)) + 1);
+  const step = rows > 1 ? Math.min(room / (rows - 1), u * space.most) : 0;
 
   const slots: Slot[] = [];
   for (let i = 0; i < rows; i++) {
@@ -114,7 +131,7 @@ function scatter(photos: { id: string; shape: WallShape }[], { W, H, blocks, ful
     for (const [a, b] of spans) if (b - a >= u) slots.push({ cy, a, b });
   }
 
-  const width = (shape: WallShape) => u * SHAPES[shape].k * 0.86;
+  const width = (shape: WallShape) => u * SHAPES[shape].k * space.across;
   const average = photos.reduce((sum, p) => sum + width(p.shape), 0) / Math.max(1, photos.length);
   const caps = slots.map((s) => Math.max(1, Math.floor((s.b - s.a) / average)));
   const total = caps.reduce((a, b) => a + b, 0);
@@ -132,24 +149,48 @@ function scatter(photos: { id: string; shape: WallShape }[], { W, H, blocks, ful
     });
 
   const spots: Record<string, Spot> = {};
-  const put = (id: string, shape: WallShape, cx: number, cy: number, seed = id) => {
+  // `limit`: how far the photo may stray before it would reach a neighbour.
+  const put = (id: string, shape: WallShape, cx: number, cy: number, seed = id, limit?: { x: number; y: number }) => {
     const rnd = random(seed);
     const w = u * SHAPES[shape].k;
     const h = w * tall(shape);
-    const x = clamp(cx + (rnd() - 0.5) * u * 0.18, w / 2 + 4, W - w / 2 - 4);
-    const y = clamp(cy + (rnd() - 0.5) * u * 0.24, h / 2 + u * 0.1, H - h / 2 - 4);
+    const dx = (rnd() - 0.5) * u * space.stray.x;
+    const dy = (rnd() - 0.5) * u * space.stray.y;
+    const x = clamp(cx + (limit ? clamp(dx, -limit.x, limit.x) : dx), w / 2 + 4, W - w / 2 - 4);
+    const y = clamp(cy + (limit ? clamp(dy, -limit.y, limit.y) : dy), h / 2 + u * 0.1, H - h / 2 - 4);
     spots[id] = { x: x / W, y: y / H, ...tilt(rnd) };
   };
 
   let next = 0;
+  let carry = 0;
   slots.forEach((slot, i) => {
-    const group = photos.slice(next, next + counts[i]);
-    next += group.length;
+    let group: typeof photos;
+    if (full) {
+      // The full wall fills rows by real widths, so neighbours never touch;
+      // what doesn't fit moves on to the next row.
+      const want = counts[i] + carry;
+      group = [];
+      let used = 0;
+      while (next < photos.length && group.length < want) {
+        const w = width(photos[next].shape);
+        if (group.length && used + w > slot.b - slot.a) break;
+        group.push(photos[next++]);
+        used += w;
+      }
+      carry = want - group.length;
+    } else {
+      group = photos.slice(next, next + counts[i]);
+      next += group.length;
+    }
     const widths = group.map((p) => width(p.shape));
     const gap = (slot.b - slot.a - widths.reduce((a, b) => a + b, 0)) / Math.max(1, group.length);
+    // Half the space to each neighbour, less what a tilt adds to a polaroid's corners.
+    const limit = full
+      ? { x: Math.max(0, (gap + (space.across - 1) * u) / 2 - u * 0.1), y: Math.max(0, (step - u * tall('portrait')) / 2 - u * 0.1) }
+      : undefined;
     let x = slot.a + gap / 2;
     group.forEach((p, j) => {
-      put(p.id, p.shape, x + widths[j] / 2, slot.cy);
+      put(p.id, p.shape, x + widths[j] / 2, slot.cy, p.id, limit);
       x += widths[j] + gap;
     });
   });
@@ -774,7 +815,7 @@ export default function PhotoWall({ className = '', variant = 'home' }: { classN
   return (
     <div
       ref={boardRef}
-      className={`photo-wall field-careers relative isolate flex flex-col overflow-hidden rounded-[1.25rem] p-5 md:p-8 ${full ? 'justify-start' : 'justify-end'} ${inView ? 'is-in' : ''} ${className}`}
+      className={`photo-wall field-careers relative isolate flex flex-col overflow-hidden rounded-[1.25rem] p-5 md:p-8 ${full ? 'min-h-[100svh] justify-start' : 'justify-end'} ${inView ? 'is-in' : ''} ${className}`}
       style={tallEnough ? { height: tallEnough } : undefined}
       onDragOver={(event) => {
         if (paused || !event.dataTransfer.types.includes('Files')) return;
