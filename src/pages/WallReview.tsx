@@ -13,6 +13,7 @@ import {
   verifyCode,
   type Review,
 } from '../lib/wall';
+import { deleteComment, latestComments, type Comment } from '../lib/comments';
 
 type Officer = { email: string; moderator: boolean };
 type Queue = { waiting: Review[]; published: Review[] };
@@ -21,22 +22,23 @@ const when = (iso: string | null) =>
   iso ? new Date(iso).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) : '';
 
 /**
- * Where officers approve the photos visitors send to the homepage wall. Not in
- * the navigation; officers sign in with a code emailed to them, and only
- * emails listed in wall_moderators (supabase/schema.sql) may review.
+ * Where officers approve the photos visitors send to the homepage wall and take
+ * down comments that don't belong. Not in the navigation; officers sign in with
+ * a code emailed to them, and only emails listed in wall_moderators
+ * (supabase/schema.sql) may review.
  */
 export default function WallReview({ path }: { path: string }) {
   return (
     <PageShell
       path={path}
       compact
-      title="Photo wall review"
-      intro="Photos visitors send to the homepage wall wait here until an officer approves them."
+      title="Review desk"
+      intro="Photos visitors send to the homepage wall wait here until an officer approves them. Comments go up right away; take down any that don’t belong."
     >
       {SHARED ? (
         <Desk />
       ) : (
-        <p className="panel t-body max-w-2xl">The shared photo wall isn’t set up yet. The README explains how to connect it to Supabase.</p>
+        <p className="panel t-body max-w-2xl">The shared photo wall and comments aren’t set up yet. The README explains how to connect it to Supabase.</p>
       )}
     </PageShell>
   );
@@ -76,10 +78,13 @@ function Desk() {
         </button>
       </div>
       {officer.moderator ? (
-        <Photos />
+        <>
+          <Photos />
+          <Comments />
+        </>
       ) : (
         <p className="panel t-body max-w-2xl">
-          This account isn’t on the list of officers who review photos. An admin can add it in Supabase (see the README).
+          This account isn’t on the list of officers who review photos and comments. An admin can add it in Supabase (see the README).
         </p>
       )}
     </div>
@@ -283,5 +288,87 @@ function Photos() {
         )}
       </section>
     </div>
+  );
+}
+
+const PAGE = 50;
+
+function Comments() {
+  const [comments, setComments] = useState<Comment[] | null>(null);
+  const [more, setMore] = useState(false);
+  const [error, setError] = useState('');
+  const [working, setWorking] = useState<string | null>(null);
+
+  const page = useCallback(async (offset: number) => {
+    try {
+      const rows = await latestComments(PAGE + 1, offset);
+      setComments((list) => {
+        const kept = offset ? list ?? [] : [];
+        return [...kept, ...rows.slice(0, PAGE).filter((c) => !kept.some((k) => k.id === c.id))];
+      });
+      setMore(rows.length > PAGE);
+      setError('');
+    } catch {
+      setError('The comments couldn’t be loaded. Try again.');
+    }
+  }, []);
+  useEffect(() => {
+    page(0);
+  }, [page]);
+
+  const takeDown = async (comment: Comment) => {
+    if (!window.confirm('Take this comment down? It will be deleted.')) return;
+    setWorking(comment.id);
+    try {
+      await deleteComment(comment.id);
+      setComments((list) => list?.filter((c) => c.id !== comment.id) ?? null);
+    } catch {
+      setError('That comment couldn’t be taken down. Try again.');
+    } finally {
+      setWorking(null);
+    }
+  };
+
+  return (
+    <section aria-labelledby="comments-title">
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
+        <h2 id="comments-title" className="t-heading">
+          Comments
+        </h2>
+        <button type="button" onClick={() => page(0)} className="glass-button px-5">
+          <RefreshCw size={16} aria-hidden="true" />
+          Refresh
+        </button>
+      </div>
+      <p className="t-body mb-6 max-w-[60ch]">Newest first, as everyone sees them under “Say hello.” on the homepage.</p>
+      {error && <p role="alert" className="mb-6 text-[#ffc2b5]">{error}</p>}
+      {comments === null ? (
+        !error && <p className="t-body">Loading comments…</p>
+      ) : comments.length ? (
+        <ul className="max-w-3xl border-t border-white/10">
+          {comments.map((comment) => (
+            <li key={comment.id} className="flex items-start justify-between gap-6 border-b border-white/10 py-5">
+              <div className="min-w-0">
+                <p className="t-meta">
+                  <span className="font-medium text-white">{comment.name || 'Anonymous'}</span> · {when(comment.created_at)}
+                </p>
+                <p className="t-body mt-1 whitespace-pre-line [overflow-wrap:anywhere]">{comment.body}</p>
+              </div>
+              <button type="button" disabled={working === comment.id} onClick={() => takeDown(comment)} className="glass-button shrink-0 px-4 text-white/80">
+                <Trash2 size={15} aria-hidden="true" />
+                Take down
+              </button>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p className="panel t-body max-w-2xl">No comments yet.</p>
+      )}
+      {more && (
+        <button type="button" onClick={() => page(comments?.length ?? 0)} className="glass-button mt-8 px-6">
+          Show more
+        </button>
+      )}
+    </section>
   );
 }

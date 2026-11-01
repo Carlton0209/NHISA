@@ -1,4 +1,5 @@
 import { ArrowRight } from 'lucide-react';
+import Comments from '../components/Comments';
 import PhotoWall from '../components/PhotoWall';
 import RevealLayer from '../components/RevealLayer';
 import { BLOCK_S_CLIP } from '../components/Brand';
@@ -222,6 +223,9 @@ export default function Home() {
             </a>
           </div>
         </section>
+
+        {/* Last before the footer: comments anyone can read and post. */}
+        <Comments />
       </main>
     </>
   );

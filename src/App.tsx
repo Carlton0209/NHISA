@@ -23,7 +23,7 @@ function resolve(path: string) {
     case '/about': return { title: 'About Us', page: <About path={path} /> };
     case '/wall':
       return path === '/wall/review'
-        ? { title: 'Photo wall review', page: <WallReview path={path} /> }
+        ? { title: 'Review desk', page: <WallReview path={path} /> }
         : { title: 'Find your moment', page: <Wall path={path} /> };
     default: return { title: 'NHISA', page: <Home /> };
   }

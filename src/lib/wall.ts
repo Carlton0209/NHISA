@@ -1,23 +1,17 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { WallShape } from '../content/photos';
+import { PROJECT, currentUser, hasSession, read, supabase, visitor } from './supabase';
+
+export { SHARED, captcha, hasSession } from './supabase';
 
 /**
  * The shared half of the photo wall: visitors' photos, approved by an officer,
- * from the Supabase project set up by supabase/schema.sql. Without the
- * VITE_SUPABASE_* settings (SHARED is false) the wall keeps visitors' photos in
- * their own browser instead.
- *
- * Reading the approved photos is a plain request; the Supabase client only
- * loads when someone sends a photo, checks on one, or reviews.
+ * from the Supabase project set up by supabase/schema.sql (see ./supabase).
+ * Officers sign in here for the review desk, which also looks after comments.
  */
 
-const PROJECT = (import.meta.env.VITE_SUPABASE_URL ?? '').replace(/\/+$/, '');
-const KEY = import.meta.env.VITE_SUPABASE_ANON_KEY ?? '';
-const CAPTCHA_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY ?? '';
-const AUTH_KEY = 'nhisa.wall-auth';
 const COLUMNS = 'id,path,shape,status,created_at,approved_at';
 
-export const SHARED = Boolean(PROJECT && KEY);
 /** Visitors may keep at most this many photos waiting; supabase/schema.sql enforces it. */
 export const MAX_WAITING = 3;
 
@@ -47,92 +41,9 @@ export const publicUrl = (path: string) => `${PROJECT}/storage/v1/object/public/
 
 /** The newest approved photos. */
 export async function approvedPhotos(limit: number): Promise<SharedPhoto[]> {
-  const res = await fetch(`${PROJECT}/rest/v1/wall_photos?select=${COLUMNS}&status=eq.approved&order=approved_at.desc&limit=${limit}`, {
-    headers: { apikey: KEY },
+  return read<SharedPhoto>('wall_photos', `select=${COLUMNS}&status=eq.approved&order=approved_at.desc&limit=${limit}`).catch((error) => {
+    throw new WallError('failed', error.message);
   });
-  if (!res.ok) throw new WallError('failed', `Photo list: ${res.status}`);
-  return res.json();
-}
-
-let client: Promise<SupabaseClient> | undefined;
-function supabase() {
-  client ??= import('@supabase/supabase-js').then(({ createClient }) =>
-    // The site's own routes live in the URL hash, so the client must not read sessions from it.
-    createClient(PROJECT, KEY, { auth: { storageKey: AUTH_KEY, detectSessionInUrl: false } }),
-  );
-  return client;
-}
-
-async function currentUser(sb: SupabaseClient) {
-  const { data } = await sb.auth.getSession();
-  return data.session?.user ?? null;
-}
-
-/** Whether this browser has a session already, so sending another photo needs no captcha. */
-export function hasSession() {
-  try {
-    return Boolean(localStorage.getItem(AUTH_KEY));
-  } catch {
-    return false;
-  }
-}
-
-// ---------- Captcha (Cloudflare Turnstile) ----------
-
-type Turnstile = { render(el: HTMLElement, options: Record<string, unknown>): string; remove(id: string): void };
-declare global {
-  interface Window {
-    turnstile?: Turnstile;
-  }
-}
-
-let script: Promise<Turnstile> | undefined;
-function loadTurnstile() {
-  script ??= new Promise<Turnstile>((resolve, reject) => {
-    const tag = document.createElement('script');
-    tag.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
-    tag.async = true;
-    tag.onload = () => (window.turnstile ? resolve(window.turnstile) : reject(new Error('Turnstile missing')));
-    tag.onerror = () => {
-      script = undefined;
-      reject(new Error('Turnstile failed to load'));
-    };
-    document.head.append(tag);
-  });
-  return script;
-}
-
-/**
- * Run Cloudflare's check in `container`, which only shows itself when it needs
- * the visitor. `token` resolves with the one-time token (undefined when no
- * captcha is set up); `cancel` takes the check away.
- */
-export function captcha(container: HTMLElement): { token: Promise<string | undefined>; cancel: () => void } {
-  if (!CAPTCHA_KEY) return { token: Promise.resolve(undefined), cancel: () => {} };
-  let widget: string | undefined;
-  let cancelled = false;
-  const token = loadTurnstile().then(
-    (turnstile) =>
-      new Promise<string>((resolve, reject) => {
-        if (cancelled) return reject(new Error('cancelled'));
-        widget = turnstile.render(container, {
-          sitekey: CAPTCHA_KEY,
-          appearance: 'interaction-only',
-          theme: 'dark',
-          callback: resolve,
-          'error-callback': () => reject(new Error('captcha')),
-          'expired-callback': () => reject(new Error('captcha expired')),
-        });
-      }),
-  );
-  token.catch(() => {});
-  return {
-    token,
-    cancel: () => {
-      cancelled = true;
-      if (widget) window.turnstile?.remove(widget);
-    },
-  };
 }
 
 // ---------- Visitors ----------
@@ -140,12 +51,9 @@ export function captcha(container: HTMLElement): { token: Promise<string | undef
 /** Sign this visitor in if needed, then send one photo to wait for approval. */
 export async function sendPhoto(photo: Blob, shape: WallShape, captchaToken?: string): Promise<Sent> {
   const sb = await supabase();
-  let user = await currentUser(sb);
-  if (!user) {
-    const { data, error } = await sb.auth.signInAnonymously({ options: { captchaToken } });
-    if (error || !data.user) throw new WallError('failed', error?.message);
-    user = data.user;
-  }
+  const user = await visitor(sb, captchaToken).catch((error) => {
+    throw new WallError('failed', error.message);
+  });
   const id = crypto.randomUUID();
   const path = `${user.id}/${id}.jpg`;
   const waiting = sb.storage.from('wall-waiting');

@@ -23,7 +23,7 @@ The structure follows the NHISA site brief: three modules (international student
 
 | Route | Content |
 | --- | --- |
-| `#/` | The campus photo turning from autumn to winter as you scroll, a pinboard of NHISA photos behind “Find your moment.”, a short statement of what NHISA is, the five sections as a poster list, one chapter per module, who runs NHISA, and a closing call to the Career Hub |
+| `#/` | The campus photo turning from autumn to winter as you scroll, a pinboard of NHISA photos behind “Find your moment.”, a short statement of what NHISA is, the five sections as a poster list, one chapter per module, who runs NHISA, a closing call to the Career Hub, and “Say hello.”, comments anyone can read and post |
 | `#/campus` | Campus Resources: Academic & Advising, International Student Resources, Student Life & Support, Study Abroad & Study Away |
 | `#/career-hub` | Career Hub: the job search in six steps, from Explore & Plan to Networking & Outreach |
 | `#/career-hub/linkedin`, `/handshake`, `/email-signature` | Long-form guides; Email Signature has `/laptop`, `/phone` and `/sample` |
@@ -31,7 +31,7 @@ The structure follows the NHISA site brief: three modules (international student
 | `#/alumni` | Alumni Connections: photo wall with an industry filter, stories and advice, events and coffee chats; each person has `#/alumni/<id>` |
 | `#/about` | Mission, team, get involved, contact |
 | `#/wall` | The full photo wall: every festival photo and up to 60 approved visitor photos, on a board as tall as they need |
-| `#/wall/review` | Officers approve the photos visitors send to the homepage wall (not in the navigation; see Photo wall) |
+| `#/wall/review` | The review desk: officers approve the photos visitors send to the homepage wall and take down comments (not in the navigation; see Photo wall and Comments) |
 
 Routes are URL fragments, so deep links work under the GitHub Pages project path without rewrites. `?section=<id>` jumps to a section, e.g. `#/career-hub?section=interviews`. Addresses from the earlier site (`#/job/…`, `#/school/…`, `#/visa`, `#/photo-wall`, `#/community`) redirect to their new homes.
 
@@ -86,6 +86,17 @@ The rules live in `supabase/schema.sql`. Waiting photos sit in a private bucket;
 6. In the GitHub repository, under **Settings → Secrets and variables → Actions → Variables**, add `SUPABASE_URL` (the project URL), `SUPABASE_ANON_KEY` (the publishable or anon key) and `TURNSTILE_SITE_KEY`, then re-run the deploy (the `VITE_`-prefixed names work too). Each deploy's summary page shows a **Photo wall** note: “Shared wall on”, or a warning naming the variables it couldn’t find. These keys are public by design; the rules above protect the data. For `npm run dev`, put the same values in `.env.local` as `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY` and `VITE_TURNSTILE_SITE_KEY`.
 
 Supabase’s built-in email sender allows only a few emails an hour, which is enough for officer sign-ins; connect your own SMTP server in Supabase if it runs short. Fill in `CONTACT.email` in `src/content/site.ts` so the send dialog can give an address for takedown requests.
+
+## Comments
+
+The last section before the footer, “Say hello.” (`src/components/Comments.tsx`), is a public comment board: a name (optional; blank shows as Anonymous) and a comment of up to 500 characters, listed newest first, ten at a time with **Show more**. It uses the same Supabase project as the photo wall:
+
+- A comment goes up for everyone as soon as it’s posted. A visitor’s first post passes the same invisible Turnstile check as sending a photo (one check covers both).
+- Each visitor can post at most five comments in any ten minutes. Nobody can edit a comment; visitors can delete their own from the same browser, and officers take down any at `#/wall/review`.
+- Readers see the name, the text and the time, never which visitor wrote it.
+- Links aren’t clickable, so posting them gains spammers nothing.
+
+The rules live in `supabase/comments.sql`: after setting up the photo wall, run it once in **SQL Editor**; no other setting changes. `src/lib/comments.ts` holds the Supabase calls; the connection both share is `src/lib/supabase.ts`. Without Supabase, comments stay in the visitor’s own browser and the section says so; if Supabase can’t be reached, it says comments couldn’t be loaded.
 
 ## Brand and type
 
