@@ -3,6 +3,7 @@ import { ArrowRight, Hourglass, ImagePlus, RotateCcw, Trash2, X } from 'lucide-r
 import { WALL_CAPTION, WALL_PHOTOS, type WallShape } from '../content/photos';
 import { CONTACT } from '../content/site';
 import { href } from '../lib/router';
+import { plural, rich, t, useLanguage } from '../lib/i18n';
 import {
   MAX_WAITING,
   SHARED,
@@ -452,13 +453,13 @@ function WallItem({ photo, spot, z, index, half, fresh, onFront, onMove, onOpen,
             {photo.waiting && (
               <span className="wall-tag">
                 <Hourglass size={11} aria-hidden="true" />
-                Waiting
+                {t('Waiting')}
               </span>
             )}
           </button>
           <Pin />
           {photo.mine && (
-            <button type="button" className="wall-remove" aria-label="Remove this photo from the wall" onClick={() => onRemove(photo.id)}>
+            <button type="button" className="wall-remove" aria-label={t('Remove this photo from the wall')} onClick={() => onRemove(photo.id)}>
               <X size={14} aria-hidden="true" />
             </button>
           )}
@@ -501,6 +502,8 @@ function interleave<T>(a: T[], b: T[]) {
  */
 export default function PhotoWall({ className = '', variant = 'home' }: { className?: string; variant?: 'home' | 'full' }) {
   const full = variant === 'full';
+  // Captions and descriptions are translated inside the memos below.
+  const language = useLanguage();
   const boardRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const controlsRef = useRef<HTMLDivElement>(null);
@@ -537,6 +540,29 @@ export default function PhotoWall({ className = '', variant = 'home' }: { classN
     return () => observer.disconnect();
   }, []);
 
+  // On wide screens the heading shares a row with the buttons. Where a
+  // language's words run longer than the English, it comes down a size so
+  // the buttons keep room beside it.
+  useLayoutEffect(() => {
+    const heading = headingRef.current;
+    if (!heading) return;
+    const fit = () => {
+      heading.style.fontSize = '';
+      if (!window.matchMedia('(min-width: 1280px)').matches) return;
+      const style = getComputedStyle(boardRef.current!);
+      const room = boardRef.current!.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight) - 11 * 16 - 20;
+      // Its width with each line unwrapped, as the English is designed.
+      heading.style.whiteSpace = 'nowrap';
+      const natural = heading.offsetWidth;
+      heading.style.whiteSpace = '';
+      if (natural > room) heading.style.fontSize = `${parseFloat(getComputedStyle(heading).fontSize) * Math.max(0.55, room / natural)}px`;
+    };
+    fit();
+    document.fonts?.ready.then(fit);
+    window.addEventListener('resize', fit);
+    return () => window.removeEventListener('resize', fit);
+  }, [language]);
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -558,7 +584,7 @@ export default function PhotoWall({ className = '', variant = 'home' }: { classN
     }
     if (!store(full, saved) && !warned.current) {
       warned.current = true;
-      setStatus('This browser has no room to keep your photos, so they will be gone when you leave.');
+      setStatus(t('This browser has no room to keep your photos, so they will be gone when you leave.'));
     }
   }, [saved]);
 
@@ -606,7 +632,9 @@ export default function PhotoWall({ className = '', variant = 'home' }: { classN
           moved: Object.fromEntries(Object.entries(s.moved).filter(([id]) => !gone.includes(id))),
           order: s.order.filter((id) => !gone.includes(id)),
         }));
-        setStatus(gone.length === 1 ? 'One of your photos wasn’t added to the wall.' : `${gone.length} of your photos weren’t added to the wall.`);
+        setStatus(
+          plural(gone.length, { one: 'One of your photos wasn’t added to the wall.', other: '{n} of your photos weren’t added to the wall.' }),
+        );
       },
       () => {},
     );
@@ -630,14 +658,15 @@ export default function PhotoWall({ className = '', variant = 'home' }: { classN
       id: `shared-${c.id}`,
       src: publicUrl(c.path),
       shape: c.shape,
-      alt: mine.has(c.id) ? 'Your photo' : 'A photo from the NHISA community',
-      caption: mine.has(c.id) ? 'Your photo, on the wall for everyone.' : 'From the NHISA community',
+      alt: mine.has(c.id) ? t('Your photo') : t('A photo from the NHISA community'),
+      caption: mine.has(c.id) ? t('Your photo, on the wall for everyone.') : t('From the NHISA community'),
       mine: mine.has(c.id),
     }));
-    const all = interleave<Pinned>(shared, FESTIVAL);
+    const festival = FESTIVAL.map((p) => ({ ...p, alt: t(p.alt), caption: t(p.caption) }));
+    const all = interleave<Pinned>(shared, festival);
     // On the homepage, community photos take festival photos' places, so the tile keeps its sixteen.
     return full ? all : all.slice(0, FESTIVAL.length);
-  }, [community, saved.uploads, full]);
+  }, [community, saved.uploads, full, language]);
   const layout = useMemo(() => (frame ? scatter(seeds, frame) : null), [frame, seeds]);
   // The full wall's height: enough rows for every photo, whatever the screen width.
   const tallEnough = full && frame ? fullHeight(seeds.length + saved.uploads.length, frame.W, frame.blocks) : 0;
@@ -652,18 +681,18 @@ export default function PhotoWall({ className = '', variant = 'home' }: { classN
           id: p.id,
           src: p.src,
           shape: p.shape,
-          alt: `Photo you added (${i + 1})`,
+          alt: t('Photo you added ({n})', { n: i + 1 }),
           caption: !p.sent
-            ? 'Added by you. Only this browser can see it.'
+            ? t('Added by you. Only this browser can see it.')
             : waiting
-              ? 'Waiting for an NHISA officer to approve it. Until then, only you can see it.'
-              : 'Your photo, on the wall for everyone.',
+              ? t('Waiting for an NHISA officer to approve it. Until then, only you can see it.')
+              : t('Your photo, on the wall for everyone.'),
           mine: true,
           waiting,
         };
       });
     return [...seeds, ...own];
-  }, [seeds, saved.uploads, community, approved]);
+  }, [seeds, saved.uploads, community, approved, language]);
   // Untouched photos keep a fixed shuffle; the ones a visitor picked up sit on top, last touched highest.
   const stack = useMemo(() => {
     const rnd = random('wall');
@@ -687,7 +716,7 @@ export default function PhotoWall({ className = '', variant = 'home' }: { classN
       try {
         await withdraw(sent);
       } catch {
-        return setStatus('Your photo couldn’t be taken down just now. Try again in a moment.');
+        return setStatus(t('Your photo couldn’t be taken down just now. Try again in a moment.'));
       }
       setCommunity((c) => c.filter((p) => p.id !== sent.id));
     }
@@ -697,7 +726,7 @@ export default function PhotoWall({ className = '', variant = 'home' }: { classN
       moved: Object.fromEntries(Object.entries(s.moved).filter(([key]) => !keys.includes(key))),
       order: s.order.filter((key) => !keys.includes(key)),
     }));
-    setStatus(sent ? 'Your photo is off the wall.' : 'Photo removed from the wall.');
+    setStatus(sent ? t('Your photo is off the wall.') : t('Photo removed from the wall.'));
   };
   const tidy = () =>
     setSaved((s) => ({
@@ -715,15 +744,14 @@ export default function PhotoWall({ className = '', variant = 'home' }: { classN
     setFresh(added.map((a) => a.upload.id));
   };
   const spread = (at: Point | undefined, i: number) => at && { x: at.x + i * 0.03, y: at.y + i * 0.03 };
-  const plural = (n: number, one: string, many: string) => (n === 1 ? one : `${n} ${many}`);
 
   // Without a shared wall: photos stay in this browser.
   const pinLocally = async (files: File[], at?: Point) => {
     if (!layout) return;
     const images = files.filter(isImage);
-    if (!images.length) return setStatus('That file isn’t a photo. Try a JPG or PNG.');
+    if (!images.length) return setStatus(t('That file isn’t a photo. Try a JPG or PNG.'));
     const room = MAX_UPLOADS - saved.uploads.length;
-    if (room <= 0) return setStatus(`The wall holds ${MAX_UPLOADS} of your photos. Remove one to add another.`);
+    if (room <= 0) return setStatus(t('The wall holds {n} of your photos. Remove one to add another.', { n: MAX_UPLOADS }));
 
     setBusy(true);
     const added: { upload: Upload; spot: Spot }[] = [];
@@ -741,8 +769,8 @@ export default function PhotoWall({ className = '', variant = 'home' }: { classN
     const skipped = images.length - added.length;
     setStatus(
       [
-        added.length && `${plural(added.length, 'Your photo is', 'photos are')} on the wall.`,
-        skipped && `${plural(skipped, 'One photo', 'photos')} couldn’t be added.`,
+        added.length && plural(added.length, { one: 'Your photo is on the wall.', other: '{n} photos are on the wall.' }),
+        skipped && plural(skipped, { one: 'One photo couldn’t be added.', other: '{n} photos couldn’t be added.' }),
       ]
         .filter(Boolean)
         .join(' '),
@@ -753,8 +781,8 @@ export default function PhotoWall({ className = '', variant = 'home' }: { classN
   const send = async (files: File[], at?: Point) => {
     if (!layout) return;
     const images = files.filter(isImage);
-    if (!images.length) return setAskError('That file isn’t a photo. Try a JPG or PNG.');
-    const full = `You have ${MAX_WAITING} photos waiting already. You can add more once an officer has looked at them.`;
+    if (!images.length) return setAskError(t('That file isn’t a photo. Try a JPG or PNG.'));
+    const full = t('You have {n} photos waiting already. You can add more once an officer has looked at them.', { n: MAX_WAITING });
     const room = MAX_WAITING - saved.uploads.filter((u) => u.sent && !approved.has(u.sent.id)).length;
     if (room <= 0) return setAskError(full);
 
@@ -765,7 +793,7 @@ export default function PhotoWall({ className = '', variant = 'home' }: { classN
       token = check.current ? await check.current.token : undefined;
     } catch {
       setBusy(false);
-      return setAskError('The security check didn’t finish. Close this and try again.');
+      return setAskError(t('The security check didn’t finish. Close this and try again.'));
     }
     const added: { upload: Upload; spot: Spot }[] = [];
     let refused = false;
@@ -785,14 +813,16 @@ export default function PhotoWall({ className = '', variant = 'home' }: { classN
       }
     }
     setBusy(false);
-    if (!added.length) return setAskError(refused ? full : 'Your photo couldn’t be sent. Check your connection and try again.');
+    if (!added.length) return setAskError(refused ? full : t('Your photo couldn’t be sent. Check your connection and try again.'));
 
     pin(added);
     sendRef.current?.close();
     const skipped = images.length - added.length;
     setStatus(
-      `Thanks! ${plural(added.length, 'Your photo is', 'photos are')} waiting for an NHISA officer. Until then, only you can see ${added.length === 1 ? 'it' : 'them'}.` +
-        (skipped ? ` ${plural(skipped, 'One photo', 'photos')} couldn’t be sent.` : ''),
+      plural(added.length, {
+        one: 'Thanks! Your photo is waiting for an NHISA officer. Until then, only you can see it.',
+        other: 'Thanks! {n} photos are waiting for an NHISA officer. Until then, only you can see them.',
+      }) + (skipped ? ` ${plural(skipped, { one: 'One photo couldn’t be sent.', other: '{n} photos couldn’t be sent.' })}` : ''),
     );
   };
 
@@ -850,7 +880,7 @@ export default function PhotoWall({ className = '', variant = 'home' }: { classN
       </svg>
 
       {layout && (
-        <ul className="wall-board" aria-label="Photos from NHISA events and members" style={{ '--u': `${layout.u}px` } as CSSProperties}>
+        <ul className="wall-board" aria-label={t('Photos from NHISA events and members')} style={{ '--u': `${layout.u}px` } as CSSProperties}>
           {pinned.map((photo, index) => {
             // A visitor's own photo added on the other wall has no place here yet: give it one.
             const spot = saved.moved[photo.id] ?? layout.spots[photo.id] ?? (photo.mine ? placeUpload(photo.id, layout) : undefined);
@@ -875,31 +905,29 @@ export default function PhotoWall({ className = '', variant = 'home' }: { classN
         </ul>
       )}
       <p id="wall-help" className="sr-only">
-        Opens the photo larger. Use the arrow keys to move it on the wall.
+        {t('Opens the photo larger. Use the arrow keys to move it on the wall.')}
       </p>
 
       <div className="relative flex flex-col gap-5 xl:flex-row xl:items-end xl:justify-between">
         {!full && (
           <h2 ref={headingRef} id="intro-title" data-reveal className="t-display relative w-fit xl:shrink-0">
-            Find your
-            <br />
-            moment.
+            {rich('Find your<0/>moment.', [<br />])}
           </h2>
         )}
         <div ref={controlsRef} className={`relative z-30 flex min-w-0 flex-col items-start gap-2.5 ${full ? '' : 'xl:items-end'}`}>
           <div className={`flex flex-wrap gap-2 ${full ? '' : 'xl:justify-end'}`}>
             {moved && (
-              <button type="button" onClick={tidy} aria-label="Put the photos back" title="Put the photos back" className="glass-button w-11">
+              <button type="button" onClick={tidy} aria-label={t('Put the photos back')} title={t('Put the photos back')} className="glass-button w-11">
                 <RotateCcw size={16} aria-hidden="true" />
               </button>
             )}
             <button type="button" onClick={() => startAdding()} disabled={busy || paused} className="glass-button whitespace-nowrap px-5">
               <ImagePlus size={17} aria-hidden="true" />
-              {busy && !ask ? 'Pinning…' : 'Add your photo'}
+              {busy && !ask ? t('Pinning…') : t('Add your photo')}
             </button>
             {!full && (
               <a href={href('/wall')} className="glass-button whitespace-nowrap px-5">
-                See the full wall
+                {t('See the full wall')}
                 <ArrowRight size={17} aria-hidden="true" />
               </a>
             )}
@@ -908,12 +936,12 @@ export default function PhotoWall({ className = '', variant = 'home' }: { classN
             {/* The full wall shows only what has just happened; the homepage also says how it works. */}
             {status ||
               (paused ? (
-                'Adding photos is paused right now.'
+                t('Adding photos is paused right now.')
               ) : full ? null : (
                 <>
-                  <span className="[@media(hover:none)]:hidden">Drag photos around. </span>
-                  <span className="hidden [@media(hover:none)]:inline">Hold a photo to move it. </span>
-                  {SHARED ? 'Yours go up once an officer approves them.' : 'Yours stay on this device.'}
+                  <span className="[@media(hover:none)]:hidden">{t('Drag photos around.')} </span>
+                  <span className="hidden [@media(hover:none)]:inline">{t('Hold a photo to move it.')} </span>
+                  {SHARED ? t('Yours go up once an officer approves them.') : t('Yours stay on this device.')}
                 </>
               ))}
           </p>
@@ -935,7 +963,7 @@ export default function PhotoWall({ className = '', variant = 'home' }: { classN
 
       {dropping && (
         <div className="pointer-events-none absolute inset-2 z-40 flex items-center justify-center rounded-[1rem] border-2 border-dashed border-white/60 bg-[#232860]/75 text-[var(--step-lead)] font-medium">
-          Drop to pin it on the wall
+          {t('Drop to pin it on the wall')}
         </div>
       )}
 
@@ -963,11 +991,11 @@ export default function PhotoWall({ className = '', variant = 'home' }: { classN
                   className="glass-button px-4"
                 >
                   <Trash2 size={15} aria-hidden="true" />
-                  Remove from the wall
+                  {t('Remove from the wall')}
                 </button>
               )}
             </figcaption>
-            <button type="button" onClick={() => dialogRef.current?.close()} aria-label="Close" autoFocus className="glass-button absolute -right-3 -top-3 h-9 w-9">
+            <button type="button" onClick={() => dialogRef.current?.close()} aria-label={t('Close')} autoFocus className="glass-button absolute -right-3 -top-3 h-9 w-9">
               <X size={18} aria-hidden="true" />
             </button>
           </figure>
@@ -987,10 +1015,10 @@ export default function PhotoWall({ className = '', variant = 'home' }: { classN
         >
           <div className="relative p-1 sm:p-3">
             <h3 id="send-title" className="pr-8 text-[var(--step-lead)] font-medium leading-tight text-white">
-              Add your photo to the wall
+              {t('Add your photo to the wall')}
             </h3>
             <p className="t-body mt-3 text-white/75">
-              An NHISA officer looks at every photo before it goes up for everyone. Until then, only you can see it here.
+              {t('An NHISA officer looks at every photo before it goes up for everyone. Until then, only you can see it here.')}
             </p>
             <label className="mt-6 flex cursor-pointer items-start gap-3 text-white">
               <input
@@ -999,7 +1027,11 @@ export default function PhotoWall({ className = '', variant = 'home' }: { classN
                 onChange={(event) => setAgreed(event.target.checked)}
                 className="mt-1 h-5 w-5 shrink-0 accent-[#aab3ff]"
               />
-              <span>Everyone in {asked > 1 ? 'these photos' : 'the photo'} is happy for it to be on the NHISA website.</span>
+              <span>
+                {asked > 1
+                  ? t('Everyone in these photos is happy for it to be on the NHISA website.')
+                  : t('Everyone in the photo is happy for it to be on the NHISA website.')}
+              </span>
             </label>
             <div ref={captchaRef} className="mt-5 empty:hidden" />
             {askError && (
@@ -1015,21 +1047,25 @@ export default function PhotoWall({ className = '', variant = 'home' }: { classN
                 className="glass-button px-6"
               >
                 <ImagePlus size={17} aria-hidden="true" />
-                {busy ? 'Sending…' : asked ? `Send ${plural(asked, 'photo', 'photos')}` : 'Choose photos'}
+                {busy ? t('Sending…') : asked ? plural(asked, { one: 'Send photo', other: 'Send {n} photos' }) : t('Choose photos')}
               </button>
               <button type="button" disabled={busy} onClick={() => sendRef.current?.close()} className="t-meta underline underline-offset-4 hover:text-white">
-                Cancel
+                {t('Cancel')}
               </button>
             </div>
             <p className="t-meta mt-6">
-              Photos are made smaller, and their location data is removed, before they leave your device. You can take yours down at any time from this
-              browser{CONTACT.email ? <>, or email <a href={`mailto:${CONTACT.email}`} className="underline underline-offset-4">{CONTACT.email}</a></> : ''}.
+              {CONTACT.email
+                ? rich(
+                    'Photos are made smaller, and their location data is removed, before they leave your device. You can take yours down at any time from this browser, or email <0/>.',
+                    [<a href={`mailto:${CONTACT.email}`} className="underline underline-offset-4">{CONTACT.email}</a>],
+                  )
+                : t('Photos are made smaller, and their location data is removed, before they leave your device. You can take yours down at any time from this browser.')}
             </p>
             <button
               type="button"
               disabled={busy}
               onClick={() => sendRef.current?.close()}
-              aria-label="Close"
+              aria-label={t('Close')}
               className="glass-button absolute -right-3 -top-3 h-9 w-9"
             >
               <X size={18} aria-hidden="true" />

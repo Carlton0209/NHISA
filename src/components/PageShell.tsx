@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import { href } from '../lib/router';
+import { t } from '../lib/i18n';
 import { chapterFor } from '../content/site';
 import { HEADER_PHOTOS, PHOTOS } from '../content/photos';
 
@@ -37,7 +38,7 @@ export default function PageShell({ path, title, intro, meta, jump, back, compac
       >
         <div className="flex flex-col lg:col-span-7">
           {back && (
-            <nav aria-label="Breadcrumb" className="mb-10 self-start">
+            <nav aria-label={t('Breadcrumb')} className="mb-10 self-start">
               <a
                 href={href(back.path, back.section)}
                 className="group inline-flex items-center gap-2 text-[var(--step-small)] font-medium opacity-75 transition-opacity hover:opacity-100"
@@ -55,7 +56,7 @@ export default function PageShell({ path, title, intro, meta, jump, back, compac
         </div>
         {photo && (
           <div className="pic-in aspect-[4/3] overflow-hidden rounded-[1.25rem] lg:col-span-5 lg:aspect-auto lg:h-[62svh]">
-            <img src={photo.src} alt={photo.alt} className="h-full w-full object-cover" style={{ objectPosition: photo.position }} />
+            <img src={photo.src} alt={t(photo.alt)} className="h-full w-full object-cover" style={{ objectPosition: photo.position }} />
           </div>
         )}
       </header>
@@ -109,7 +110,7 @@ function JumpNav({ path, items }: { path: string; items: JumpItem[] }) {
   };
 
   return (
-    <nav ref={barRef} aria-label="On this page" className={`jump-sticky sticky z-30 mt-6 py-3 transition-[background-color,top] duration-300 ${stuck ? 'bg-[var(--bg)]' : ''}`}
+    <nav ref={barRef} aria-label={t('On this page')} className={`jump-sticky sticky z-30 mt-6 py-3 transition-[background-color,top] duration-300 ${stuck ? 'bg-[var(--bg)]' : ''}`}
       style={{ marginInline: 'calc(var(--margin) * -1)', paddingInline: 'var(--margin)' }}>
       <ul className="no-scrollbar flex gap-2 overflow-x-auto">
         {items.map((item) => (

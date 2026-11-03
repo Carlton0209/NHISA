@@ -1,4 +1,5 @@
 import { href } from '../lib/router';
+import { t } from '../lib/i18n';
 
 // The Block S, traced from Syracuse University's artwork (986 x 1358), as a CSS clip-path
 // for cutting a photograph to its shape.
@@ -25,7 +26,7 @@ const WORDMARK: { x: number; d: string; evenodd?: boolean }[] = [
  */
 export function Logo({ height = 28, className = '' }: { height?: number; className?: string }) {
   return (
-    <a href={href('/')} aria-label="NHISA home" className={`flex items-center focus-visible:outline-offset-4 ${className}`}>
+    <a href={href('/')} aria-label={t('NHISA home')} className={`flex items-center focus-visible:outline-offset-4 ${className}`}>
       <svg
         viewBox={`${VIEWBOX.x} ${VIEWBOX.y} ${VIEWBOX.w} ${VIEWBOX.h}`}
         height={height}

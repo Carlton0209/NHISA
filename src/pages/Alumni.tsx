@@ -5,10 +5,11 @@ import Topic from '../components/Topic';
 import { PHOTOS } from '../content/photos';
 import { ALUMNI, ALUMNI_SECTIONS, EVENTS, type Alumnus } from '../content/alumni';
 import { href } from '../lib/router';
+import { locale, t } from '../lib/i18n';
 
 export function alumniTitle(path: string) {
   const person = ALUMNI.find((a) => path === `/alumni/${a.id}`);
-  return person ? `${person.name} · Alumni Connections` : 'Alumni Connections';
+  return person ? `${person.name} · ${t('Alumni Connections')}` : t('Alumni Connections');
 }
 
 function ShareYourStory({ className = '' }: { className?: string }) {
@@ -18,15 +19,15 @@ function ShareYourStory({ className = '' }: { className?: string }) {
       className={`group flex flex-col overflow-hidden rounded-[1.25rem] bg-accent/[0.08] transition-colors duration-300 hover:bg-accent/[0.14] ${className}`}
     >
       <span className="pic-in block min-h-[10rem] flex-1 overflow-hidden">
-        <img src={PHOTOS.school.src} alt={PHOTOS.school.alt} loading="lazy" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]" />
+        <img src={PHOTOS.school.src} alt={t(PHOTOS.school.alt)} loading="lazy" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]" />
       </span>
       <span className="block p-6">
-        <span className="block text-[1.0625rem] font-semibold text-white">Are you a Newhouse alum?</span>
+        <span className="block text-[1.0625rem] font-semibold text-white">{t('Are you a Newhouse alum?')}</span>
         <span className="t-body mt-2 block">
-          Share your story over coffee and help the next class.
+          {t('Share your story over coffee and help the next class.')}
         </span>
         <span className="mt-5 flex items-center gap-2 text-sm font-medium text-accent">
-          Get involved
+          {t('Get involved')}
           <ArrowRight size={16} aria-hidden="true" className="transition-transform duration-500 group-hover:translate-x-1" />
         </span>
       </span>
@@ -45,14 +46,14 @@ function PhotoWall() {
         {[0, 1, 2].map((i) => (
           <div key={i} aria-hidden="true" data-reveal={String(i + 1)} className="flex aspect-[4/5] flex-col items-center justify-center gap-3 rounded-[1.25rem] bg-[var(--surface)] text-white/55">
             <User size={36} />
-            <span className="t-meta">Coming soon</span>
+            <span className="t-meta">{t('Coming soon')}</span>
           </div>
         ))}
         <div data-reveal="4" className="flex lg:aspect-[4/5]">
           <ShareYourStory className="w-full" />
         </div>
         <p data-reveal className="t-body max-w-[60ch] sm:col-span-2 lg:col-span-4">
-          Our first coffee chats are being written up. Everyone we meet gets a place here.
+          {t('Our first coffee chats are being written up. Everyone we meet gets a place here.')}
         </p>
       </div>
     );
@@ -61,7 +62,7 @@ function PhotoWall() {
   return (
     <>
       {industries.length > 1 && (
-        <div className="no-scrollbar -mx-5 mb-8 flex gap-2 overflow-x-auto px-5 sm:mx-0 sm:px-0" role="group" aria-label="Filter by industry">
+        <div className="no-scrollbar -mx-5 mb-8 flex gap-2 overflow-x-auto px-5 sm:mx-0 sm:px-0" role="group" aria-label={t('Filter by industry')}>
           {[null, ...industries].map((value) => (
             <button
               key={value ?? 'all'}
@@ -70,7 +71,7 @@ function PhotoWall() {
               aria-pressed={industry === value}
               className={`glass-button shrink-0 px-4 py-2 ${industry === value ? '' : 'text-white/75 hover:text-white'}`}
             >
-              {value ?? 'All industries'}
+              {value ?? t('All industries')}
             </button>
           ))}
         </div>
@@ -106,7 +107,7 @@ function PhotoWall() {
 function Stories() {
   const withAdvice = ALUMNI.filter((a) => a.advice);
   if (!withAdvice.length) {
-    return <div className="panel t-body max-w-2xl">Advice from our first coffee chats will appear here.</div>;
+    return <div className="panel t-body max-w-2xl">{t('Advice from our first coffee chats will appear here.')}</div>;
   }
   return (
     <div className="grid gap-x-12 gap-y-12 md:grid-cols-2">
@@ -129,8 +130,8 @@ function Events() {
   if (!upcoming.length) {
     return (
       <div className="panel t-body flex max-w-2xl flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
-        <span>No coffee chats scheduled yet. Get involved to hear about the next one.</span>
-        <a href={href('/about', 'get-involved')} className="glass-button shrink-0 px-5 py-2.5">Get involved</a>
+        <span>{t('No coffee chats scheduled yet. Get involved to hear about the next one.')}</span>
+        <a href={href('/about', 'get-involved')} className="glass-button shrink-0 px-5 py-2.5">{t('Get involved')}</a>
       </div>
     );
   }
@@ -139,7 +140,7 @@ function Events() {
       {upcoming.map((event) => (
         <li key={event.id} className="grid gap-4 rounded-2xl bg-[var(--surface)] p-6 sm:grid-cols-[8rem_1fr_auto] sm:items-center">
           <p className="tnum font-medium">
-            {new Date(`${event.date}T12:00:00`).toLocaleDateString('en-US', { month: 'short', day: 'numeric', weekday: 'short' })}
+            {new Date(`${event.date}T12:00:00`).toLocaleDateString(locale(), { month: 'short', day: 'numeric', weekday: 'short' })}
             {event.time && <span className="block text-white/50">{event.time}</span>}
           </p>
           <div>
@@ -152,9 +153,9 @@ function Events() {
           </div>
           {event.signupUrl && (
             <a href={event.signupUrl} target="_blank" rel="noopener noreferrer" className="glass-button px-5 py-2.5">
-              Sign up
+              {t('Sign up')}
               <ArrowUpRight size={15} aria-hidden="true" />
-              <span className="sr-only">(opens in a new tab)</span>
+              <span className="sr-only">{t('(opens in a new tab)')}</span>
             </a>
           )}
         </li>
@@ -166,10 +167,10 @@ function Events() {
 function Profile({ path, person }: { path: string; person: Alumnus }) {
   const facts = [
     ['Newhouse', `${person.program}, ${person.classOf}`],
-    ['Based in', person.location],
-    ['Industry', person.industry],
+    [t('Based in'), person.location],
+    [t('Industry'), person.industry],
     ...(person.chatDate
-      ? [['Coffee chat', new Date(`${person.chatDate}T12:00:00`).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })]]
+      ? [[t('Coffee chat'), new Date(`${person.chatDate}T12:00:00`).toLocaleDateString(locale(), { month: 'long', year: 'numeric' })]]
       : []),
   ];
   return (
@@ -177,7 +178,7 @@ function Profile({ path, person }: { path: string; person: Alumnus }) {
       path={path}
       title={person.name}
       intro={`${person.role}, ${person.organization}`}
-      back={{ label: 'Alumni Connections', path: '/alumni' }}
+      back={{ label: t('Alumni Connections'), path: '/alumni' }}
     >
       <div className="grid gap-12 lg:grid-cols-[22rem_1fr]">
         <div className="lg:sticky lg:top-32 lg:self-start">
@@ -192,9 +193,9 @@ function Profile({ path, person }: { path: string; person: Alumnus }) {
           </dl>
           {person.linkedin && (
             <a href={person.linkedin} target="_blank" rel="noopener noreferrer" className="glass-button mt-6 w-full px-5 py-3">
-              Connect on LinkedIn
+              {t('Connect on LinkedIn')}
               <ArrowUpRight size={15} aria-hidden="true" />
-              <span className="sr-only">(opens in a new tab)</span>
+              <span className="sr-only">{t('(opens in a new tab)')}</span>
             </a>
           )}
         </div>
@@ -211,7 +212,7 @@ function Profile({ path, person }: { path: string; person: Alumnus }) {
           </div>
           {person.advice && (
             <aside className="panel mt-14 bg-accent/[0.08]">
-              <h2 className="text-[1.0625rem] font-semibold text-accent">Advice for international students</h2>
+              <h2 className="text-[1.0625rem] font-semibold text-accent">{t('Advice for international students')}</h2>
               <p className="mt-3 text-xl leading-relaxed tracking-[-0.01em] text-white/90">{person.advice}</p>
             </aside>
           )}
@@ -227,8 +228,8 @@ export default function Alumni({ path }: { path: string }) {
     const person = ALUMNI.find((a) => a.id === id);
     if (person) return <Profile path={path} person={person} />;
     return (
-      <PageShell path={path} title="We couldn’t find that profile"
-        intro="It may have moved, or it hasn’t been published yet." back={{ label: 'Alumni Connections', path: '/alumni' }}>
+      <PageShell path={path} title={t('We couldn’t find that profile')}
+        intro={t('It may have moved, or it hasn’t been published yet.')} back={{ label: t('Alumni Connections'), path: '/alumni' }}>
         <ShareYourStory className="max-w-md" />
       </PageShell>
     );
@@ -237,23 +238,23 @@ export default function Alumni({ path }: { path: string }) {
   return (
     <PageShell
       path={path}
-      title="People who did it"
-      intro="Every coffee chat with a Newhouse alum or professional becomes a profile: their path, their job search, their advice."
-      jump={ALUMNI_SECTIONS}
+      title={t('People who did it')}
+      intro={t('Every coffee chat with a Newhouse alum or professional becomes a profile: their path, their job search, their advice.')}
+      jump={ALUMNI_SECTIONS.map((item) => ({ ...item, label: t(item.label) }))}
     >
       <div className="space-y-28 sm:space-y-36">
         <section id="meet" aria-labelledby="meet-title" className="scroll-mt-40">
           <SectionHeading
             id="meet-title"
-            title="Meet Alumni & Professionals"
-            intro={ALUMNI.length ? 'Filter by industry, then open a profile.' : 'Open a profile to read the full conversation.'}
+            title={t('Meet Alumni & Professionals')}
+            intro={ALUMNI.length ? t('Filter by industry, then open a profile.') : t('Open a profile to read the full conversation.')}
           />
           <PhotoWall />
         </section>
-        <Topic id="stories" photo="studios" photoBelow title="Career Stories & Advice" intro="What each person wishes they’d known.">
+        <Topic id="stories" photo="studios" photoBelow title={t('Career Stories & Advice')} intro={t('What each person wishes they’d known.')}>
           <Stories />
         </Topic>
-        <Topic id="events" photo="hall" photoBelow title="Events & Coffee Chats" intro="Small-group chats, open to NHISA members.">
+        <Topic id="events" photo="hall" photoBelow title={t('Events & Coffee Chats')} intro={t('Small-group chats, open to NHISA members.')}>
           <Events />
         </Topic>
       </div>

@@ -35,7 +35,7 @@ The structure follows the NHISA site brief: three modules (international student
 
 Routes are URL fragments, so deep links work under the GitHub Pages project path without rewrites. `?section=<id>` jumps to a section, e.g. `#/career-hub?section=interviews`. Addresses from the earlier site (`#/job/…`, `#/school/…`, `#/visa`, `#/photo-wall`, `#/community`) redirect to their new homes.
 
-The navigation is a transparent glass bar at the top right, which hides while you scroll down and switches to dark text over light sections. The footer builds the NHISA wordmark from five blocks, one per section colour, and keeps the small line drawing on a ground line (Common App).
+The navigation is a transparent glass bar at the top right, with the language button beside it (see Languages). It hides while you scroll down and switches to dark text over light sections; when a language's section names don't fit, they move into the menu. The footer builds the NHISA wordmark from five blocks, one per section colour, and keeps the small line drawing on a ground line (Common App).
 
 ## Edit content
 
@@ -49,6 +49,23 @@ All copy and links live in `src/content/`:
 - `site.ts`: mission, audiences and **contact details**. Fill in `CONTACT` (email, Instagram, LinkedIn, join form) before announcing the site; until then the Get involved and Contact sections say "coming soon".
 
 The sample signature itself is in `src/pages/guides/EmailSignature.tsx`. The Outlook screenshots in `src/assets/email/` have the original account name and address replaced with placeholders.
+
+## Languages
+
+The site opens in English. The language button at the top right switches every page to 简体中文, 繁體中文, 日本語, 한국어, ไทย, Tiếng Việt, Bahasa Indonesia, हिन्दी or Español. The browser remembers the choice, and the address gains `?lang=<code>` (for example `?lang=ja`), so a copied link opens in the same language.
+
+- Each language is a dictionary in `src/locales/<code>.json` that maps the English text to its translation. A language downloads only when a visitor picks it.
+- Text goes through `t()` (`src/lib/i18n.ts`) where it is shown. The content in `src/content/` stays in English and is looked up the same way. Anything a dictionary lacks appears in English, so editing copy never breaks a page; that text just stays English until someone translates it.
+- **After changing any English text, run `npm run i18n`.** For each language it lists the texts that are missing or no longer used, and any placeholders that don't match. It also lists English shown without `t()`. Add new entries to every `src/locales/*.json`, using the same English key and a translated value.
+- Translations must keep placeholders such as `{n}` and tags such as `<0>…</0>` (a link or bold words inside a sentence). Counts in Spanish and Hindi have `one` and `other` forms.
+- Not translated:
+  - visitors' comments and names
+  - alumni profiles
+  - photo credits
+  - the sample email signature, which stays in English as it would be sent
+  - the officers' review desk
+- General Sans has Latin letters only, so each script uses the system's own font for its language. Display type is set a little looser for Chinese, Japanese, Korean, Thai and Hindi (`src/index.css`, "Other languages").
+- AI drafted the translations. Before announcing a language, ask a native speaker in NHISA to read through it.
 
 ## Hero and interactions
 

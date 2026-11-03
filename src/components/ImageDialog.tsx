@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 import { X } from 'lucide-react';
+import { t } from '../lib/i18n';
 
 type ImageDialogProps = { label: string; src: string; alt: string; caption: string };
 
@@ -30,7 +31,7 @@ export default function ImageDialog({ label, src, alt, caption }: ImageDialogPro
           <button
             type="button"
             onClick={() => dialogRef.current?.close()}
-            aria-label="Close"
+            aria-label={t('Close')}
             autoFocus
             className="glass-button absolute -top-3 -right-3 h-9 w-9"
           >

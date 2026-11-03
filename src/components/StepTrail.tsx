@@ -1,6 +1,7 @@
 import { ArrowRight, ArrowUpRight } from 'lucide-react';
 import type { Step } from '../content/email';
 import { href } from '../lib/router';
+import { t } from '../lib/i18n';
 import ImageDialog from './ImageDialog';
 
 /** Ordered steps that alternate left and right, as in the hand-drawn layout. */
@@ -12,16 +13,16 @@ export default function StepTrail({ steps }: { steps: Step[] }) {
         return (
           <li key={step.title} data-reveal className={`panel relative sm:w-[64%] ${right ? 'sm:ml-auto' : ''}`}>
             <h3 className="text-[var(--step-lead)] font-medium leading-tight text-white">
-              <span className="sr-only">Step {index + 1}: </span>
-              {step.title}
+              <span className="sr-only">{t('Step {n}:', { n: index + 1 })} </span>
+              {t(step.title)}
             </h3>
-            {step.body && <p className="t-body mt-4">{step.body}</p>}
+            {step.body && <p className="t-body mt-4">{t(step.body)}</p>}
             {step.extras?.map((extra) => (
               // A div, not a p: the image link renders its <dialog> here.
               <div key={extra.label} className="mt-4 text-white/80">
-                <span className="mr-2">{extra.prompt}</span>
+                <span className="mr-2">{t(extra.prompt)}</span>
                 {extra.kind === 'image' && (
-                  <ImageDialog label={extra.label} src={extra.src} alt={extra.alt} caption={`Step ${index + 1}: ${step.title}`} />
+                  <ImageDialog label={t(extra.label)} src={extra.src} alt={t(extra.alt)} caption={`${t('Step {n}:', { n: index + 1 })} ${t(step.title)}`} />
                 )}
                 {extra.kind === 'external' && (
                   <a
@@ -30,9 +31,9 @@ export default function StepTrail({ steps }: { steps: Step[] }) {
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1 font-medium text-accent underline decoration-accent/40 underline-offset-4 hover:decoration-accent"
                   >
-                    {extra.label}
+                    {t(extra.label)}
                     <ArrowUpRight size={15} aria-hidden="true" />
-                    <span className="sr-only">(opens in a new tab)</span>
+                    <span className="sr-only">{t('(opens in a new tab)')}</span>
                   </a>
                 )}
                 {extra.kind === 'route' && (
@@ -40,7 +41,7 @@ export default function StepTrail({ steps }: { steps: Step[] }) {
                     href={href(extra.path)}
                     className="inline-flex items-center gap-1 font-medium text-accent underline decoration-accent/40 underline-offset-4 hover:decoration-accent"
                   >
-                    {extra.label}
+                    {t(extra.label)}
                     <ArrowRight size={15} aria-hidden="true" />
                   </a>
                 )}

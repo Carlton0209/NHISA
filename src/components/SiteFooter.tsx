@@ -1,12 +1,12 @@
 import { Instagram, Linkedin, Mail } from 'lucide-react';
 import { CONTACT, MODULES } from '../content/site';
 import { href, newTab } from '../lib/router';
+import { locale, rich, t } from '../lib/i18n';
 import { Logo } from './Brand';
 import CREDITS from '../assets/found/credits.json';
 
-const listed = (values: string[]) => [...new Set(values)].join(' and ');
-const CREATORS = listed(CREDITS.map((c) => c.creator));
-const LICENSES = listed(CREDITS.map((c) => c.license));
+/** "A and B", in the visitor's language. */
+const listed = (values: string[]) => new Intl.ListFormat(locale(), { type: 'conjunction' }).format([...new Set(values)]);
 
 const ABOUT_LINKS = [
   { label: 'Our mission', section: 'mission' },
@@ -75,7 +75,7 @@ export default function SiteFooter() {
   const socials = [
     CONTACT.instagram && { label: 'Instagram', url: CONTACT.instagram, Icon: Instagram },
     CONTACT.linkedin && { label: 'LinkedIn', url: CONTACT.linkedin, Icon: Linkedin },
-    CONTACT.email && { label: 'Email', url: `mailto:${CONTACT.email}`, Icon: Mail },
+    CONTACT.email && { label: t('Email'), url: `mailto:${CONTACT.email}`, Icon: Mail },
   ].filter(Boolean) as { label: string; url: string; Icon: typeof Mail }[];
 
   return (
@@ -83,7 +83,7 @@ export default function SiteFooter() {
       <div className="flex h-[22svh] items-end gap-1 md:h-[34svh]" aria-hidden="true">
         {BLOCKS.map((block) => (
           <div key={block.letter} className="flex flex-1 items-end justify-center overflow-hidden rounded-[1.25rem]" style={{ background: block.field, height: block.height }}>
-            <span className="translate-y-[12%] select-none text-[18vw] font-bold leading-none text-[var(--bg)] md:text-[15vw]">{block.letter}</span>
+            <span lang="en" className="translate-y-[12%] select-none text-[18vw] font-bold leading-none text-[var(--bg)] md:text-[15vw]">{block.letter}</span>
           </div>
         ))}
       </div>
@@ -91,28 +91,28 @@ export default function SiteFooter() {
       <div className="mt-14 grid gap-10 text-[0.9375rem] md:grid-cols-12">
         <div className="md:col-span-4">
           <Logo />
-          <p className="mt-4 max-w-xs text-white/75">Newhouse International Student Association</p>
+          <p className="mt-4 max-w-xs text-white/75">{t('Newhouse International Student Association')}</p>
         </div>
-        <nav aria-label="Footer" className="grid grid-cols-2 gap-8 md:col-span-5">
+        <nav aria-label={t('Footer')} className="grid grid-cols-2 gap-8 md:col-span-5">
           <div>
-            <h2 className="font-medium">Explore</h2>
+            <h2 className="font-medium">{t('Explore')}</h2>
             <ul className="mt-3 space-y-2">
               {MODULES.filter((m) => m.id !== 'about').map((m) => (
-                <li key={m.id}><a href={href(m.path)} className="text-white/75 transition-colors hover:text-white">{m.title}</a></li>
+                <li key={m.id}><a href={href(m.path)} className="text-white/75 transition-colors hover:text-white">{t(m.title)}</a></li>
               ))}
             </ul>
           </div>
           <div>
-            <h2 className="font-medium">About</h2>
+            <h2 className="font-medium">{t('About')}</h2>
             <ul className="mt-3 space-y-2">
               {ABOUT_LINKS.map((link) => (
-                <li key={link.section}><a href={href('/about', link.section)} className="text-white/75 transition-colors hover:text-white">{link.label}</a></li>
+                <li key={link.section}><a href={href('/about', link.section)} className="text-white/75 transition-colors hover:text-white">{t(link.label)}</a></li>
               ))}
             </ul>
           </div>
         </nav>
         <div className="md:col-span-3">
-          <h2 className="font-medium">Connect with NHISA</h2>
+          <h2 className="font-medium">{t('Connect with NHISA')}</h2>
           {socials.length ? (
             <ul className="mt-3 flex gap-2">
               {socials.map(({ label, url, Icon }) => (
@@ -124,7 +124,7 @@ export default function SiteFooter() {
               ))}
             </ul>
           ) : (
-            <p className="mt-3 text-white/75">Coming soon.</p>
+            <p className="mt-3 text-white/75">{t('Coming soon.')}</p>
           )}
         </div>
       </div>
@@ -133,21 +133,27 @@ export default function SiteFooter() {
         <div className="max-w-[60ch] space-y-2 md:col-span-8">
           <details className="group">
             <summary className="cursor-pointer list-none [&::-webkit-details-marker]:hidden">
-              Campus photographs by {CREATORS} on Wikimedia Commons, {LICENSES}.{' '}
+              {t('Campus photographs by {creators} on Wikimedia Commons, {licenses}.', {
+                creators: listed(CREDITS.map((c) => c.creator)),
+                licenses: listed(CREDITS.map((c) => c.license)),
+              })}{' '}
               <span className="font-medium text-white underline decoration-1 underline-offset-4 group-hover:decoration-2">
-                <span className="group-open:hidden">Show photo credits</span>
-                <span className="hidden group-open:inline">Hide photo credits</span>
+                <span className="group-open:hidden">{t('Show photo credits')}</span>
+                <span className="hidden group-open:inline">{t('Hide photo credits')}</span>
               </span>
             </summary>
             <ul className="mt-3 space-y-1.5">
               {CREDITS.map((c) => (
                 <li key={c.file}>
-                  <a href={c.page} target="_blank" rel="noopener noreferrer" className="underline decoration-white/30 underline-offset-2 hover:text-white">{c.title}</a> by {c.creator}, {c.license}
+                  {/* Each photograph keeps its title on Wikimedia Commons. */}
+                  {rich('<0/> by {creator}, {license}', [
+                    <a href={c.page} target="_blank" rel="noopener noreferrer" lang="en" className="underline decoration-white/30 underline-offset-2 hover:text-white">{c.title}</a>,
+                  ], { creator: c.creator, license: c.license })}
                 </li>
               ))}
             </ul>
           </details>
-          <p>© {new Date().getFullYear()} Newhouse International Student Association. Links marked ↗ open official sites.</p>
+          <p>© {new Date().getFullYear()} {t('Newhouse International Student Association')}. {t('Links marked ↗ open official sites.')}</p>
         </div>
         <div className="flex justify-end text-white/45 md:col-span-4">
           <FooterArt />

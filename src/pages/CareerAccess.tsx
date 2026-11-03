@@ -8,6 +8,7 @@ import { PHOTOS, type PhotoKey } from '../content/photos';
 import type { Category, Resource } from '../content/types';
 import { transitionRows } from '../lib/interactions';
 import { href } from '../lib/router';
+import { plural, rich, t } from '../lib/i18n';
 
 const ALL = Object.entries(RESOURCES as Record<string, Resource>);
 
@@ -52,8 +53,10 @@ export default function CareerAccess({ path }: { path: string }) {
     return () => window.removeEventListener('keydown', onKey);
   }, []);
 
+  // Search finds a resource by its English words and by their translation.
   const q = query.trim().toLowerCase();
-  const searched = ALL.filter(([, item]) => !q || `${item.name} ${item.intro} ${item.category} ${item.note ?? ''}`.toLowerCase().includes(q));
+  const words = (item: Resource) => [item.name, item.intro, item.category, item.note ?? ''].flatMap((text) => [text, t(text)]).join(' ');
+  const searched = ALL.filter(([, item]) => !q || words(item).toLowerCase().includes(q));
   const results = category ? searched.filter(([, item]) => item.category === category) : searched;
   const count = (c: Category | null) => (c ? searched.filter(([, item]) => item.category === c).length : searched.length);
 
@@ -72,12 +75,12 @@ export default function CareerAccess({ path }: { path: string }) {
   return (
     <PageShell
       path={path}
-      title="The NHISA resource library"
-      meta={`${ALL.length} resources · ${CATEGORIES.length} categories`}
-      intro="Every resource on NHISA, searchable. Jobs shared by alumni will join them soon."
+      title={t('The NHISA resource library')}
+      meta={t('{resources} resources · {categories} categories', { resources: ALL.length, categories: CATEGORIES.length })}
+      intro={t('Every resource on NHISA, searchable. Jobs shared by alumni will join them soon.')}
     >
       <section aria-labelledby="starts-title" className="mb-20 md:mb-28">
-        <h2 id="starts-title" data-reveal className="mb-6 text-[var(--step-lead)] font-medium">Start here</h2>
+        <h2 id="starts-title" data-reveal className="mb-6 text-[var(--step-lead)] font-medium">{t('Start here')}</h2>
         <ul className="grid gap-x-2 gap-y-8 sm:grid-cols-3">
           {STARTS.map((item, index) => (
             <li key={item.category} data-reveal={String(index + 1)}>
@@ -85,8 +88,8 @@ export default function CareerAccess({ path }: { path: string }) {
                 <span className="pic-in block aspect-[4/3] overflow-hidden rounded-[1.25rem]">
                   <img src={PHOTOS[item.photo].src} alt="" loading="lazy" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]" style={{ objectPosition: PHOTOS[item.photo].position }} />
                 </span>
-                <span className="mt-4 block text-[var(--step-lead)] font-medium leading-tight">{item.label}</span>
-                <span className="t-meta tnum mt-1 block">{count(item.category)} resources</span>
+                <span className="mt-4 block text-[var(--step-lead)] font-medium leading-tight">{t(item.label)}</span>
+                <span className="t-meta tnum mt-1 block">{plural(count(item.category), { one: '{n} resource', other: '{n} resources' })}</span>
               </button>
             </li>
           ))}
@@ -94,8 +97,8 @@ export default function CareerAccess({ path }: { path: string }) {
       </section>
 
       <div id="library" className="grid gap-10 lg:grid-cols-[15rem_1fr] lg:gap-14">
-        <aside aria-label="Filter by category" className="min-w-0 lg:sticky lg:top-28 lg:self-start">
-          <h2 className="mb-3 hidden font-medium lg:block">Category</h2>
+        <aside aria-label={t('Filter by category')} className="min-w-0 lg:sticky lg:top-28 lg:self-start">
+          <h2 className="mb-3 hidden font-medium lg:block">{t('Category')}</h2>
           <div className="flex flex-wrap gap-2 lg:flex-col lg:flex-nowrap lg:gap-1.5">
             {[null, ...CATEGORIES].map((c) => {
               const n = count(c);
@@ -108,7 +111,7 @@ export default function CareerAccess({ path }: { path: string }) {
                   disabled={n === 0 && category !== c}
                   className={`glass-button shrink-0 justify-between gap-4 px-4 py-2 lg:w-full ${category === c ? '' : 'text-white/75 hover:text-white'}`}
                 >
-                  <span>{c ?? 'All resources'}</span>
+                  <span>{c ? t(c) : t('All resources')}</span>
                   <span className="tnum text-xs text-white/50">{n}</span>
                 </button>
               );
@@ -125,15 +128,17 @@ export default function CareerAccess({ path }: { path: string }) {
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               onKeyDown={(event) => event.key === 'Escape' && setQuery('')}
-              placeholder="Search, e.g. OPT, résumé, internships"
-              aria-label="Search resources"
+              placeholder={t('Search, e.g. OPT, résumé, internships')}
+              aria-label={t('Search resources')}
               className="search-input w-full bg-transparent text-white placeholder:text-white/45"
             />
             <kbd className="hidden rounded-md bg-white/10 px-2 py-0.5 text-[var(--step-small)] text-white/70 sm:block" aria-hidden="true">/</kbd>
           </label>
 
           <p className="t-meta tnum mt-6" aria-live="polite">
-            Showing {results.length} of {ALL.length} resources{category ? ` in ${category}` : ''}
+            {category
+              ? t('Showing {shown} of {total} resources in {category}', { shown: results.length, total: ALL.length, category: t(category) })
+              : t('Showing {shown} of {total} resources', { shown: results.length, total: ALL.length })}
           </p>
 
           {results.length ? (
@@ -144,20 +149,20 @@ export default function CareerAccess({ path }: { path: string }) {
             </ul>
           ) : (
             <div className="panel mt-4 text-white/70">
-              Nothing matches “{query}”{category ? ` in ${category}` : ''}. Try a different word, or{' '}
-              <button type="button" onClick={clear} className="text-accent underline decoration-accent/40 underline-offset-4 hover:decoration-accent">
-                clear the search and filters
-              </button>
-              .
+              {rich(
+                category
+                  ? 'Nothing matches “{query}” in {category}. Try a different word, or <0>clear the search and filters</0>.'
+                  : 'Nothing matches “{query}”. Try a different word, or <0>clear the search and filters</0>.',
+                [<button type="button" onClick={clear} className="text-accent underline decoration-accent/40 underline-offset-4 hover:decoration-accent" />],
+                { query, category: category ? t(category) : '' },
+              )}
             </div>
           )}
 
           <p data-reveal className="t-body mt-16">
-            Missing something?{' '}
-            <a href={href('/about', 'get-involved')} className="font-medium text-white underline decoration-1 underline-offset-4 hover:decoration-2">
-              Suggest a resource
-            </a>
-            .
+            {rich('Missing something? <0>Suggest a resource</0>.', [
+              <a href={href('/about', 'get-involved')} className="font-medium text-white underline decoration-1 underline-offset-4 hover:decoration-2" />,
+            ])}
           </p>
         </div>
       </div>

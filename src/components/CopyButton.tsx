@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Check, Copy } from 'lucide-react';
+import { t } from '../lib/i18n';
 
 type CopyButtonProps = {
   text: string;
@@ -21,7 +22,7 @@ async function copy(text: string, html?: string) {
   await navigator.clipboard.writeText(text);
 }
 
-export default function CopyButton({ text, html, label = 'Copy' }: CopyButtonProps) {
+export default function CopyButton({ text, html, label = t('Copy') }: CopyButtonProps) {
   const [state, setState] = useState<'idle' | 'copied' | 'failed'>('idle');
 
   useEffect(() => {
@@ -37,7 +38,7 @@ export default function CopyButton({ text, html, label = 'Copy' }: CopyButtonPro
       className="glass-button px-4 py-2"
     >
       {state === 'copied' ? <Check size={16} aria-hidden="true" /> : <Copy size={16} aria-hidden="true" />}
-      <span aria-live="polite">{state === 'copied' ? 'Copied' : state === 'failed' ? 'Couldn’t copy, select the text instead' : label}</span>
+      <span aria-live="polite">{state === 'copied' ? t('Copied') : state === 'failed' ? t('Couldn’t copy, select the text instead') : label}</span>
     </button>
   );
 }
