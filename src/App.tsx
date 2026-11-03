@@ -33,7 +33,7 @@ function resolve(path: string) {
 export default function App() {
   const { path, section } = useRoute();
   // Every page re-renders in a new language as soon as it's picked.
-  useLanguage();
+  const language = useLanguage();
   const { title, page } = resolve(path);
   const firstRender = useRef(true);
 
@@ -48,10 +48,10 @@ export default function App() {
     };
   }, []);
 
-  // The tab's title follows both the page and the language.
+  // The tab's title follows both the page and the language (the homepage's has no page title to change).
   useEffect(() => {
     document.title = title ? `${title} | NHISA` : `NHISA · ${t('Newhouse International Student Association')}`;
-  }, [title]);
+  }, [title, language]);
 
   // Only a new page or section moves the reader; a new language leaves them where they are.
   useEffect(() => {
