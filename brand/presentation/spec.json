@@ -1,0 +1,42 @@
+{
+  "brand": "NHISA",
+  "tagline": "Newhouse International Student Association",
+  "brief": "A community for Newhouse international students and alumni. Not only to help them succeed at Newhouse, but to help them experience it: the time we share, while we're here, and what we leave behind for the next class.",
+  "adjectives": ["shared", "present", "lasting", "confident"],
+  "criteria": "Success: one idea in one sentence, no globes, planes, flags or hands, readable at 16 px, works in one colour, at home on the site's navy and periwinkle.",
+  "industry": "education",
+  "mockups": ["website", "social", "tshirt", "tote", "badge", "sticker"],
+  "nav": ["Campus", "Career Hub", "Alumni"],
+  "brand_color": "#232860",
+  "tile_color": "#232860",
+  "greyscale": false,
+  "final": true,
+  "designer": "NHISA web team",
+  "concepts": [
+    {
+      "name": "Ring by Ring",
+      "symbol": "../logo/nhisa-symbol.svg",
+      "lockup": "../logo/nhisa-horizontal.svg",
+      "stacked": "../logo/nhisa-stacked.svg",
+      "avatar": "../logo/nhisa-symbol.svg",
+      "symbol_on_tile": "../logo/nhisa-symbol-reversed.svg",
+      "stacked_on_tile": "../logo/nhisa-stacked-reversed.svg",
+      "lockup_on_tile": "../logo/nhisa-horizontal-reversed.svg",
+      "symbol_on_dark": "../logo/nhisa-symbol-reversed.svg",
+      "lockup_on_dark": "../logo/nhisa-horizontal-reversed.svg",
+      "stacked_on_dark": "../logo/nhisa-stacked-reversed.svg",
+      "idea": "Every class adds a ring to the archway; the outer one is ours, still being drawn.",
+      "rationale": [
+        "The finished rings are the classes before us: what they left behind is the doorway we walk in through",
+        "The open outer ring, in periwinkle, is the class that is here now; its round end is where the pen is",
+        "Built from one ring width and one spacing, with a heavier two-ring cut for tabs and app icons"
+      ]
+    }
+  ],
+  "recommendation": "Ring by Ring: the classes before us, the class here now, and a door left open for the next.",
+  "next_steps": [
+    "Share the kit with the team",
+    "Use the horizontal logo in the site header and the tile as the tab icon",
+    "Order a first run of stickers and tote bags"
+  ]
+}

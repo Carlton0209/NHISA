@@ -58,6 +58,9 @@ export function transitionPage(update: () => void, { toHome }: { toHome: boolean
   transition.finished.finally(() => {
     const next = pageTitle();
     if (next) next.style.viewTransitionName = '';
+    // Hit-testing sees only the transition layer while it runs, so whatever reads the
+    // ground under it on scroll (the top bar's ink) reads again on the settled page.
+    window.dispatchEvent(new Event('scroll'));
   });
 }
 

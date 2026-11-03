@@ -100,7 +100,7 @@ The rules live in `supabase/comments.sql`: after setting up the photo wall, run 
 
 ## Brand and type
 
-The logo pairs Syracuse University's Block S (`src/components/Brand.tsx`, traced from the university's artwork and kept in its official orange, #F76900) with the NHISA wordmark; the browser tab icon (`public/favicon.svg`) redraws the Newhouse School’s own: the Block S over “Newhouse School” on Syracuse navy. University marks belong to Syracuse University and are not covered by this repository's code.
+The logo is NHISA's own, Ring by Ring: an archway every class adds a ring to, the open outer ring being the class here now. The header and footer draw it inline (`src/components/Brand.tsx`), with the open ring in the accent on dark grounds and the whole logo in the ink on light ones. The browser tab and home-screen icons (`public/favicon.svg`, `favicon.ico`, `apple-touch-icon.png`) use its heavier two-ring cut on a navy tile. The full kit, usage guide and the script that draws it are in `brand/` (start with `brand/README.md`). The homepage still cuts one photograph to Syracuse University's Block S (`BLOCK_S_CLIP`); university marks belong to Syracuse University and are not covered by this repository's code.
 
 Text is set in General Sans (Fontshare). Each section has its own colour, used for its homepage chapter and its page header (`CHAPTERS` in `src/content/site.ts`): Campus Resources pale blue, Career Hub deep indigo, Career Access periwinkle, Alumni Connections slate, About Us grey. Everything else sits on the dark night ground, with glass reserved for the navigation and buttons.
 
