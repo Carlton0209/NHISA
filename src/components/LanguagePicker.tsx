@@ -58,8 +58,11 @@ export default function LanguagePicker() {
       ref={rootRef}
       className="relative"
       onKeyDown={onKeyDown}
+      // Tabbing out closes the list. Safari doesn't focus a button it clicks, so a blur with nowhere
+      // to go is a click, and the click itself decides: a language, or outside (onPointer above).
       onBlur={(event) => {
-        if (open && !event.currentTarget.contains(event.relatedTarget as Node | null)) setOpen(false);
+        const next = event.relatedTarget as Node | null;
+        if (open && next && !event.currentTarget.contains(next)) setOpen(false);
       }}
     >
       <button
