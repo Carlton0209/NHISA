@@ -1,6 +1,6 @@
-"""NHISA logo kit, direction C (Ring by Ring). Every shape is a filled outline; no strokes, no live text.
+"""NHISA logo kit, Shared Stretch. Every shape is a filled outline; no strokes, no live text.
 
-Writes the master SVGs into <out>/logo. Usage: python kit.py <out-dir>
+Writes the master SVGs into <out>/logo. Usage: python build_logo.py <out-dir>
 """
 import math
 import os
@@ -12,8 +12,8 @@ os.makedirs(LOGO, exist_ok=True)
 
 NAVY, PERI = '#232860', '#7C86F5'            # on light grounds
 PAPER, PERI_TINT = '#F4F5FB', '#AAB3FF'      # on dark grounds
-LIGHT = {'past': NAVY, 'ours': PERI, 'type': NAVY}
-DARK = {'past': PAPER, 'ours': PERI_TINT, 'type': PAPER}
+LIGHT = {'first': NAVY, 'second': PERI, 'type': NAVY}
+DARK = {'first': PAPER, 'second': PERI_TINT, 'type': PAPER}
 
 
 def f(v):
@@ -41,46 +41,49 @@ def save(name, content):
 
 # ---------------------------------------------------------------- symbol
 
-def arch(cx, base, spring, r, w, open_deg=None):
-    """One arch as a filled band: two legs on the base line and a half ring between them.
-    With open_deg the right side is left unbuilt and the band ends in a round cap at that angle."""
-    ro, ri = r + w / 2, r - w / 2
-    head = f'M{pt(cx - ro, base)} V{f(spring)} A{f(ro)} {f(ro)} 0 0 1 '
-    if open_deg is None:
-        return (head + f'{pt(cx + ro, spring)} V{f(base)} H{f(cx + ri)} V{f(spring)} '
-                f'A{f(ri)} {f(ri)} 0 0 0 {pt(cx - ri, spring)} V{f(base)} Z')
-    t = math.radians(open_deg)
-    po = (cx + ro * math.cos(t), spring - ro * math.sin(t))
-    pi = (cx + ri * math.cos(t), spring - ri * math.sin(t))
-    return (head + f'{pt(*po)} A{f(w / 2)} {f(w / 2)} 0 0 1 {pt(*pi)} '
-            f'A{f(ri)} {f(ri)} 0 0 0 {pt(cx - ri, spring)} V{f(base)} Z')
+def capsule(p, q, r):
+    """A straight stroke from p to q with round ends, as a filled outline. Every capsule winds the same
+    way, so capsules that overlap in one path unite under the default nonzero fill."""
+    dx, dy = q[0] - p[0], q[1] - p[1]
+    length = math.hypot(dx, dy)
+    nx, ny = -dy / length * r, dx / length * r
+    a, b, c, d = (p[0] + nx, p[1] + ny), (q[0] + nx, q[1] + ny), (q[0] - nx, q[1] - ny), (p[0] - nx, p[1] - ny)
+    return f'M{pt(*a)} L{pt(*b)} A{f(r)} {f(r)} 0 0 0 {pt(*c)} L{pt(*d)} A{f(r)} {f(r)} 0 0 0 {pt(*a)} Z'
 
 
-# Full drawing: three rings on a 256 canvas. Small cut: two heavier rings for 16-32 px.
-FULL = dict(cx=132, base=224, legs=80, radii=(30, 68, 106), w=22, open_deg=30)
-SMALL = dict(cx=132, base=236, legs=96, radii=(40, 102), w=36, open_deg=30)
+# Two strokes make one N: the first climbs the left stem and comes down the diagonal, the second goes
+# down the diagonal beside it and climbs the right stem. Drawn on a 256 canvas, diagonals 30 degrees off
+# vertical. Small cut: heavier strokes and a wider gap, for 16-31 px.
+FULL = dict(w=36.0, gap=20.0, slant=30, top=24.0, bottom=232.0)
+SMALL = dict(w=40.0, gap=24.0, slant=30, top=24.0, bottom=232.0)
 THIN = 0.965   # reversed artwork is thinned ~3.5 %, light on dark reads heavier
 
 
+def strokes(spec):
+    """Centrelines of the two strokes, centred on the canvas."""
+    w, theta = spec['w'], math.radians(spec['slant'])
+    y0, y1 = spec['top'] + w / 2, spec['bottom'] - w / 2
+    dx = (y1 - y0) * math.tan(theta)
+    off = (w + spec['gap']) / math.cos(theta)       # the diagonals sit one stroke and one gap apart
+    x1 = (256 - (off + dx + w)) / 2 + w / 2
+    x2 = x1 + off
+    return [(x1, y1), (x1, y0), (x1 + dx, y1)], [(x2, y0), (x2 + dx, y1), (x2 + dx, y0)]
+
+
 def symbol_paths(spec, colors, x=0.0, y=0.0, k=1.0, reversed_=False):
-    w = spec['w'] * (THIN if reversed_ else 1)
-    cx, base = x + spec['cx'] * k, y + spec['base'] * k
-    spring = base - spec['legs'] * k
-    *past, ours = spec['radii']
-    d_past = ' '.join(arch(cx, base, spring, r * k, w * k) for r in past)
-    d_ours = arch(cx, base, spring, ours * k, w * k, spec['open_deg'])
-    return f'<path fill="{colors["past"]}" d="{d_past}"/><path fill="{colors["ours"]}" d="{d_ours}"/>'
+    r = spec['w'] * (THIN if reversed_ else 1) * k / 2
+    out = []
+    for line, role in zip(strokes(spec), ('first', 'second')):
+        p = [(x + px * k, y + py * k) for px, py in line]
+        out.append(f'<path fill="{colors[role]}" d="{capsule(p[0], p[1], r)} {capsule(p[1], p[2], r)}"/>')
+    return ''.join(out)
 
 
 def symbol_box(spec):
     """Visual bounds of the symbol in its own units: left, top, right, bottom."""
-    *_, ours = spec['radii']
+    first, second = strokes(spec)
     half = spec['w'] / 2
-    spring = spec['base'] - spec['legs']
-    t = math.radians(spec['open_deg'])
-    right_inner = spec['cx'] + spec['radii'][-2] + half
-    right_cap = spec['cx'] + ours * math.cos(t) + half
-    return (spec['cx'] - ours - half, spring - ours - half, max(right_inner, right_cap), spec['base'])
+    return (first[0][0] - half, spec['top'], second[2][0] + half, spec['bottom'])
 
 
 # ---------------------------------------------------------------- letters
@@ -327,54 +330,47 @@ def build(colors, rev, tag):
     thin = THIN if rev else 1.0
     L, T, R, B = symbol_box(FULL)
     sym_w, sym_h = R - L, B - T
-    smallest = (FULL['radii'][0] + FULL['w'] / 2) * 2           # width of the smallest arch
+    pad = 24
 
     # symbol only
     save(f'nhisa-symbol{tag}.svg', svg(256, 256, symbol_paths(FULL, colors, reversed_=rev), 'NHISA symbol'))
     save(f'nhisa-symbol-small{tag}.svg', svg(256, 256, symbol_paths(SMALL, colors, reversed_=rev), 'NHISA symbol, small sizes'))
 
     # wordmark only
-    pad = 24
     wm, wm_w = wordmark(pad, 68, 1.0, colors['type'], thin)
     save(f'nhisa-wordmark{tag}.svg', svg(round(wm_w + 2 * pad), 256, wm, 'NHISA wordmark'))
 
-    # horizontal: the arch stands on the wordmark's base line, 1.5 x cap height tall
+    # horizontal: the N 128 tall, centred on the wordmark's 84-unit caps, two stroke widths clear of it
     cap = 84.0
-    k_sym = cap * 1.5 / sym_h
-    k_wm = cap / WM['cap']
-    gap = smallest * k_sym * 0.62
-    baseline = 128 + cap * 1.5 / 2
-    sx = pad - L * k_sym
-    sy = baseline - B * k_sym
-    sym = symbol_paths(FULL, colors, sx, sy, k_sym, rev)
-    wm, wm_w = wordmark(pad + sym_w * k_sym + gap, baseline - cap, k_wm, colors['type'], thin)
+    k_sym = 128 / sym_h
+    gap = 2 * FULL['w'] * k_sym
+    sym = symbol_paths(FULL, colors, pad - L * k_sym, 128 - 64 - T * k_sym, k_sym, rev)
+    wm, wm_w = wordmark(pad + sym_w * k_sym + gap, 128 - cap / 2, cap / WM['cap'], colors['type'], thin)
     width = round(pad + sym_w * k_sym + gap + wm_w + pad)
     save(f'nhisa-horizontal{tag}.svg', svg(width, 256, sym + wm, 'NHISA logo'))
 
-    # stacked: symbol centred over the wordmark
+    # stacked: the N twice the cap height, centred over the wordmark, half a cap height above it
     cap_s = 72.0
     k_wm = cap_s / WM['cap']
     _, wm_w = wordmark(0, 0, k_wm, colors['type'], thin)
-    k_sym = 168 / sym_h
-    gap_s = smallest * k_sym * 0.55
+    sym_hs = 2 * cap_s
+    k_sym = sym_hs / sym_h
+    gap_s = cap_s / 2
     width = round(max(wm_w, sym_w * k_sym) + 2 * pad)
-    height = round(pad + 168 + gap_s + cap_s + pad)
-    sx = width / 2 - (L + sym_w / 2) * k_sym
-    sym = symbol_paths(FULL, colors, sx, pad - T * k_sym, k_sym, rev)
-    wm, _ = wordmark((width - wm_w) / 2, pad + 168 + gap_s, k_wm, colors['type'], thin)
+    height = round(pad + sym_hs + gap_s + cap_s + pad)
+    sym = symbol_paths(FULL, colors, width / 2 - (L + sym_w / 2) * k_sym, pad - T * k_sym, k_sym, rev)
+    wm, _ = wordmark((width - wm_w) / 2, pad + sym_hs + gap_s, k_wm, colors['type'], thin)
     save(f'nhisa-stacked{tag}.svg', svg(width, height, sym + wm, 'NHISA logo, stacked'))
 
-    # full name: symbol | NHISA over the name in two lines
-    cap = 84.0
+    # full name: the N spans NHISA and the name set in two lines beneath it
     d_cap = 15.0
     line_gap = d_cap * 0.85
     first_gap = cap * 0.34
     block_h = cap + first_gap + d_cap + line_gap + d_cap
     k_sym = block_h / sym_h
     top = 128 - block_h / 2
-    sx = pad - L * k_sym
-    sym = symbol_paths(FULL, colors, sx, top - T * k_sym, k_sym, rev)
-    tx = pad + sym_w * k_sym + smallest * k_sym * 0.62
+    sym = symbol_paths(FULL, colors, pad - L * k_sym, top - T * k_sym, k_sym, rev)
+    tx = pad + sym_w * k_sym + 2 * FULL['w'] * k_sym
     wm, wm_w = wordmark(tx, top, cap / WM['cap'], colors['type'], thin)
     l1, w1 = descriptor('NEWHOUSE INTERNATIONAL', tx + 2, top + cap + first_gap, d_cap, colors['type'], thin)
     l2, w2 = descriptor('STUDENT ASSOCIATION', tx + 2, top + cap + first_gap + d_cap + line_gap, d_cap, colors['type'], thin)
@@ -382,37 +378,19 @@ def build(colors, rev, tag):
     save(f'nhisa-full-name{tag}.svg', svg(width, 256, sym + wm + l1 + l2, 'NHISA, Newhouse International Student Association'))
 
 
+def tile(name, spec, size, rounded, nudge):
+    """The N light on a navy tile: tab and app icons (small cut, rounded) and the social avatar."""
+    L, T, R, B = symbol_box(spec)
+    k = size / max(R - L, B - T)
+    x = 128 - (L + (R - L) / 2) * k
+    y = 128 - (T + (B - T) / 2) * k - nudge          # a touch above centre
+    ground = f'<rect width="256" height="256"{' rx="56"' if rounded else ''} fill="{NAVY}"/>'
+    save(name, svg(256, 256, ground + symbol_paths(spec, DARK, x, y, k, True), 'NHISA'))
+
+
 if __name__ == '__main__':
     build(LIGHT, False, '')
     build(DARK, True, '-reversed')
+    tile('nhisa-favicon.svg', SMALL, 164, True, 3)
+    tile('nhisa-avatar.svg', FULL, 132, False, 2)          # kept inside the circle crop
     print('wrote', len(os.listdir(LOGO)), 'files to', LOGO)
-
-
-def favicon_tile(path):
-    """Tab and app icon: the small cut, light on a Newhouse-night tile, so it reads on light and dark tab bars."""
-    L, T, R, B = symbol_box(SMALL)
-    k = 196 / max(R - L, B - T)
-    x = 128 - (L + (R - L) / 2) * k
-    y = 128 - (T + (B - T) / 2) * k - 3          # a touch above centre
-    body = f'<rect width="256" height="256" rx="56" fill="{NAVY}"/>' + symbol_paths(SMALL, DARK, x, y, k, True)
-    with open(path, 'w', encoding='utf-8') as fh:
-        fh.write(svg(256, 256, body, 'NHISA'))
-
-
-if __name__ == '__main__' and len(sys.argv) > 2 and sys.argv[2] == 'favicon':
-    favicon_tile(os.path.join(LOGO, 'nhisa-favicon.svg'))
-
-
-def avatar(path):
-    """Social avatar: the full symbol, light on navy, kept inside the circle crop."""
-    L, T, R, B = symbol_box(FULL)
-    k = 140 / max(R - L, B - T)
-    x = 128 - (L + (R - L) / 2) * k
-    y = 128 - (T + (B - T) / 2) * k - 2
-    body = f'<rect width="256" height="256" fill="{NAVY}"/>' + symbol_paths(FULL, DARK, x, y, k, True)
-    with open(path, 'w', encoding='utf-8') as fh:
-        fh.write(svg(256, 256, body, 'NHISA'))
-
-
-if __name__ == '__main__' and len(sys.argv) > 2 and sys.argv[2] == 'avatar':
-    avatar(os.path.join(LOGO, 'nhisa-avatar.svg'))

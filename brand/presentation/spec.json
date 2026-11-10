@@ -2,11 +2,27 @@
   "brand": "NHISA",
   "tagline": "Newhouse International Student Association",
   "brief": "A community for Newhouse international students and alumni. Not only to help them succeed at Newhouse, but to help them experience it: the time we share, while we're here, and what we leave behind for the next class.",
-  "adjectives": ["shared", "present", "lasting", "confident"],
+  "adjectives": [
+    "shared",
+    "present",
+    "lasting",
+    "confident"
+  ],
   "criteria": "Success: one idea in one sentence, no globes, planes, flags or hands, readable at 16 px, works in one colour, at home on the site's navy and periwinkle.",
   "industry": "education",
-  "mockups": ["website", "social", "tshirt", "tote", "badge", "sticker"],
-  "nav": ["Campus", "Career Hub", "Alumni"],
+  "mockups": [
+    "website",
+    "social",
+    "tshirt",
+    "tote",
+    "badge",
+    "sticker"
+  ],
+  "nav": [
+    "Campus",
+    "Career Hub",
+    "Alumni"
+  ],
   "brand_color": "#232860",
   "tile_color": "#232860",
   "greyscale": false,
@@ -14,7 +30,7 @@
   "designer": "NHISA web team",
   "concepts": [
     {
-      "name": "Ring by Ring",
+      "name": "Shared Stretch",
       "symbol": "../logo/nhisa-symbol.svg",
       "lockup": "../logo/nhisa-horizontal.svg",
       "stacked": "../logo/nhisa-stacked.svg",
@@ -25,18 +41,19 @@
       "symbol_on_dark": "../logo/nhisa-symbol-reversed.svg",
       "lockup_on_dark": "../logo/nhisa-horizontal-reversed.svg",
       "stacked_on_dark": "../logo/nhisa-stacked-reversed.svg",
-      "idea": "Every class adds a ring to the archway; the outer one is ours, still being drawn.",
+      "idea": "Two strokes make one N and run side by side through the middle: the time we share.",
       "rationale": [
-        "The finished rings are the classes before us: what they left behind is the doorway we walk in through",
-        "The open outer ring, in periwinkle, is the class that is here now; its round end is where the pen is",
-        "Built from one ring width and one spacing, with a heavier two-ring cut for tabs and app icons"
+        "Two strokes, two people: one who was here first and one who has just arrived. Neither makes an N alone",
+        "Side by side through the middle, in navy and periwinkle, is the stretch of time they share",
+        "Turned half a circle it is the same shape: each class is handed what the last one held",
+        "One stroke width, one gap and one 30-degree slant, with a heavier cut for tabs and app icons"
       ]
     }
   ],
-  "recommendation": "Ring by Ring: the classes before us, the class here now, and a door left open for the next.",
+  "recommendation": "Shared Stretch: two paths that make one N, side by side for the time we share.",
   "next_steps": [
     "Share the kit with the team",
-    "Use the horizontal logo in the site header and the tile as the tab icon",
+    "The site header, footer and tab icon already use it",
     "Order a first run of stickers and tote bags"
   ]
 }

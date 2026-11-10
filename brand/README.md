@@ -2,9 +2,9 @@
 
 ![NHISA, Newhouse International Student Association](png/nhisa-full-name.png)
 
-**The idea:** every class adds a ring to the archway; the outer one is ours, still being drawn.
-The finished navy rings are the classes before us, and what they left behind is the doorway we walk in through.
-The open periwinkle ring is the class that is here now. Its round end is where the pen is.
+**The idea:** two strokes make one N and run side by side through the middle: the time we share.
+The navy stroke is someone who was here first, the periwinkle stroke someone who has just arrived. Neither makes an
+N alone. Turn the mark half a circle and it is the same shape: each class is handed what the last one held.
 
 ## Versions
 
@@ -15,7 +15,7 @@ The open periwinkle ring is the class that is here now. Its round end is where t
 | Square spaces, merch, signs | `logo/nhisa-stacked.svg` | |
 | Wordmark on its own | `logo/nhisa-wordmark.svg` | When the symbol is already nearby |
 | Symbol on its own | `logo/nhisa-symbol.svg` | 32 px and up |
-| Symbol at 16–31 px | `logo/nhisa-symbol-small.svg` | Two heavier rings, so the doorway stays open |
+| Symbol at 16–31 px | `logo/nhisa-symbol-small.svg` | Heavier strokes and a wider gap, so the two diagonals stay apart |
 | Instagram / LinkedIn avatar | `logo/nhisa-avatar.svg`, `png/nhisa-avatar.png` | Kept inside the circle crop |
 | Browser tab, app icon | `web/` | `favicon.ico`, `favicon.svg`, PNG icons, `site.webmanifest`, `head-snippet.html` |
 
@@ -24,7 +24,7 @@ Every version has a `-reversed` file for dark grounds. One-colour navy, black an
 
 ## Clear space and size
 
-Keep a clear space the **width of the smallest arch** on every side, at whatever size the logo is used.
+Keep a clear space of **two stroke widths** of the N on every side, at whatever size the logo is used.
 The files carry only a small margin, so leave the rest around them.
 
 | Version | Smallest on screen | Smallest in print |
@@ -32,16 +32,16 @@ The files carry only a small margin, so leave the rest around them.
 | Horizontal | 120 px wide | 30 mm wide |
 | Full name | 260 px wide | 60 mm wide |
 | Stacked | 80 px wide | 20 mm wide |
-| Symbol | 32 px (16 px with the small cut) | 8 mm (5 mm with the small cut) |
+| Symbol | 24 px (16 px with the small cut) | 8 mm (5 mm with the small cut) |
 
 ## Colour
 
 | Name | HEX | RGB | CMYK (starting point) | Role |
 |---|---|---|---|---|
-| Newhouse Navy | `#232860` | 35 40 96 | 64 58 0 62 | Finished rings and the wordmark on light grounds |
-| Periwinkle | `#7C86F5` | 124 134 245 | 49 45 0 4 | The open ring on light grounds |
-| Periwinkle Tint | `#AAB3FF` | 170 179 255 | 33 30 0 0 | The open ring on dark grounds; the site's accent |
-| Paper | `#F4F5FB` | 244 245 251 | 3 2 0 2 | Finished rings and the wordmark on dark grounds |
+| Newhouse Navy | `#232860` | 35 40 96 | 64 58 0 62 | The first stroke and the wordmark on light grounds |
+| Periwinkle | `#7C86F5` | 124 134 245 | 49 45 0 4 | The second stroke on light grounds |
+| Periwinkle Tint | `#AAB3FF` | 170 179 255 | 33 30 0 0 | The second stroke on dark grounds; the site's accent |
+| Paper | `#F4F5FB` | 244 245 251 | 3 2 0 2 | The first stroke and the wordmark on dark grounds |
 | Night | `#090B14` | 9 11 20 | 55 45 0 92 | The site's background |
 
 The CMYK values are a plain conversion from RGB; ask the printer for a proof before a large run. No Pantone match
@@ -59,20 +59,22 @@ The wordmark and the full name are drawn shapes, not a font, so never retype the
 
 ## Please don't
 
-Stretch, squash or rotate the logo · recolour it outside this palette · swap which ring is periwinkle · close the
-open ring · add shadows, outlines, gradients or glows · rearrange or resize the parts of a lockup · put it on a busy
+Stretch, squash, rotate or mirror the logo (mirrored, the N reads as И) · recolour it outside this palette · swap
+which stroke is periwinkle · close the gap between the diagonals · add shadows, outlines, gradients or glows · rearrange or resize the parts of a lockup · put it on a busy
 photo without the avatar tile · use the Syracuse Block S or Syracuse Orange inside the NHISA logo.
 
 ## How it is built
 
-On a 256-unit grid: three rings 22 units wide, 38 units apart centre to centre (radii 30, 68 and 106), standing on
-legs 80 units long. The open ring stops at 30° above the horizontal, with a round end. The small cut has two rings
-36 units wide (radii 40 and 102). Reversed files are drawn about 3.5 % thinner, because light shapes on dark grounds
-look heavier. The letters are geometric capitals with 22-unit stems, thinner horizontals and a 30° diagonal in the N.
+On a 256-unit grid: two strokes 36 units wide with round ends, each a stem and a diagonal. The diagonals run 30° off
+vertical, 20 units apart, and the N is 208 units tall. The small cut has strokes 40 wide and 24 apart. In the
+horizontal logo the N is 128 units tall, centred on the wordmark's 84-unit caps and two stroke widths clear of them.
+Reversed files are drawn about 3.5 % thinner, because light shapes on dark grounds look heavier. The letters are
+geometric capitals with 22-unit stems, thinner horizontals and a 30° diagonal in the N.
 
 The masters are generated by `source/build_logo.py` (`python source/build_logo.py <out-dir>`), so a change to a
 measurement or colour is made there, not by hand in the SVGs. The board in `presentation/nhisa-logo.html` (slides in
-`presentation/slides/`) shows the logo in use.
+`presentation/slides/`) shows the logo in use. An earlier direction, Ring by Ring, is in the git history at
+commit `14fca65`.
 
 **Before wider use:** no trademark search has been run. Check SU's rules for registered student organizations
 before printing merchandise.
