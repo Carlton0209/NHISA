@@ -3,8 +3,7 @@
 ![NHISA, Newhouse International Student Association](png/nhisa-full-name.png)
 
 **The idea:** two strokes make one N and run side by side through the middle: the time we share.
-The navy stroke is someone who was here first, the periwinkle stroke someone who has just arrived. Neither makes an
-N alone. Turn the mark half a circle and it is the same shape: each class is handed what the last one held.
+One stroke is someone who was here first, the other someone who has just arrived. Neither makes an N alone. Turn the mark half a circle and it is the same shape: each class is handed what the last one held.
 
 ## Versions
 
@@ -16,11 +15,11 @@ N alone. Turn the mark half a circle and it is the same shape: each class is han
 | Wordmark on its own | `logo/nhisa-wordmark.svg` | When the symbol is already nearby |
 | Symbol on its own | `logo/nhisa-symbol.svg` | 32 px and up |
 | Symbol at 16–31 px | `logo/nhisa-symbol-small.svg` | Heavier strokes and a wider gap, so the two diagonals stay apart |
-| Instagram / LinkedIn avatar | `logo/nhisa-avatar.svg`, `png/nhisa-avatar.png` | Kept inside the circle crop |
+| Instagram / LinkedIn avatar | `logo/nhisa-avatar.svg`, `png/nhisa-avatar.png` | White on black, kept inside the circle crop |
 | Browser tab, app icon | `web/` | `favicon.ico`, `favicon.svg`, PNG icons, `site.webmanifest`, `head-snippet.html` |
 
-Every version has a `-reversed` file for dark grounds. One-colour navy, black and white files are in
-`logo/one-colour/`, and ready-made PNGs are in `png/`. Use SVG wherever you can.
+Each master is black, for light grounds, with a white `-reversed` file for dark grounds. Ready-made PNGs are in
+`png/`. Use SVG wherever you can.
 
 ## Clear space and size
 
@@ -36,21 +35,11 @@ The files carry only a small margin, so leave the rest around them.
 
 ## Colour
 
-| Name | HEX | RGB | CMYK (starting point) | Role |
-|---|---|---|---|---|
-| Newhouse Navy | `#232860` | 35 40 96 | 64 58 0 62 | The first stroke and the wordmark on light grounds |
-| Periwinkle | `#7C86F5` | 124 134 245 | 49 45 0 4 | The second stroke on light grounds |
-| Periwinkle Tint | `#AAB3FF` | 170 179 255 | 33 30 0 0 | The second stroke on dark grounds; the site's accent |
-| Paper | `#F4F5FB` | 244 245 251 | 3 2 0 2 | The first stroke and the wordmark on dark grounds |
-| Night | `#090B14` | 9 11 20 | 55 45 0 92 | The site's background |
+The logo is **black and white only**: black (`#000000`) on light grounds, white (`#FFFFFF`) on dark ones. The two
+strokes are told apart by the gap between them, not by colour. Contrast is 21 : 1 either way.
 
-The CMYK values are a plain conversion from RGB; ask the printer for a proof before a large run. No Pantone match
-has been made yet.
-
-**Approved pairs:** full colour on white or Paper · reversed on Night or Navy · one-colour Navy, black or white on
-anything calm. On photos, use the white or black version over a quiet area, or the avatar tile.
-
-Contrast: Navy on white 13.6 : 1 · Periwinkle on white 3.2 : 1 · Periwinkle Tint on Night 9.9 : 1 · Paper on Navy 12.5 : 1.
+**Approved pairs:** black on white or any light ground · white on black or any dark ground, including the site's
+Night (`#090B14`) and Navy (`#232860`). On photos, use whichever reads on a calm area, or the avatar tile.
 
 ## Type
 
@@ -59,8 +48,8 @@ The wordmark and the full name are drawn shapes, not a font, so never retype the
 
 ## Please don't
 
-Stretch, squash, rotate or mirror the logo (mirrored, the N reads as И) · recolour it outside this palette · swap
-which stroke is periwinkle · close the gap between the diagonals · add shadows, outlines, gradients or glows · rearrange or resize the parts of a lockup · put it on a busy
+Stretch, squash, rotate or mirror the logo (mirrored, the N reads as И) · print it in any colour but black or white ·
+give the two strokes different colours · close the gap between the diagonals · add shadows, outlines, gradients or glows · rearrange or resize the parts of a lockup · put it on a busy
 photo without the avatar tile · use the Syracuse Block S or Syracuse Orange inside the NHISA logo.
 
 ## How it is built

@@ -10,10 +10,10 @@ OUT = sys.argv[1] if len(sys.argv) > 1 else 'kit'
 LOGO = os.path.join(OUT, 'logo')
 os.makedirs(LOGO, exist_ok=True)
 
-NAVY, PERI = '#232860', '#7C86F5'            # on light grounds
-PAPER, PERI_TINT = '#F4F5FB', '#AAB3FF'      # on dark grounds
-LIGHT = {'first': NAVY, 'second': PERI, 'type': NAVY}
-DARK = {'first': PAPER, 'second': PERI_TINT, 'type': PAPER}
+# The logo is black and white only: black on light grounds, white on dark ones.
+BLACK, WHITE = '#000000', '#FFFFFF'
+LIGHT = {'first': BLACK, 'second': BLACK, 'type': BLACK}
+DARK = {'first': WHITE, 'second': WHITE, 'type': WHITE}
 
 
 def f(v):
@@ -379,12 +379,12 @@ def build(colors, rev, tag):
 
 
 def tile(name, spec, size, rounded, nudge):
-    """The N light on a navy tile: tab and app icons (small cut, rounded) and the social avatar."""
+    """The N white on a black tile: tab and app icons (small cut, rounded) and the social avatar."""
     L, T, R, B = symbol_box(spec)
     k = size / max(R - L, B - T)
     x = 128 - (L + (R - L) / 2) * k
     y = 128 - (T + (B - T) / 2) * k - nudge          # a touch above centre
-    ground = f'<rect width="256" height="256"{' rx="56"' if rounded else ''} fill="{NAVY}"/>'
+    ground = f'<rect width="256" height="256"{' rx="56"' if rounded else ''} fill="{BLACK}"/>'
     save(name, svg(256, 256, ground + symbol_paths(spec, DARK, x, y, k, True), 'NHISA'))
 
 

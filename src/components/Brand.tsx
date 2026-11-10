@@ -21,8 +21,8 @@ const WORDMARK: { x: number; d: string; evenodd?: boolean }[] = [
 ];
 
 /**
- * NHISA lockup: the Shared Stretch N beside the wordmark. It takes the ink of whatever it sits on;
- * on dark grounds the second stroke takes the accent, so the two paths read side by side.
+ * NHISA lockup: the Shared Stretch N beside the wordmark, in black and white only: white on dark
+ * grounds, black on light ones.
  */
 export function Logo({ height = 28, className = '' }: { height?: number; className?: string }) {
   return (
@@ -31,11 +31,11 @@ export function Logo({ height = 28, className = '' }: { height?: number; classNa
         viewBox={`${VIEWBOX.x} ${VIEWBOX.y} ${VIEWBOX.w} ${VIEWBOX.h}`}
         height={height}
         width={(height * VIEWBOX.w) / VIEWBOX.h}
-        className="fill-current"
+        className="nhisa-logo"
         aria-hidden="true"
       >
         <path d={STROKE_FIRST} />
-        <path d={STROKE_SECOND} className="logo-ours" />
+        <path d={STROKE_SECOND} />
         {WORDMARK.map((letter) => (
           <path key={letter.x} transform={`translate(${letter.x} 86)`} d={letter.d} fillRule={letter.evenodd ? 'evenodd' : undefined} />
         ))}
