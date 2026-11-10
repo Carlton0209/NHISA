@@ -148,10 +148,10 @@ html[data-header='hidden'] .jump-sticky { top: 0.5rem; }
 .poster-line { transition: color 0.3s var(--ease-out); }
 .poster-line:hover, .poster-line:focus-visible { color: var(--accent); }
 
-/* The logo's open ring takes the accent on dark grounds; on a light chapter the
-   whole logo turns to the ink, its approved one-colour version. */
-.logo-ours { fill: var(--accent); transition: fill 0.3s var(--ease-out); }
-.on-light .logo-ours { fill: currentColor; }
+/* The logo's second stroke takes the accent on dark grounds; on a light chapter the
+   whole logo turns to the ink, its one-colour version. */
+.logo-ours { stroke: var(--accent); transition: stroke 0.3s var(--ease-out); }
+.on-light .logo-ours { stroke: currentColor; }
 
 /* ---------- Hero ---------- */
 
