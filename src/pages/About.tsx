@@ -1,138 +1,123 @@
-import { ArrowRight, ArrowUpRight, Instagram, Linkedin, Mail } from 'lucide-react';
-import PageShell from '../components/PageShell';
-import Topic from '../components/Topic';
-import { AUDIENCES, CONTACT, MISSION, MODULES, PROBLEMS } from '../content/site';
+import { useEffect, useRef } from 'react';
+import { ArrowDown, ArrowUpRight, Mail } from 'lucide-react';
+import { CONTACT, MISSION } from '../content/site';
 import { href, newTab } from '../lib/router';
 import { t } from '../lib/i18n';
+import painting from '../assets/about/newhouse-painted.webp';
+import blueprint from '../assets/about/newhouse-blueprint.webp';
+import walkers from '../assets/about/between-classes.webp';
+import './about.css';
 
-const JUMP = [
-  { id: 'mission', label: 'Our mission' },
-  { id: 'team', label: 'Our team' },
-  { id: 'get-involved', label: 'Get involved' },
-  { id: 'contact', label: 'Contact us' },
+const emailLink = `mailto:${CONTACT.email}`;
+const ways = [
+  { title: 'Join as a student', body: 'Hear first about coffee chats, workshops and new resources.', url: CONTACT.joinForm || emailLink + '?subject=Joining%20NHISA' },
+  { title: 'Offer a coffee chat', body: 'Share your experience and open doors for the next class.', url: emailLink + '?subject=Coffee%20chat%20with%20NHISA' },
+  { title: 'Suggest a resource', body: 'Found something useful? We’ll add it to the library.', url: emailLink + '?subject=Resource%20suggestion%20for%20NHISA' },
 ];
-
-const mailto = (subject: string) => (CONTACT.email ? `mailto:${CONTACT.email}?subject=${encodeURIComponent(subject)}` : '');
-
-const WAYS = [
-  {
-    title: 'Join as a student',
-    body: 'Hear first about coffee chats, workshops and new resources.',
-    action: 'Join NHISA',
-    url: CONTACT.joinForm || mailto('Joining NHISA'),
-  },
-  {
-    title: 'Share your story',
-    body: 'Alumni and professionals: join us for a coffee chat.',
-    action: 'Offer a coffee chat',
-    url: mailto('Coffee chat with NHISA'),
-  },
-  {
-    title: 'Suggest a resource',
-    body: 'Found something useful? We’ll add it to the library.',
-    action: 'Suggest a resource',
-    url: mailto('Resource suggestion for NHISA'),
-  },
-];
-
-const subheading = 'mb-5 text-[var(--step-lead)] font-medium text-white';
 
 export default function About({ path }: { path: string }) {
-  const channels = [
-    CONTACT.email && { label: CONTACT.email, url: `mailto:${CONTACT.email}`, Icon: Mail },
-    CONTACT.instagram && { label: 'Instagram', url: CONTACT.instagram, Icon: Instagram },
-    CONTACT.linkedin && { label: 'LinkedIn', url: CONTACT.linkedin, Icon: Linkedin },
-  ].filter(Boolean) as { label: string; url: string; Icon: typeof Mail }[];
+  const cover = useRef<HTMLElement>(null);
+  const crossing = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const hero = cover.current!;
+    const scene = crossing.current!;
+    const motion = matchMedia('(prefers-reduced-motion: reduce)');
+    let frame = 0;
+    const clamp = (n: number) => Math.min(1, Math.max(0, n));
+
+    const draw = () => {
+      frame = 0;
+      if (motion.matches) return;
+      const bounds = hero.getBoundingClientRect();
+      if (bounds.bottom > 0) {
+        const progress = clamp(-bounds.top / (bounds.height * 0.7));
+        hero.style.setProperty('--wipe', `${progress * 126 - 16}%`);
+      }
+      const photo = scene.getBoundingClientRect();
+      const progress = clamp((window.innerHeight - photo.top) / (window.innerHeight * 0.5 + photo.height * 0.35));
+      scene.style.setProperty('--path-offset', String(1 - progress));
+    };
+    const schedule = () => { if (!frame && !motion.matches) frame = requestAnimationFrame(draw); };
+    const moveLens = (event: PointerEvent) => {
+      if (motion.matches || event.pointerType !== 'mouse') return;
+      const bounds = hero.getBoundingClientRect();
+      hero.style.setProperty('--lens-x', `${event.clientX - bounds.left}px`);
+      hero.style.setProperty('--lens-y', `${event.clientY - bounds.top}px`);
+      hero.classList.add('about-lens-active');
+    };
+    const hideLens = () => hero.classList.remove('about-lens-active');
+    draw();
+    hero.addEventListener('pointermove', moveLens);
+    hero.addEventListener('pointerleave', hideLens);
+    window.addEventListener('blur', hideLens);
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule);
+    motion.addEventListener('change', schedule);
+    return () => {
+      cancelAnimationFrame(frame);
+      hero.removeEventListener('pointermove', moveLens);
+      hero.removeEventListener('pointerleave', hideLens);
+      window.removeEventListener('blur', hideLens);
+      window.removeEventListener('scroll', schedule);
+      window.removeEventListener('resize', schedule);
+      motion.removeEventListener('change', schedule);
+    };
+  }, []);
 
   return (
-    <PageShell path={path} title={t('Built by students')} intro={t(MISSION)} jump={JUMP.map((item) => ({ ...item, label: t(item.label) }))}>
-      <div className="space-y-28 sm:space-y-36">
-        <Topic id="mission" photo="hall" title={t('Our mission')}>
-          <div className="space-y-14">
-            <div>
-              <h3 className={subheading}>{t('Who we serve')}</h3>
-              <div className="grid gap-x-10 gap-y-8 sm:grid-cols-2">
-                {AUDIENCES.map((audience) => (
-                  <div key={audience.title}>
-                    <h4 className="text-[1.0625rem] font-semibold text-white">{t(audience.title)}</h4>
-                    <p className="t-body mt-2">{t(audience.body)}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
+    <main id="main" className="about-story relative z-10">
+      <header ref={cover} id="mission" className="about-cover" data-ink="dark">
+        <img className="about-painting" src={painting} alt="" fetchPriority="high" />
+        <div className="about-blueprint" style={{ backgroundImage: `url("${blueprint}")` }} aria-hidden="true" />
+        <div className="about-cover-shade" />
+        <div className="about-cover-copy about-inner">
+          <div className="about-caption">{t('About Us')} <span aria-hidden="true">/</span> {t('Our mission')}</div>
+          <h1 tabIndex={-1} data-page-title className="about-title">{t('Built by students')}</h1>
+          <p className="about-mission">{t(MISSION)}</p>
+          <nav aria-label={t('About Us')} className="about-cover-links">
+            <a href={href(path, 'team')}>{t('Our team')} <ArrowDown size={16} /></a>
+            <a href={href(path, 'get-involved')}>{t('Get involved')} <ArrowDown size={16} /></a>
+            <a href={emailLink}>{t('Contact us')} <Mail size={16} /></a>
+          </nav>
+        </div>
+      </header>
 
-            <div>
-              <h3 className={subheading}>{t('Why we exist')}</h3>
-              <ul className="space-y-5">
-                {PROBLEMS.map((problem) => (
-                  <li key={problem} className="t-lede">
-                    {t(problem)}
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div>
-              <h3 className={subheading}>{t('What we do')}</h3>
-              <ul className="space-y-1">
-                {MODULES.filter((m) => m.id !== 'about').map((module) => (
-                  <li key={module.id}>
-                    <a href={href(module.path)} className="row -mx-4 grid grid-cols-[1fr_auto] items-start gap-x-6 rounded-2xl px-4 py-6">
-                      <span>
-                        <span data-vt-title className="row-title block text-[1.0625rem] font-semibold text-white">{t(module.title)}</span>
-                        <span className="t-body mt-1.5 block">{t(module.summary)}</span>
-                      </span>
-                      <ArrowRight size={18} aria-hidden="true" className="row-arrow is-forward mt-1 text-accent" />
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
+      <section id="team" aria-labelledby="team-title" className="about-team" data-ink="light">
+        <div className="about-inner about-team-grid">
+          <div>
+            <h2 id="team-title" className="about-heading" data-reveal>{t('Our team')}</h2>
+            <p className="about-team-copy" data-reveal="2">{t('NHISA is run by Newhouse international students.')}</p>
           </div>
-        </Topic>
+          <div ref={crossing} className="about-crossing" aria-hidden="true">
+            <img src={walkers} width="1200" height="748" alt="" loading="lazy" />
+            <svg viewBox="0 0 1200 748" fill="none" strokeWidth="4" strokeLinecap="round">
+              <path stroke="#dfe5ff" pathLength="1" d="M302 468 C420 500 520 520 600 522 C690 524 820 490 1250 396" />
+              <path stroke="#f6cd98" pathLength="1" d="M930 478 C830 528 710 548 604 547 C500 546 360 574 -50 632" />
+            </svg>
+          </div>
+        </div>
+      </section>
 
-        <Topic id="team" photo="quad" photoBelow title={t('Our team')} intro={t('NHISA is run by Newhouse international students.')}>
-          <div className="panel t-body">{t('Team profiles coming soon.')}</div>
-        </Topic>
-
-        <Topic id="get-involved" photo="school" title={t('Get involved')} intro={t('Three ways to help NHISA grow.')}>
-          <ul className="space-y-3">
-            {WAYS.map((way) => (
-              <li key={way.title} className="grid gap-4 rounded-2xl bg-[var(--surface)] p-6 sm:grid-cols-[1fr_auto] sm:items-center sm:gap-8">
-                <div>
-                  <h3 className="text-[1.0625rem] font-semibold text-white">{t(way.title)}</h3>
-                  <p className="t-body mt-1.5">{t(way.body)}</p>
-                </div>
-                {way.url ? (
-                  <a href={way.url} {...newTab(way.url)} className="glass-button justify-self-start px-5 py-2.5">
-                    {t(way.action)}
-                    <ArrowUpRight size={15} aria-hidden="true" />
-                  </a>
-                ) : (
-                  <span className="t-meta">{t('Sign-ups open soon')}</span>
-                )}
+      <section id="get-involved" className="about-involvement" data-ink="dark" aria-labelledby="involve-title">
+        <div className="about-inner about-involve-grid">
+          <h2 id="involve-title" className="about-heading" data-reveal>{t('Get involved')}</h2>
+          <ul>
+            {ways.map((way, i) => (
+              <li key={way.title} data-reveal={i + 1}>
+                <a className="about-way" href={way.url} {...newTab(way.url)}>
+                  <span><strong>{t(way.title)}</strong><span>{t(way.body)}</span></span>
+                  <ArrowUpRight aria-hidden="true" />
+                </a>
               </li>
             ))}
           </ul>
-        </Topic>
-
-        <Topic id="contact" title={t('Contact us')}>
-          {channels.length ? (
-            <ul className="flex flex-wrap gap-3">
-              {channels.map(({ label, url, Icon }) => (
-                <li key={label}>
-                  <a href={url} {...newTab(url)} className="glass-button px-5 py-3">
-                    <Icon size={17} aria-hidden="true" />
-                    {label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <div className="panel t-body">{t('Contact channels coming soon.')}</div>
-          )}
-        </Topic>
-      </div>
-    </PageShell>
+        </div>
+        <div id="contact" className="about-inner about-contact">
+          <a href={emailLink}><Mail size={20} aria-hidden="true" />{t('Contact us')}</a>
+          <a href={emailLink}>{CONTACT.email}</a>
+        </div>
+      </section>
+    </main>
   );
 }

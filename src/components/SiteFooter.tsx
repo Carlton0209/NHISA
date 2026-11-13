@@ -12,7 +12,7 @@ const ABOUT_LINKS = [
   { label: 'Our mission', section: 'mission' },
   { label: 'Our team', section: 'team' },
   { label: 'Get involved', section: 'get-involved' },
-  { label: 'Contact us', section: 'contact' },
+  { label: 'Contact us', section: 'contact', url: `mailto:${CONTACT.email}` },
 ];
 
 // Roof of the Newhouse building, rising in a wave from left to right.
@@ -106,7 +106,7 @@ export default function SiteFooter() {
             <h2 className="font-medium">{t('About')}</h2>
             <ul className="mt-3 space-y-2">
               {ABOUT_LINKS.map((link) => (
-                <li key={link.section}><a href={href('/about', link.section)} className="text-white/75 transition-colors hover:text-white">{t(link.label)}</a></li>
+                <li key={link.section}><a href={link.url ?? href('/about', link.section)} className="text-white/75 transition-colors hover:text-white">{t(link.label)}</a></li>
               ))}
             </ul>
           </div>

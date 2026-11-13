@@ -3,7 +3,7 @@
  * site: empty values hide their buttons and show "coming soon" instead.
  */
 export const CONTACT = {
-  email: '',
+  email: 'hjiang07@syr.edu',
   instagram: '',
   linkedin: '',
   /** A sign-up form for new members, e.g. a Google Form. */
