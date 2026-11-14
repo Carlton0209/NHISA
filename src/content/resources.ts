@@ -28,7 +28,7 @@ export const RESOURCES = {
     name: 'Create a Résumé & Cover Letter',
     intro: 'Guides and templates from Career Services.',
     category: 'Career services',
-    url: 'https://newhouse.syracuse.edu/',
+    url: 'https://careerservices.syr.edu/channels/create-a-resume-cover-letter/',
   },
   'su-interview': {
     name: 'Prepare for an Interview',
