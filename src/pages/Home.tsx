@@ -6,6 +6,7 @@ import { BLOCK_S_CLIP } from '../components/Brand';
 import { CAMPUS_SECTIONS } from '../content/campus';
 import { CAREER_STEPS } from '../content/careerHub';
 import { RESOURCES } from '../content/resources';
+import type { Resource } from '../content/types';
 import { AUDIENCES, CHAPTERS, MISSION, MODULES } from '../content/site';
 import { href } from '../lib/router';
 import { t } from '../lib/i18n';
@@ -18,7 +19,8 @@ import shawQuad from '../assets/found/shaw-quad.webp';
 import newhouseSchool from '../assets/found/newhouse-school.webp';
 import crouseCollege from '../assets/found/crouse-college.webp';
 
-const RESOURCE_COUNT = Object.keys(RESOURCES).length;
+// What the Career Access library lists.
+const RESOURCE_COUNT = Object.values(RESOURCES as Record<string, Resource>).filter((item) => !item.hideInLibrary).length;
 
 // The poster list: each section as one giant line, with its one fact.
 const poster = (id: string) =>

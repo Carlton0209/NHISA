@@ -36,6 +36,13 @@ export const LINKEDIN = {
       ],
     },
     {
+      title: 'Headline',
+      points: [
+        'Go beyond “Student”: say what you study or do, and what you’re aiming for.',
+        'Use the words recruiters in your field search for.',
+      ],
+    },
+    {
       title: 'About',
       points: [
         'Introduce your major, role and interests.',

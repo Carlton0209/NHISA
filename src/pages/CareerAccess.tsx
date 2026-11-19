@@ -10,7 +10,7 @@ import { transitionRows } from '../lib/interactions';
 import { href } from '../lib/router';
 import { plural, rich, t } from '../lib/i18n';
 
-const ALL = Object.entries(RESOURCES as Record<string, Resource>);
+const ALL = Object.entries(RESOURCES as Record<string, Resource>).filter(([, item]) => !item.hideInLibrary);
 
 const CATEGORIES: Category[] = [
   'Job & internship search',

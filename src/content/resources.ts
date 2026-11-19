@@ -8,7 +8,7 @@ export const RESOURCES = {
   // ---------- Career services ----------
   cdc: {
     name: 'Newhouse Career Development Center',
-    intro: 'Career advising, résumé and interview help, internships and events.',
+    intro: 'Career advising for Newhouse students: résumé and interview help, internships and events.',
     category: 'Career services',
     url: 'https://newhouse.syracuse.edu/students/career-development-center/',
   },
@@ -20,7 +20,7 @@ export const RESOURCES = {
   },
   'su-career-services': {
     name: 'Syracuse University Career Services',
-    intro: 'University-wide coaching, workshops and employer events.',
+    intro: 'Career support for every Syracuse University student: coaching, workshops and employer events.',
     category: 'Career services',
     url: 'https://careerservices.syr.edu/',
   },
@@ -56,28 +56,46 @@ export const RESOURCES = {
   },
 
   // ---------- Job & internship search ----------
+  // The guide and the platform in one card, for Career Hub and the library.
+  'handshake-start': {
+    name: 'Handshake',
+    intro: 'Internships, full-time roles, campus jobs, career fairs and recruiters.',
+    category: 'Job & internship search',
+    links: [
+      { label: 'Read the guide', path: '/career-hub/handshake' },
+      { label: 'Open Handshake', url: 'https://app.joinhandshake.com/home' },
+    ],
+  },
+  // The platform alone, for the end of the Handshake guide.
   handshake: {
     name: 'Handshake',
     intro: 'Internships, full-time roles, campus jobs, career fairs and recruiters.',
     category: 'Job & internship search',
     url: 'https://app.joinhandshake.com/home',
+    hideInLibrary: true,
+  },
+  'linkedin-jobs': {
+    name: 'LinkedIn Jobs',
+    intro: 'Search internships and jobs, and set alerts for the roles you want.',
+    category: 'Job & internship search',
+    url: 'https://www.linkedin.com/jobs/',
   },
   interstride: {
     name: 'Interstride',
-    intro: 'Search jobs by work authorization and check employers’ H-1B history.',
+    intro: 'For international-student-friendly jobs: filter by work authorization and check employers’ H-1B history.',
     category: 'Job & internship search',
     url: 'https://www.interstride.com/syracuse/',
   },
   careershift: {
     name: 'CareerShift',
-    intro: 'Find jobs, and the people at your target companies with their work emails.',
+    intro: 'Search millions of job and internship listings, save your searches, and track target companies.',
     category: 'Job & internship search',
-    url: 'https://www.careershift.com/Account/Login?ReturnUrl=%2fApp%2fContacts%2fSearch',
+    url: 'https://app.careershift.com/signin',
     note: 'Sign in with your SU email.',
   },
   cuseworks: {
     name: 'CuseWorks',
-    intro: 'On-campus jobs, pay rates and internship funding.',
+    intro: 'For on-campus jobs: listings, pay rates and internship funding.',
     category: 'Job & internship search',
     url: 'https://experience.syracuse.edu/cuseworks/',
   },
@@ -91,15 +109,9 @@ export const RESOURCES = {
   // ---------- Guides & toolkits ----------
   'guide-linkedin': {
     name: 'LinkedIn guide',
-    intro: 'Setup, profile tips, networking and two AI prompts.',
+    intro: 'Write your headline, About and Experience, and choose a profile photo.',
     category: 'Guides & toolkits',
-    path: '/career-hub/linkedin',
-  },
-  'guide-handshake': {
-    name: 'Handshake guide',
-    intro: 'Why it matters, setup, and how to make jobs come to you.',
-    category: 'Guides & toolkits',
-    path: '/career-hub/handshake',
+    path: '/career-hub/linkedin?section=profile',
   },
   'guide-email-signature': {
     name: 'Email signature guide',
@@ -124,6 +136,19 @@ export const RESOURCES = {
     intro: 'NHISA’s six-part workbook, from career focus to an action plan.',
     category: 'Guides & toolkits',
     url: 'https://docs.google.com/document/d/1yoLkWUvhvyt1e5BOxqGNfis9jbZ2F3rVPjnRH14qQh8/edit',
+  },
+  'semester-checklist': {
+    name: 'Semester Checklist',
+    intro: 'International Edge’s twelve things to do each semester, from office hours to a weekly plan.',
+    category: 'Guides & toolkits',
+    url: 'https://internationaledge.org/semester-checklist',
+  },
+  // Part 02 of the Résumé Toolkit, "Build a readable résumé", by its heading link.
+  'resume-basics': {
+    name: 'Résumé basics',
+    intro: 'Part 02 of the Résumé Toolkit: what to include, what to leave out, and a clean format.',
+    category: 'Guides & toolkits',
+    url: 'https://docs.google.com/document/d/16hNXj4SUa4O6NvoiicBevIeECtKgbQAnS0oEtlcFhQE/edit#heading=h.xz9939ik7j5n',
   },
   'resume-toolkit': {
     name: 'Résumé & Cover Letter Toolkit',
@@ -177,6 +202,12 @@ export const RESOURCES = {
     intro: 'The official office for F-1 and J-1 students: advising, travel signatures, work authorization.',
     category: 'International students',
     url: 'https://experience.syracuse.edu/intercultural-collective/center-for-international-services/',
+  },
+  'cis-employment': {
+    name: 'Employment & Work Authorization',
+    intro: 'The Center for International Services’ official guide to on-campus work, CPT, OPT and other work authorization.',
+    category: 'International students',
+    url: 'https://experience.syracuse.edu/intercultural-collective/center-for-international-services/employment/',
   },
   'cis-status': {
     name: 'Maintaining Your Status',

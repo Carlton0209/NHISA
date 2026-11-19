@@ -6,6 +6,8 @@ type TopicProps = {
   id: string;
   title: string;
   intro?: ReactNode;
+  /** A link set beside the introduction, e.g. the official rules to check first. */
+  aside?: ReactNode;
   /** Short data line under the introduction, e.g. "Step 2 / 6" or "6 resources". */
   meta?: string;
   /** Position in a sequence; announced to screen readers, shown by position. */
@@ -20,7 +22,7 @@ type TopicProps = {
  * The site's long-page section: title and introduction stay in view on
  * the left while the content runs on the right. Stacks on narrow screens.
  */
-export default function Topic({ id, title, intro, meta, step, photo, photoBelow = false, children }: TopicProps) {
+export default function Topic({ id, title, intro, aside, meta, step, photo, photoBelow = false, children }: TopicProps) {
   const picture = photo ? PHOTOS[photo] : null;
   return (
     <section id={id} aria-labelledby={`${id}-title`} className="grid scroll-mt-40 gap-10 lg:grid-cols-12 lg:gap-x-10">
@@ -30,6 +32,11 @@ export default function Topic({ id, title, intro, meta, step, photo, photoBelow 
           {title}
         </h2>
         {intro && <div data-reveal="2" className="t-body mt-5 max-w-md">{intro}</div>}
+        {aside && (
+          <div data-reveal="3" className="mt-6 max-w-md">
+            {aside}
+          </div>
+        )}
         {meta && <p data-reveal="3" className="t-meta mt-6">{meta}</p>}
         {picture && !photoBelow && (
           <div className="pic-in mt-8 aspect-[4/3] max-w-md overflow-hidden rounded-[1.25rem]">
